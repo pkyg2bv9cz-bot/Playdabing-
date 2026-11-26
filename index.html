@@ -140,13 +140,12 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </footer>
 
 <div style="text-align:center;color:white;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px">
- BETA VERZE 0.7
+ BETA VERZE 0.8
 </div>
 
 <script>
 "use strict";
 
-/* ZÁKLADNÍ PROMĚNNÉ A PRVKY */
 const $ = id => document.getElementById(id);
 const english=$("english"), czech=$("czech"), statusText=$("status");
 const voiceInfo=$("voiceInfo"), savedList=$("savedList");
@@ -162,7 +161,6 @@ let analyser=null, audioSource=null, pitchAnimation=null;
 let detectedVoiceType="unknown", pitchSamples=[], lastVoiceType="unknown";
 let interimElement=null, savedItems=[], translationCache=new Map();
 
-/* OŠETŘENÍ CHYB – CHYBA ZVUKU NESMÍ VYPNOUT OSTATNÍ TLAČÍTKA */
 window.addEventListener("error",event=>{
  statusText.textContent="Chyba aplikace: "+(event.message||"neznámá chyba");
 });
@@ -171,7 +169,10 @@ window.addEventListener("unhandledrejection",event=>{
 });
 
 function setStatus(message){statusText.textContent=message}
-function speechAvailable(){return "speechSynthesis" in window && typeof SpeechSynthesisUtterance!=="undefined"}
+function speechAvailable(){
+ return "speechSynthesis" in window &&
+        typeof SpeechSynthesisUtterance!=="undefined";
+}
 
 /* KNIHOVNA */
 function toggleLibrary(){
@@ -204,7 +205,9 @@ function persistSavedItems(){
 function normalize(text){
  return String(text||"").trim().toLocaleLowerCase("en-US").replace(/[.!?,;:]+$/g,"");
 }
-function cacheKey(text,direction="en|cs"){return direction+"|"+normalize(text)}
+function cacheKey(text,direction="en|cs"){
+ return direction+"|"+normalize(text);
+}
 
 function rebuildCache(){
  translationCache.clear();
@@ -344,6 +347,7 @@ function getCzechVoice(){
  return cs[0];
 }
 
+/* OPRAVENÉ ČESKÉ PŘEDČÍTÁNÍ */
 function speakCzech(text){
  return new Promise((resolve,reject)=>{
   if(!speechAvailable()){
@@ -351,31 +355,55 @@ function speakCzech(text){
    return;
   }
 
+  const synth=window.speechSynthesis;
   const utterance=new SpeechSynthesisUtterance(text);
+
   utterance.lang="cs-CZ";
-  utterance.rate=1.04;
-  utterance.pitch=detectedVoiceType==="male"?.88:detectedVoiceType==="female"?1.12:1;
+  utterance.rate=1.0;
+  utterance.pitch=detectedVoiceType==="male" ? 0.88 :
+                  detectedVoiceType==="female" ? 1.12 : 1;
+
   const voice=getCzechVoice();
   if(voice)utterance.voice=voice;
 
   let finished=false;
-  const watchdog=setTimeout(()=>finish(new Error("Přehrávání trvá příliš dlouho.")),30000);
+  let watchdog;
 
   function finish(error){
    if(finished)return;
    finished=true;
    clearTimeout(watchdog);
-   if(error)reject(error);else resolve();
+   if(error)reject(error);
+   else resolve();
   }
 
-  utterance.onstart=()=>setStatus("Přehrávám český překlad...");
+  utterance.onstart=()=>{
+   setStatus("🔊 Přehrávám český překlad...");
+  };
+
   utterance.onend=()=>finish();
-  utterance.onerror=event=>finish(new Error(event.error||"Přehrávání selhalo."));
+  utterance.onerror=event=>{
+   finish(new Error(event.error||"Přehrávání selhalo."));
+  };
+
+  watchdog=setTimeout(()=>{
+   finish(new Error("Český hlas se neozval."));
+  },25000);
 
   try{
-   window.speechSynthesis.resume();
-   window.speechSynthesis.speak(utterance);
-  }catch(error){finish(error)}
+   synth.resume();
+
+   setTimeout(()=>{
+    if(finished)return;
+    try{
+     synth.speak(utterance);
+    }catch(error){
+     finish(error);
+    }
+   },150);
+  }catch(error){
+   finish(error);
+  }
  });
 }
 
@@ -390,10 +418,12 @@ async function testCzechVoice(){
   setStatus("Testuji český hlas...");
   await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.");
   setStatus("Test českého hlasu dokončen.");
- }catch(error){setStatus("Chyba hlasu: "+error.message)}
+ }catch(error){
+  setStatus("Chyba hlasu: "+error.message);
+ }
 }
 
-/* ANALÝZA HLASU – JE DOPLŇKOVÁ, NESMÍ BLOKOVAT MIKROFON */
+/* ANALÝZA HLASU */
 async function startVoiceAnalysis(){
  try{
   if(!navigator.mediaDevices?.getUserMedia)return;
@@ -415,7 +445,10 @@ async function startVoiceAnalysis(){
   analyzePitch();
  }catch(error){
   voiceInfo.textContent="Analýza hlasu není dostupná – překlad funguje dál.";
-  if(audioStream){audioStream.getTracks().forEach(t=>t.stop());audioStream=null}
+  if(audioStream){
+   audioStream.getTracks().forEach(t=>t.stop());
+   audioStream=null;
+  }
  }
 }
 
@@ -431,7 +464,10 @@ function estimatePitch(buffer,sampleRate){
   let correlation=0;
   for(let i=0;i<buffer.length-lag;i++)correlation+=buffer[i]*buffer[i+lag];
   correlation/=buffer.length-lag;
-  if(correlation>bestCorrelation){bestCorrelation=correlation;bestLag=lag}
+  if(correlation>bestCorrelation){
+   bestCorrelation=correlation;
+   bestLag=lag;
+  }
  }
  return bestLag<0||bestCorrelation<.01?null:sampleRate/bestLag;
 }
@@ -462,10 +498,19 @@ function analyzePitch(){
 function stopVoiceAnalysis(){
  if(pitchAnimation)cancelAnimationFrame(pitchAnimation);
  pitchAnimation=null;
- if(audioStream){audioStream.getTracks().forEach(t=>t.stop());audioStream=null}
- if(audioContext){audioContext.close().catch(()=>{});audioContext=null}
- analyser=null;audioSource=null;pitchSamples=[];
- detectedVoiceType="unknown";lastVoiceType="unknown";
+ if(audioStream){
+  audioStream.getTracks().forEach(t=>t.stop());
+  audioStream=null;
+ }
+ if(audioContext){
+  audioContext.close().catch(()=>{});
+  audioContext=null;
+ }
+ analyser=null;
+ audioSource=null;
+ pitchSamples=[];
+ detectedVoiceType="unknown";
+ lastVoiceType="unknown";
 }
 
 /* PŘEKLAD */
@@ -547,7 +592,10 @@ function updateInterim(text){
 }
 
 function clearInterim(){
- if(interimElement){interimElement.remove();interimElement=null}
+ if(interimElement){
+  interimElement.remove();
+  interimElement=null;
+ }
 }
 
 /* ROZPOZNÁVÁNÍ ŘEČI */
@@ -618,7 +666,10 @@ async function startListening(){
  if(!recognition&&!setupRecognition())return;
 
  if(speechAvailable()){
-  try{window.speechSynthesis.cancel();window.speechSynthesis.resume()}catch(error){}
+  try{
+   window.speechSynthesis.cancel();
+   window.speechSynthesis.resume();
+  }catch(error){}
  }
 
  listening=true;
@@ -631,8 +682,6 @@ async function startListening(){
  voiceInfo.textContent="Analyzuji hlas...";
 
  startRecognition();
-
- /* Analýza běží samostatně. Nečekáme na ni, aby mikrofon začal poslouchat. */
  startVoiceAnalysis();
 }
 
@@ -644,7 +693,9 @@ function stopListening(){
  wordQueue=[];
  clearInterim();
 
- if(recognition){try{recognition.stop()}catch(error){}}
+ if(recognition){
+  try{recognition.stop()}catch(error){}
+ }
  stopVoiceAnalysis();
 
  if(speechAvailable()){
@@ -681,10 +732,14 @@ async function processQueue(){
     appendTranscript(czech,translation);
     addSavedItem("sentence",item.text,translation);
     queueAutomaticWords(item.text);
+
     speechQueue.push({text:translation,session:item.session});
     processSpeechQueue();
+
    }catch(error){
-    if(listening&&item.session===session)setStatus("Chyba překladu: "+error.message);
+    if(listening&&item.session===session){
+     setStatus("Chyba překladu: "+error.message);
+    }
    }
   }
  }finally{
@@ -693,17 +748,29 @@ async function processQueue(){
  }
 }
 
+/* OPRAVENÁ FRONTa ČESKÉHO HLASU */
 async function processSpeechQueue(){
  if(speechProcessing)return;
  speechProcessing=true;
+
  try{
   while(speechQueue.length){
    const first=speechQueue.shift();
+
    if(!listening||first.session!==session)continue;
-   await new Promise(resolve=>setTimeout(resolve,300));
+
+   if(speechAvailable()){
+    try{
+     window.speechSynthesis.resume();
+    }catch(error){}
+   }
+
+   await new Promise(resolve=>setTimeout(resolve,250));
+
    if(!listening||first.session!==session)continue;
 
    const batch=[first.text];
+
    while(speechQueue.length&&speechQueue[0].session===session){
     batch.push(speechQueue.shift().text);
    }
@@ -711,13 +778,19 @@ async function processSpeechQueue(){
    try{
     await speakCzech(batch.join(" "));
    }catch(error){
-    if(listening&&first.session===session)setStatus("Chyba českého hlasu: "+error.message);
+    if(listening&&first.session===session){
+     setStatus("Problém s českým hlasem: "+error.message);
+    }
    }
   }
  }finally{
   speechProcessing=false;
-  if(listening&&speechQueue.length)processSpeechQueue();
-  else if(listening&&sentenceQueue.length===0)setStatus("Poslouchám další anglické věty...");
+
+  if(listening&&speechQueue.length){
+   processSpeechQueue();
+  }else if(listening&&sentenceQueue.length===0){
+   setStatus("Poslouchám další anglické věty...");
+  }
  }
 }
 
@@ -760,7 +833,7 @@ async function searchDictionary(){
  }
 }
 
-/* TLAČÍTKA – PŘÍMÉ A SAMOSTATNÉ PŘIPOJENÍ */
+/* TLAČÍTKA */
 $("start").addEventListener("click",startListening);
 $("stop").addEventListener("click",stopListening);
 $("test").addEventListener("click",testCzechVoice);
