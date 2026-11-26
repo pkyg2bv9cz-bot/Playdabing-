@@ -7,35 +7,16 @@
 <title>PlayDabing TV</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;background:#080d19;color:white;
- font-family:Arial,sans-serif
-}
-header{text-align:center;padding:28px;background:#111c31}
-h1{margin:0;font-size:30px}
+body{margin:0;background:#080d19;color:white;font-family:Arial}
+header{text-align:center;padding:25px;background:#111c31}
+h1{margin:0;font-size:29px}
 h1 span{color:#38bdf8}
-main{max-width:650px;margin:auto;padding:20px}
-.card{
- background:#142239;border:1px solid #294363;
- border-radius:16px;padding:20px;margin-bottom:18px
-}
-textarea{
- width:100%;height:110px;padding:14px;
- border-radius:10px;border:1px solid #456080;
- background:#091426;color:white;font-size:16px
-}
-button{
- width:100%;padding:15px;margin-top:10px;
- border:0;border-radius:10px;
- background:#168bd2;color:white;
- font-size:16px;font-weight:bold
-}
-button.stop{background:#a83245}
-#result{
- min-height:60px;padding:14px;
- background:#091426;border-radius:10px;
- line-height:1.5
-}
+main{max-width:650px;margin:auto;padding:18px}
+.card{background:#142239;border:1px solid #294363;border-radius:16px;padding:20px;margin-bottom:17px}
+textarea{width:100%;height:90px;padding:12px;border-radius:9px;background:#091426;color:white;font-size:16px}
+button{width:100%;padding:15px;margin-top:10px;border:0;border-radius:10px;background:#168bd2;color:white;font-size:16px;font-weight:bold}
+.stop{background:#a83245}
+.result{padding:14px;background:#091426;border-radius:9px;min-height:45px;line-height:1.5;overflow-wrap:anywhere}
 .status{color:#38bdf8}
 footer{text-align:center;color:#71839d;padding:20px}
 </style>
@@ -45,92 +26,122 @@ footer{text-align:center;color:#71839d;padding:20px}
 <h1>PLAY<span>DABING</span> TV</h1>
 <p>Tvůj svět. Tvůj český dabing.</p>
 </header>
-
 <main>
 <div class="card">
-<h2>🎬 AI český překladač</h2>
-<p>Vlož anglickou větu:</p>
-<textarea id="english" placeholder="Enter English text..."></textarea>
-<button onclick="translateText()">🇨🇿 Přeložit do češtiny</button>
+<h2>🎙️ Živý překladač</h2>
+<p>Anglická řeč přes mikrofon:</p>
+<div id="heard" class="result">Zde se zobrazí rozpoznaná angličtina.</div>
+<button onclick="listen()">🎙️ Spustit mikrofon</button>
+<button class="stop" onclick="stopListening()">■ Zastavit poslouchání</button>
 </div>
 
 <div class="card">
-<h2>🗣️ Český AI hlas</h2>
-<div id="result">Zde se zobrazí český překlad.</div>
-<button onclick="speakText()">🔊 Přehrát český hlas</button>
+<h2>🇨🇿 Český překlad</h2>
+<div id="translated" class="result">Zde bude český překlad.</div>
+<button onclick="speak()">🔊 Přehrát český hlas</button>
 <button class="stop" onclick="stopVoice()">■ Zastavit hlas</button>
-<p class="status" id="status">● Připraveno</p>
+</div>
+
+<div class="card">
+<h2>⌨️ Ruční překlad</h2>
+<textarea id="manual" placeholder="Napiš anglickou větu..."></textarea>
+<button onclick="manualTranslate()">Přeložit text</button>
+</div>
+
+<div class="card">
+<h2>⚙️ Stav systému</h2>
+<p id="status" class="status">● Připraveno</p>
 </div>
 </main>
-
 <footer>PlayDabing TV © 2026</footer>
 
 <script>
-let translated = "";
+let recognition=null;
+let translatedText="";
+let listening=false;
 
-async function translateText(){
- const input = document.getElementById("english").value.trim();
- const status = document.getElementById("status");
+function setup(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR)return false;
+ recognition=new SR();
+ recognition.lang="en-US";
+ recognition.continuous=true;
+ recognition.interimResults=false;
 
- if(!input){
-   status.textContent="Nejdříve napiš anglickou větu.";
-   return;
- }
+ recognition.onresult=async function(event){
+  const text=event.results[event.results.length-1][0].transcript;
+  document.getElementById("heard").textContent=text;
+  await translate(text);
+ };
 
- status.textContent="Překládám...";
+ recognition.onerror=function(event){
+  document.getElementById("status").textContent=
+  "Chyba mikrofonu: "+event.error;
+ };
 
+ recognition.onend=function(){
+  if(listening){
+   try{recognition.start()}catch(e){}
+  }
+ };
+ return true;
+}
+
+async function translate(text){
+ const status=document.getElementById("status");
+ status.textContent="● Překládám...";
  try{
-   const url =
-    "https://api.mymemory.translated.net/get?q="
-    +encodeURIComponent(input)
-    +"&langpair=en|cs";
+  const url="https://api.mymemory.translated.net/get?q="+
+  encodeURIComponent(text)+"&langpair=en|cs";
+  const response=await fetch(url);
+  const data=await response.json();
+  if(data.responseStatus!==200)throw Error("Translation error");
 
-   const response = await fetch(url);
-   const data = await response.json();
-
-   if(data.responseStatus !== 200){
-     throw new Error("Překlad se nepodařil.");
-   }
-
-   translated = data.responseData.translatedText;
-
-   document.getElementById("result").textContent=translated;
-   status.textContent="● Překlad dokončen!";
- }catch(error){
-   status.textContent="Chyba překladu. Zkus to znovu.";
+  translatedText=data.responseData.translatedText;
+  document.getElementById("translated").textContent=translatedText;
+  status.textContent="● Překlad hotový";
+ }catch(e){
+  status.textContent="Překlad se nepodařil.";
  }
 }
 
-function speakText(){
- if(!translated){
-   document.getElementById("status").textContent=
-    "Nejdříve přelož text.";
-   return;
+function listen(){
+ if(!recognition&&!setup()){
+  document.getElementById("status").textContent=
+  "Tento prohlížeč nepodporuje rozpoznávání řeči. Zkusíme jinou cestu.";
+  return;
  }
-
- if(!("speechSynthesis" in window)){
-   document.getElementById("status").textContent=
-    "Toto zařízení nepodporuje hlas.";
-   return;
- }
-
- speechSynthesis.cancel();
-
- const voice = new SpeechSynthesisUtterance(translated);
- voice.lang="cs-CZ";
- voice.rate=1;
- voice.pitch=1;
-
- speechSynthesis.speak(voice);
+ listening=true;
  document.getElementById("status").textContent=
-  "● Přehrávám český hlas";
+ "● Žádám o přístup k mikrofonu...";
+ try{recognition.start()}catch(e){
+  document.getElementById("status").textContent=
+  "Mikrofon už běží nebo je potřeba obnovit stránku.";
+ }
+}
+
+function stopListening(){
+ listening=false;
+ if(recognition)recognition.stop();
+ document.getElementById("status").textContent="● Poslouchání zastaveno";
+}
+
+function speak(){
+ if(!translatedText)return;
+ speechSynthesis.cancel();
+ const msg=new SpeechSynthesisUtterance(translatedText);
+ msg.lang="cs-CZ";
+ msg.rate=1;
+ speechSynthesis.speak(msg);
 }
 
 function stopVoice(){
- if("speechSynthesis" in window){
-   speechSynthesis.cancel();
- }
- document.getElementById("status").textContent="Hlas zastaven.";
+ speechSynthesis.cancel();
+}
+
+async function manualTranslate(){
+ const text=document.getElementById("manual").value.trim();
+ if(text)await translate(text);
 }
 </script>
 </body>
