@@ -3,78 +3,77 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#050d25">
-<title>PlayDabing TV Beta 0.9.2</title>
+<title>PlayDabing TV Beta 0.9.3</title>
+
 <style>
 *{box-sizing:border-box}
 :root{color-scheme:dark}
 [hidden]{display:none!important}
 body{
-min-height:100vh;margin:0;padding:28px 5.4% 22px;color:#f7f8ff;
-font-family:Arial,Helvetica,sans-serif;text-align:center;overflow-x:hidden;
-background:radial-gradient(ellipse at 12% 43%,rgba(0,116,255,.38),transparent 38%),
-radial-gradient(ellipse at 88% 42%,rgba(147,0,255,.36),transparent 39%),
-linear-gradient(115deg,#02091e,#050d25 48%,#100522)
+ margin:0;min-height:100vh;padding:24px 4%;
+ color:#f7f8ff;font-family:Arial,Helvetica,sans-serif;text-align:center;
+ background:radial-gradient(ellipse at 12% 43%,rgba(0,116,255,.38),transparent 38%),
+ radial-gradient(ellipse at 88% 42%,rgba(147,0,255,.36),transparent 39%),
+ linear-gradient(115deg,#02091e,#050d25 48%,#100522)
 }
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.7;
-background:repeating-linear-gradient(110deg,transparent 0 80px,rgba(28,115,255,.035) 81px 83px,transparent 84px 160px)}
-body>*{position:relative;z-index:1}
-h1{margin:20px 0 3px;font-size:clamp(34px,6vw,64px);font-weight:900;font-style:italic}
+h1{font-size:clamp(34px,6vw,64px);font-weight:900;font-style:italic;margin:20px 0 3px}
 h1:after{content:" TV";color:#078cff}
-.subtitle{color:#d5def5;font-size:clamp(15px,2.4vw,27px);margin:8px 0 28px}
-.controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:14px;margin:0 auto 28px}
-button{padding:14px 22px;min-height:52px;border:1px solid rgba(112,169,255,.65);border-radius:20px;font-size:15px;font-weight:700;cursor:pointer;color:white;background:linear-gradient(135deg,#078cff,#0648ed);box-shadow:0 8px 28px rgba(0,100,255,.28)}
+.subtitle{color:#d5def5;font-size:clamp(15px,2.4vw,27px);margin:8px 0 25px}
+.controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:25px}
+button{padding:13px 20px;min-height:48px;border:1px solid rgba(112,169,255,.65);border-radius:18px;font-size:14px;font-weight:700;cursor:pointer;color:white;background:linear-gradient(135deg,#078cff,#0648ed)}
 button:disabled{opacity:.5;cursor:not-allowed}
 #stop{background:linear-gradient(145deg,#263959,#111d39)}
 #test{background:linear-gradient(135deg,#a43cff,#5410d8)}
-.panel-container{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;width:100%;max-width:1500px;margin:auto}
-.panel{min-width:0;min-height:225px;padding:22px 26px 18px;text-align:left;border:1.5px solid rgba(48,157,255,.9);border-radius:25px;background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9))}
+.panel-container{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;width:100%;max-width:1500px;margin:auto}
+.panel{min-width:0;min-height:220px;padding:20px;text-align:left;border:1.5px solid rgba(48,157,255,.9);border-radius:23px;background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9))}
 .panel:nth-child(2){border-color:rgba(157,92,255,.85);background:linear-gradient(135deg,rgba(34,27,76,.84),rgba(19,19,52,.92))}
-.panel h3{font-size:clamp(15px,2vw,25px);border-bottom:1px solid #7890bb;padding-bottom:14px;margin:0 0 14px}
-.transcript{height:150px;overflow-y:auto;overflow-wrap:anywhere;white-space:pre-wrap;color:#dce6ff;font-size:clamp(14px,1.8vw,22px);line-height:1.45}
+.panel h3{font-size:clamp(13px,2vw,23px);border-bottom:1px solid #7890bb;padding-bottom:12px;margin:0 0 12px}
+.transcript{height:160px;overflow-y:auto;overflow-wrap:anywhere;white-space:pre-wrap;color:#dce6ff;font-size:clamp(13px,1.8vw,20px);line-height:1.5}
 .transcript p{margin:0 0 8px}
 .interim{color:#8ebaff;font-style:italic;border-left:2px solid #399aff;padding-left:8px}
-.status{display:inline-flex;align-items:center;gap:14px;color:white;margin:28px auto 18px;padding:12px 32px;min-width:250px;justify-content:center;font-size:16px;font-weight:700;border:1px solid #45658d;border-radius:30px;background:#102b3a}
-.status:before{content:"";width:11px;height:11px;border-radius:50%;background:#00f08a;box-shadow:0 0 14px #00f08a}
-.voice-info{color:#cbd8f5;font-size:13px;margin:12px auto 0}
-.library-toggle{display:block;margin:30px auto 12px;background:linear-gradient(135deg,#853cff,#4211b5);border-color:#be82ff;min-width:min(90%,300px)}
-.saved-section{max-width:1100px;margin:15px auto;padding:22px;text-align:left;border:1px solid #7182ff;border-radius:22px;background:linear-gradient(135deg,rgba(17,30,72,.95),rgba(28,17,65,.95))}
+.status{display:inline-flex;align-items:center;gap:12px;color:white;margin:25px auto 12px;padding:11px 25px;min-width:230px;justify-content:center;font-size:14px;font-weight:700;border:1px solid #45658d;border-radius:30px;background:#102b3a}
+.status:before{content:"";width:10px;height:10px;border-radius:50%;background:#00f08a;box-shadow:0 0 12px #00f08a}
+.voice-info{color:#cbd8f5;font-size:12px;margin:10px auto}
+.library-toggle{display:block;margin:28px auto 12px;background:linear-gradient(135deg,#853cff,#4211b5);border-color:#be82ff;min-width:min(90%,300px)}
+.saved-section{max-width:1100px;margin:15px auto;padding:20px;text-align:left;border:1px solid #7182ff;border-radius:22px;background:linear-gradient(135deg,rgba(17,30,72,.95),rgba(28,17,65,.95))}
 .saved-section h2{text-align:center}
 .saved-note{text-align:center;color:#bdcbed;font-size:13px;line-height:1.5}
-.dictionary-search,.saved-toolbar{display:flex;gap:9px;margin:18px 0;flex-wrap:wrap}
-.dictionary-search input,.saved-search{flex:1;min-width:150px;padding:13px 15px;border-radius:13px;border:1px solid #5878bd;background:#08152f;color:white;font-size:16px}
-.dictionary-result,.saved-item{padding:14px;margin:12px 0;border-radius:13px;background:rgba(5,15,40,.75);border:1px solid rgba(85,140,255,.4);line-height:1.5;overflow-wrap:anywhere}
-.saved-list{display:grid;gap:10px}
-.saved-item{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0}
+.dictionary-search,.saved-toolbar{display:flex;gap:9px;margin:16px 0;flex-wrap:wrap}
+.dictionary-search input,.saved-search{flex:1;min-width:150px;padding:12px 14px;border-radius:13px;border:1px solid #5878bd;background:#08152f;color:white;font-size:15px}
+.dictionary-result,.saved-item{padding:13px;margin:10px 0;border-radius:13px;background:rgba(5,15,40,.75);border:1px solid rgba(85,140,255,.4);line-height:1.5;overflow-wrap:anywhere}
+.saved-toolbar button,.small-button{min-height:36px;padding:8px 12px;font-size:12px;border-radius:11px}
+.saved-list{display:grid;gap:9px}
+.saved-item{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;margin:0}
 .saved-item-main{min-width:0;flex:1}
 .saved-type{font-size:10px;letter-spacing:1px;color:#8bbaff;font-weight:bold}
-.saved-english{font-size:16px;font-weight:bold;margin:5px 0;color:white}
-.saved-czech{font-size:14px;color:#c5d6ff}
+.saved-english{font-size:15px;font-weight:bold;margin:5px 0;color:white}
+.saved-czech{font-size:13px;color:#c5d6ff}
 .saved-date{font-size:10px;color:#8195bd;margin-top:6px}
 .delete-button{min-height:32px;padding:6px 10px;border-radius:9px;background:linear-gradient(135deg,#a52d53,#6d173c)}
 .saved-count{color:#a9c7ff;font-size:13px}
 .empty-list{text-align:center;color:#aebcda;padding:20px}
 .save-message{min-height:20px;color:#85edbd;font-size:13px;text-align:center}
-.footer{margin-top:28px;padding:20px 10px 8px;border-top:1px solid #538ee6;color:#d8e0f5;font-size:14px;line-height:1.5}
+.footer{margin-top:28px;padding:20px 10px 8px;border-top:1px solid #538ee6;color:#d8e0f5;font-size:13px;line-height:1.5}
 .footer strong{display:block;color:white;font-size:18px;margin-bottom:3px}
 @media(max-width:700px){
-body{padding:18px 2% 16px}
-h1{margin-top:14px}
-.subtitle{margin-bottom:20px}
-.controls{gap:9px;margin-bottom:20px}
-button{min-height:46px;padding:11px 12px;border-radius:15px;font-size:12px}
-.panel-container{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-.panel{min-height:170px;padding:10px;border-radius:15px}
-.panel h3{font-size:12px;padding-bottom:9px}
-.transcript{height:145px;font-size:13px}
-.status{margin-top:20px;min-width:210px;font-size:13px;padding:10px 15px}
-.saved-section{padding:14px 10px}
-.saved-item{padding:10px}
-.saved-english{font-size:14px}
+ body{padding:17px 2%}
+ h1{margin-top:12px}
+ .controls{gap:8px;margin-bottom:18px}
+ button{min-height:44px;padding:10px 11px;border-radius:14px;font-size:12px}
+ .panel-container{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .panel{min-height:170px;padding:10px;border-radius:15px}
+ .panel h3{font-size:11px;padding-bottom:8px}
+ .transcript{height:145px;font-size:13px}
+ .status{margin-top:18px;min-width:200px;font-size:12px;padding:10px 15px}
+ .saved-section{padding:14px 10px}
+ .saved-item{padding:10px}
+ .saved-english{font-size:14px}
 }
 </style>
 </head>
+
 <body>
 
 <h1>PLAYDABING</h1>
@@ -91,6 +90,7 @@ button{min-height:46px;padding:11px 12px;border-radius:15px;font-size:12px}
 <h3>ANGLICKÝ PŘEPIS</h3>
 <div id="english" class="transcript">Zatím nic neslyším...</div>
 </div>
+
 <div class="panel">
 <h3>ČESKÝ PŘEKLAD</h3>
 <div id="czech" class="transcript">Čekám na překlad...</div>
@@ -100,19 +100,14 @@ button{min-height:46px;padding:11px 12px;border-radius:15px;font-size:12px}
 <p class="status" id="status">Připraveno</p>
 <p class="voice-info" id="voiceInfo">Typ hlasu: zatím neurčen</p>
 
-<button class="library-toggle" id="libraryToggle" aria-expanded="false">
-📚 Otevřít knihovnu slovíček a vět
-</button>
+<button class="library-toggle" id="libraryToggle">📚 Otevřít knihovnu slovíček a vět</button>
 
 <section class="saved-section" id="savedSection" hidden>
 <h2>📚 Moje knihovna</h2>
-<p class="saved-note">
-Zde najdeš automaticky ukládaná anglická slovíčka i celé věty s českým překladem.
-Knihovna zůstává uložená v tomto prohlížeči.
-</p>
+<p class="saved-note">Zde najdeš automaticky ukládaná anglická slovíčka i celé věty s českým překladem. Knihovna zůstává uložená v tomto prohlížeči.</p>
 
 <div class="dictionary-search">
-<input id="dictionaryInput" type="text" placeholder="Napiš české nebo anglické slovo...">
+<input id="dictionaryInput" placeholder="Napiš české nebo anglické slovo...">
 <button id="dictionaryButton">Vyhledat</button>
 </div>
 
@@ -120,8 +115,8 @@ Knihovna zůstává uložená v tomto prohlížeči.
 
 <div class="saved-toolbar">
 <input id="savedSearch" class="saved-search" type="search" placeholder="Hledat v knihovně...">
-<button class="small-button" id="exportButton">Exportovat</button>
-<button class="small-button" id="clearButton" style="background:linear-gradient(135deg,#85304b,#57152e)">Smazat vše</button>
+<button id="exportButton">Exportovat</button>
+<button id="clearButton" style="background:linear-gradient(135deg,#85304b,#57152e)">Smazat vše</button>
 </div>
 
 <div class="saved-count" id="savedCount">Uloženo: 0</div>
@@ -136,543 +131,814 @@ Vytvořil Jan Chaloupka<br><br>
 </footer>
 
 <div style="text-align:center;color:white;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px">
-BETA VERZE 0.9.2
+BETA VERZE 0.9.3 – FAST ENGINE
 </div>
 
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-const english=$("english");
-const czech=$("czech");
-const statusText=$("status");
-const voiceInfo=$("voiceInfo");
-const savedList=$("savedList");
-const savedCount=$("savedCount");
-const saveMessage=$("saveMessage");
-const dictionaryResult=$("dictionaryResult");
+/* =========================
+   PLAYDABING TV FAST ENGINE
+   ========================= */
 
-const STORAGE_KEY="playdabing_tv_saved_v06";
+const $ = id => document.getElementById(id);
 
-let recognition=null;
-let listening=false;
-let processing=false;
-let restarting=false;
-let restartTimer=null;
-let sentenceQueue=[];
-let session=0;
-let voices=[];
-let interimElement=null;
-let savedItems=[];
-let translationCache=new Map();
-let activeUtterance=null;
+const english = $("english");
+const czech = $("czech");
+const statusText = $("status");
+const savedList = $("savedList");
+const savedCount = $("savedCount");
+const saveMessage = $("saveMessage");
+const dictionaryResult = $("dictionaryResult");
 
-function setStatus(m){statusText.textContent=m}
-function speechAvailable(){return "speechSynthesis" in window&&typeof SpeechSynthesisUtterance!=="undefined"}
+const STORAGE_KEY = "playdabing_tv_saved_v06";
 
-function normalize(t){
-return String(t||"").toLocaleLowerCase("en-US")
-.replace(/[.!?,;:]+$/g,"")
-.replace(/\s+/g," ").trim()
+let recognition = null;
+let listening = false;
+let sentenceQueue = [];
+let processing = false;
+let restartTimer = null;
+let session = 0;
+
+let savedItems = [];
+let translationCache = new Map();
+
+let voices = [];
+let activeUtterance = null;
+let speechUnlocked = false;
+
+function setStatus(text){
+ statusText.textContent = text;
 }
 
-function cacheKey(t){return "en|cs|"+normalize(t)}
-
-function toggleLibrary(){
-const s=$("savedSection");
-const b=$("libraryToggle");
-const opening=s.hidden;
-s.hidden=!opening;
-b.setAttribute("aria-expanded",String(opening));
-b.textContent=opening?"📚 Zavřít knihovnu":"📚 Otevřít knihovnu slovíček a vět";
-if(opening)renderSavedItems()
+function normalize(text){
+ return String(text || "")
+  .toLocaleLowerCase("en-US")
+  .replace(/[.!?,;:]+$/g,"")
+  .replace(/\s+/g," ")
+  .trim();
 }
+
+function cacheKey(text){
+ return "en|cs|" + normalize(text);
+}
+
+/* =========================
+   MEMORY / CACHE
+   ========================= */
 
 function loadSavedItems(){
-try{
-const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-return Array.isArray(d)?d:[]
-}catch(e){return []}
+ try{
+  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  return Array.isArray(data) ? data : [];
+ }catch(e){
+  return [];
+ }
 }
 
 function persistSavedItems(){
-try{
-localStorage.setItem(STORAGE_KEY,JSON.stringify(savedItems));
-return true
-}catch(e){
-saveMessage.textContent="Uložení se nezdařilo.";
-return false
-}
+ try{
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(savedItems));
+  return true;
+ }catch(e){
+  saveMessage.textContent = "Uložení se nezdařilo.";
+  return false;
+ }
 }
 
 function rebuildCache(){
-translationCache.clear();
-savedItems.forEach(i=>{
-if(i.direction==="en|cs"&&i.english&&i.czech)
-translationCache.set(cacheKey(i.english),i.czech)
-})
+ translationCache.clear();
+
+ savedItems.forEach(item=>{
+  if(item.direction === "en|cs" && item.english && item.czech){
+   translationCache.set(cacheKey(item.english),item.czech);
+  }
+ });
+}
+
+function findCachedTranslation(text){
+ const key = cacheKey(text);
+
+ if(translationCache.has(key)){
+  return translationCache.get(key);
+ }
+
+ const item = savedItems.find(i =>
+  i.direction === "en|cs" &&
+  normalize(i.english) === normalize(text)
+ );
+
+ return item ? item.czech : null;
 }
 
 function addSavedItem(type,en,cs,direction="en|cs"){
-en=String(en||"").trim();
-cs=String(cs||"").trim();
-if(!en||!cs)return false;
+ en = String(en || "").trim();
+ cs = String(cs || "").trim();
 
-const dup=savedItems.some(i=>
-i.type===type&&
-normalize(i.english)===normalize(en)&&
-normalize(i.czech)===normalize(cs)
-);
+ if(!en || !cs) return false;
 
-if(dup)return false;
+ const duplicate = savedItems.some(i =>
+  i.type === type &&
+  normalize(i.english) === normalize(en) &&
+  normalize(i.czech) === normalize(cs)
+ );
 
-savedItems.unshift({
-id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
-type,english:en,czech:cs,direction,
-createdAt:new Date().toISOString()
-});
+ if(duplicate) return false;
 
-persistSavedItems();
-if(direction==="en|cs")translationCache.set(cacheKey(en),cs);
-renderSavedItems();
-return true
+ savedItems.unshift({
+  id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),
+  type,
+  english:en,
+  czech:cs,
+  direction,
+  createdAt:new Date().toISOString()
+ });
+
+ persistSavedItems();
+
+ if(direction === "en|cs"){
+  translationCache.set(cacheKey(en),cs);
+ }
+
+ renderSavedItems();
+ return true;
+}
+
+/* =========================
+   LIBRARY
+   ========================= */
+
+function toggleLibrary(){
+ const section = $("savedSection");
+ const button = $("libraryToggle");
+
+ section.hidden = !section.hidden;
+
+ button.textContent = section.hidden
+  ? "📚 Otevřít knihovnu slovíček a vět"
+  : "📚 Zavřít knihovnu";
+
+ if(!section.hidden) renderSavedItems();
 }
 
 function renderSavedItems(){
-const q=normalize($("savedSearch").value);
-const items=savedItems.filter(i=>
-!q||normalize(i.english).includes(q)||normalize(i.czech).includes(q)
-);
+ const q = normalize($("savedSearch").value);
 
-savedCount.textContent="Uloženo: "+savedItems.length+" | Zobrazeno: "+items.length;
-savedList.replaceChildren();
+ const filtered = savedItems.filter(item =>
+  !q ||
+  normalize(item.english).includes(q) ||
+  normalize(item.czech).includes(q)
+ );
 
-if(!items.length){
-const e=document.createElement("div");
-e.className="empty-list";
-e.textContent="Zatím zde nic není. Slovíčka a věty se budou ukládat automaticky.";
-savedList.appendChild(e);
-return
-}
+ savedCount.textContent =
+  "Uloženo: "+savedItems.length+" | Zobrazeno: "+filtered.length;
 
-items.forEach(i=>{
-const w=document.createElement("div");
-const m=document.createElement("div");
-const t=document.createElement("div");
-const en=document.createElement("div");
-const cs=document.createElement("div");
-const d=document.createElement("div");
-const del=document.createElement("button");
+ savedList.replaceChildren();
 
-w.className="saved-item";
-m.className="saved-item-main";
-t.className="saved-type";
-t.textContent=i.type==="sentence"?"CELÁ VĚTA":"SLOVÍČKO";
-en.className="saved-english";
-en.textContent=i.english;
-cs.className="saved-czech";
-cs.textContent=i.czech;
-d.className="saved-date";
-d.textContent=i.createdAt?new Date(i.createdAt).toLocaleString("cs-CZ"):"";
+ if(!filtered.length){
+  const empty = document.createElement("div");
+  empty.className = "empty-list";
+  empty.textContent = "Zatím zde nic není.";
+  savedList.appendChild(empty);
+  return;
+ }
 
-m.append(t,en,cs,d);
-del.className="delete-button";
-del.textContent="Smazat";
-del.onclick=()=>deleteSaved(i.id);
-w.append(m,del);
-savedList.appendChild(w)
-})
-}
+ filtered.forEach(item=>{
+  const card = document.createElement("div");
+  card.className = "saved-item";
 
-function deleteSaved(id){
-savedItems=savedItems.filter(i=>i.id!==id);
-persistSavedItems();
-rebuildCache();
-renderSavedItems();
-saveMessage.textContent="Záznam byl smazán."
+  const main = document.createElement("div");
+  main.className = "saved-item-main";
+
+  const type = document.createElement("div");
+  type.className = "saved-type";
+  type.textContent = item.type === "sentence" ? "CELÁ VĚTA" : "SLOVÍČKO";
+
+  const en = document.createElement("div");
+  en.className = "saved-english";
+  en.textContent = item.english;
+
+  const cs = document.createElement("div");
+  cs.className = "saved-czech";
+  cs.textContent = item.czech;
+
+  const date = document.createElement("div");
+  date.className = "saved-date";
+  date.textContent = item.createdAt
+   ? new Date(item.createdAt).toLocaleString("cs-CZ")
+   : "";
+
+  main.append(type,en,cs,date);
+
+  const del = document.createElement("button");
+  del.className = "delete-button";
+  del.textContent = "Smazat";
+
+  del.onclick = ()=>{
+   savedItems = savedItems.filter(i=>i.id !== item.id);
+   persistSavedItems();
+   rebuildCache();
+   renderSavedItems();
+  };
+
+  card.append(main,del);
+  savedList.appendChild(card);
+ });
 }
 
 function clearSaved(){
-if(!confirm("Opravdu chceš smazat celý uložený slovník?"))return;
-savedItems=[];
-translationCache.clear();
-persistSavedItems();
-renderSavedItems();
-saveMessage.textContent="Knihovna byla vymazána."
+ if(!confirm("Opravdu chceš smazat celý uložený slovník?")) return;
+
+ savedItems = [];
+ translationCache.clear();
+
+ persistSavedItems();
+ renderSavedItems();
+
+ saveMessage.textContent = "Knihovna byla vymazána.";
 }
 
 function exportSaved(){
-try{
-const blob=new Blob([JSON.stringify(savedItems,null,2)],{type:"application/json"});
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-a.href=url;
-a.download="playdabing-knihovna.json";
-document.body.appendChild(a);
-a.click();
-a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
-saveMessage.textContent="Export knihovny byl připraven."
-}catch(e){
-saveMessage.textContent="Export se nepodařil."
+ try{
+  const blob = new Blob(
+   [JSON.stringify(savedItems,null,2)],
+   {type:"application/json"}
+  );
+
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+
+  a.href = url;
+  a.download = "playdabing-knihovna.json";
+
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+
+  saveMessage.textContent = "Export knihovny byl připraven.";
+ }catch(e){
+  saveMessage.textContent = "Export se nepodařil.";
+ }
 }
+
+/* =========================
+   ONLINE TRANSLATION
+   ========================= */
+
+async function translateOnline(text){
+ const url =
+  "https://api.mymemory.translated.net/get?q="+
+  encodeURIComponent(text)+
+  "&langpair=en|cs";
+
+ const response = await fetch(url);
+
+ if(!response.ok){
+  throw new Error("Online překladač neodpovídá.");
+ }
+
+ const data = await response.json();
+ const translated = data?.responseData?.translatedText?.trim();
+
+ if(!translated){
+  throw new Error("Překlad není dostupný.");
+ }
+
+ return translated;
+}
+
+/*
+ FAST:
+ 1. okamžitá cache
+ 2. celý text jedním online požadavkem
+ 3. žádné čekání na překlad slova po slově
+*/
+
+async function translateFast(text){
+ const cached = findCachedTranslation(text);
+
+ if(cached){
+  return cached;
+ }
+
+ const translation = await translateOnline(text);
+
+ translationCache.set(cacheKey(text),translation);
+
+ return translation;
+}
+
+/* =========================
+   SPEECH / VOICE
+   ========================= */
+
+function speechAvailable(){
+ return "speechSynthesis" in window &&
+  typeof SpeechSynthesisUtterance !== "undefined";
 }
 
 function loadVoices(){
-if(!speechAvailable()){voices=[];return}
-try{voices=window.speechSynthesis.getVoices()||[]}catch(e){voices=[]}
+ if(!speechAvailable()) return;
+
+ voices = window.speechSynthesis.getVoices() || [];
 }
 
 if(speechAvailable()){
-loadVoices();
-window.speechSynthesis.onvoiceschanged=loadVoices
+ loadVoices();
+ window.speechSynthesis.onvoiceschanged = loadVoices;
 }
 
 function getCzechVoice(){
-loadVoices();
-const cs=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith("cs"));
-return cs[0]||null
+ loadVoices();
+
+ return voices.find(v =>
+  v.lang && v.lang.toLowerCase().startsWith("cs")
+ ) || null;
 }
 
 function unlockSpeech(){
-if(!speechAvailable())return;
-try{
-const s=window.speechSynthesis;
-s.cancel();
-s.resume();
-const u=new SpeechSynthesisUtterance(" ");
-u.lang="cs-CZ";
-u.volume=0;
-s.speak(u)
-}catch(e){}
+ if(!speechAvailable()) return false;
+
+ try{
+  const synth = window.speechSynthesis;
+  synth.cancel();
+  synth.resume();
+
+  const utterance = new SpeechSynthesisUtterance(" ");
+  utterance.lang = "cs-CZ";
+  utter.volume = 0;
+
+  synth.speak(utterance);
+  speechUnlocked = true;
+
+  return true;
+ }catch(e){
+  return false;
+ }
 }
 
 function speakCzech(text){
-if(!speechAvailable())return;
-const s=window.speechSynthesis;
-const u=new SpeechSynthesisUtterance(String(text||""));
-activeUtterance=u;
-u.lang="cs-CZ";
-u.rate=1;
-const v=getCzechVoice();
-if(v)u.voice=v;
+ return new Promise((resolve,reject)=>{
+  if(!speechAvailable()){
+   reject(new Error("Prohlížeč nepodporuje český hlas."));
+   return;
+  }
 
-u.onstart=()=>setStatus("🔊 Přehrávám český překlad...");
-u.onend=()=>{if(activeUtterance===u)activeUtterance=null};
-u.onerror=()=>{if(activeUtterance===u)activeUtterance=null};
+  text = String(text || "").trim();
 
-try{s.resume();s.speak(u)}catch(e){}
+  if(!text){
+   resolve();
+   return;
+  }
+
+  const synth = window.speechSynthesis;
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  activeUtterance = utterance;
+
+  utterance.lang = "cs-CZ";
+  utter.rate = 1.08;
+  utter.pitch = 1;
+
+  const voice = getCzechVoice();
+  if(voice) utterance.voice = voice;
+
+  let finished = false;
+  let timeout;
+
+  function finish(error){
+   if(finished) return;
+   finished = true;
+
+   clearTimeout(timeout);
+
+   if(activeUtterance === utterance){
+    activeUtterance = null;
+   }
+
+   if(error) reject(error);
+   else resolve();
+  }
+
+  utterance.onstart = ()=>{
+   setStatus("🔊 Přehrávám český dabing...");
+  };
+
+  utterance.onend = ()=>finish();
+  utterance.onerror = e=>finish(new Error(e.error || "Chyba hlasu"));
+
+  timeout = setTimeout(()=>{
+   finish(new Error("Český hlas se příliš dlouho nespustil."));
+  },30000);
+
+  try{
+   synth.resume();
+   synth.speak(utterance);
+  }catch(e){
+   finish(e);
+  }
+ });
 }
 
 async function testCzechVoice(){
-if(!speechAvailable()){
-setStatus("Tento prohlížeč nepodporuje český hlas.");
-return
-}
-try{
-window.speechSynthesis.cancel();
-setStatus("Testuji český hlas...");
-speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.")
-}catch(e){
-setStatus("Chyba českého hlasu.")
-}
-}
+ if(!speechAvailable()){
+  setStatus("Tento prohlížeč nepodporuje český hlas.");
+  return;
+ }
 
-async function translateOnline(text){
-const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=en|cs";
-const r=await fetch(url);
-if(!r.ok)throw new Error("Online překladač neodpovídá.");
-const j=await r.json();
-const tr=j?.responseData?.translatedText?.trim();
-if(!tr)throw new Error("Překlad není dostupný.");
-return tr
+ try{
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.resume();
+
+  setStatus("Testuji český hlas...");
+
+  await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.");
+
+  setStatus("Test českého hlasu dokončen.");
+ }catch(e){
+  setStatus("Chyba hlasu: "+e.message);
+ }
 }
 
-/* Základní offline slovník */
-const offlineDictionary={
-"hello":"Ahoj","hi":"Ahoj","hey":"Hej",
-"good morning":"Dobré ráno","good afternoon":"Dobré odpoledne",
-"good evening":"Dobrý večer","good night":"Dobrou noc",
-"goodbye":"Na shledanou","bye":"Ahoj",
-"thank you":"Děkuji","thanks":"Díky","please":"Prosím",
-"sorry":"Promiň","excuse me":"Promiňte",
-"yes":"Ano","no":"Ne","okay":"Dobře","ok":"Dobře","welcome":"Vítej",
-"how are you":"Jak se máš?","what are you doing":"Co děláš?",
-"come here":"Pojď sem","wait":"Počkej","wait a minute":"Počkej chvíli",
-"i love you":"Miluji tě","i don't know":"Nevím","i know":"Vím",
-"help me":"Pomoz mi","leave me alone":"Nech mě být",
-"what happened":"Co se stalo?","are you okay":"Jsi v pořádku?",
-"let's go":"Pojďme","get out":"Vypadni","look out":"Pozor",
-"be careful":"Buď opatrný","calm down":"Uklidni se",
-"shut up":"Drž hubu","what the hell":"Co to sakra?",
-"come on":"No tak","my friend":"Můj přítel",
-"good job":"Dobrá práce","right now":"Hned teď",
-"never mind":"To je jedno","i'm sorry":"Je mi to líto",
-"where are you":"Kde jsi?","what do you want":"Co chceš?",
-"i need help":"Potřebuji pomoc","don't worry":"Neboj se",
-"see you":"Uvidíme se","take care":"Opatruj se",
-"i'm here":"Jsem tady","i'm ready":"Jsem připraven",
-"stop":"Přestaň","run":"Utíkej","go":"Jdi","stay":"Zůstaň",
-"listen":"Poslouchej","watch out":"Dávej pozor",
-"it's okay":"To je v pořádku","i understand":"Rozumím",
-"i don't understand":"Nerozumím","who are you":"Kdo jsi?",
-"why":"Proč?","because":"Protože","maybe":"Možná",
-"really":"Vážně?","never":"Nikdy","always":"Vždycky",
-"now":"Teď","later":"Později","today":"Dnes","tomorrow":"Zítra",
-"friend":"Přítel","family":"Rodina","love":"Láska",
-"money":"Peníze","water":"Voda","food":"Jídlo",
-"house":"Dům","car":"Auto","man":"Muž","woman":"Žena",
-"child":"Dítě","people":"Lidé","time":"Čas","work":"Práce",
-"life":"Život","death":"Smrt","danger":"Nebezpečí","safe":"V bezpečí"
-};
+/* =========================
+   SPEECH RECOGNITION
+   ========================= */
 
-function findCachedTranslation(text){
-const key=cacheKey(text);
-if(translationCache.has(key))return translationCache.get(key);
+function setupRecognition(){
+ const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
 
-const stored=savedItems.find(i=>
-i.direction==="en|cs"&&normalize(i.english)===normalize(text)
-);
+ if(!SpeechRecognition){
+  setStatus("Rozpoznávání není podporováno. Zkus Chrome.");
+  return false;
+ }
 
-if(stored?.czech){
-translationCache.set(key,stored.czech);
-return stored.czech
+ recognition = new SpeechRecognition();
+
+ recognition.lang = "en-US";
+ recognition.continuous = true;
+ recognition.interimResults = true;
+ recognition.maxAlternatives = 1;
+
+ recognition.onresult = event=>{
+  let finalText = "";
+  let interimText = "";
+
+  for(let i=event.resultIndex;i<event.results.length;i++){
+   const result = event.results[i];
+   const text = result[0].transcript.trim();
+
+   if(result.isFinal && text){
+    finalText += text+" ";
+   }else if(text){
+    interimText += text+" ";
+   }
+  }
+
+  if(finalText.trim()){
+   clearInterim();
+   addSentence(finalText.trim());
+  }
+
+  if(interimText.trim()){
+   updateInterim(interimText.trim());
+  }
+ };
+
+ recognition.onerror = event=>{
+  if(!listening) return;
+
+  if(event.error === "not-allowed" ||
+     event.error === "service-not-allowed"){
+   listening = false;
+   setStatus("Mikrofon nemá povolení.");
+  }else if(event.error !== "no-speech" &&
+            event.error !== "aborted"){
+   setStatus("Chyba mikrofonu: "+event.error);
+  }
+ };
+
+ recognition.onend = ()=>{
+  if(!listening) return;
+
+  clearTimeout(restartTimer);
+
+  restartTimer = setTimeout(()=>{
+   restartTimer = null;
+
+   if(listening){
+    try{
+     recognition.start();
+    }catch(e){}
+   }
+  },350);
+ };
+
+ return true;
 }
 
-const offline=offlineDictionary[normalize(text)];
-if(offline){
-translationCache.set(key,offline);
-return offline
-}
-return null
-}
+/* Interim text display */
+let interimElement = null;
 
-/* Nejprve paměť, potom offline slovník, internet pouze pro neznámé výrazy. */
-async function translateSmart(text){
-const known=findCachedTranslation(text);
-if(known)return known;
+function updateInterim(text){
+ if(!interimElement){
+  if(english.textContent === "Zatím nic neslyším..."){
+   english.textContent = "";
+  }
 
-const offline=offlineDictionary[normalize(text)];
-if(offline)return offline;
+  interimElement = document.createElement("p");
+  interimElement.className = "interim";
+  english.appendChild(interimElement);
+ }
 
-const translated=await translateOnline(text);
-translationCache.set(cacheKey(text),translated);
-return translated
-}
-
-function appendTranscript(el,text){
-if(["Zatím nic neslyším...","Čekám na překlad..."].includes(el.textContent.trim()))el.textContent="";
-const p=document.createElement("p");
-p.textContent=text;
-el.appendChild(p);
-el.scrollTop=el.scrollHeight
-}
-
-function showInterim(text){
-if(!interimElement){
-if(english.textContent.trim()==="Zatím nic neslyším...")english.textContent="";
-interimElement=document.createElement("p");
-interimElement.className="interim";
-english.appendChild(interimElement)
-}
-interimElement.textContent=text;
-english.scrollTop=english.scrollHeight;
-setStatus("Rozpoznávám: "+text)
+ interimElement.textContent = text;
+ english.scrollTop = english.scrollHeight;
 }
 
 function clearInterim(){
-if(interimElement){interimElement.remove();interimElement=null}
+ if(interimElement){
+  interimElement.remove();
+  interimElement = null;
+ }
 }
 
-function setupRecognition(){
-const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(!SR){
-setStatus("Rozpoznávání řeči není podporováno. Otevři aplikaci v Chrome.");
-return false
+function appendTranscript(element,text){
+ if(element.textContent.trim() === "Zatím nic neslyším..." ||
+    element.textContent.trim() === "Čekám na překlad..."){
+  element.textContent = "";
+ }
+
+ const p = document.createElement("p");
+ p.textContent = text;
+
+ element.appendChild(p);
+ element.scrollTop = element.scrollHeight;
+
+ return p;
 }
 
-recognition=new SR();
-recognition.lang="en-US";
-recognition.continuous=true;
-recognition.interimResults=true;
-recognition.maxAlternatives=1;
+/* =========================
+   TRANSLATION QUEUE
+   ========================= */
 
-recognition.onresult=e=>{
-let finalText="",interim="";
-for(let i=e.resultIndex;i<e.results.length;i++){
-const result=e.results[i];
-const txt=result[0].transcript.trim();
-if(result.isFinal&&txt)finalText+=txt+" ";
-else if(txt)interim+=txt+" "
-}
-if(finalText.trim()){clearInterim();addSentence(finalText.trim())}
-if(interim.trim())showInterim(interim.trim())
-};
+function addSentence(text){
+ appendTranscript(english,text);
 
-recognition.onerror=e=>{
-if(!listening)return;
-if(e.error==="not-allowed"||e.error==="service-not-allowed"){
-listening=false;
-clearTimeout(restartTimer);
-restartTimer=null;
-setStatus("Mikrofon nemá povolení. Povol ho v nastavení Chrome.")
-}else if(e.error!=="no-speech"&&e.error!=="aborted"){
-setStatus("Chyba mikrofonu: "+e.error)
-}
-};
+ sentenceQueue.push({
+  text,
+  session
+ });
 
-recognition.onend=()=>{
-restarting=false;
-if(listening){
-clearTimeout(restartTimer);
-restartTimer=setTimeout(()=>{
-restartTimer=null;
-startRecognition()
-},650)
-}
-};
-return true
+ processQueue();
 }
 
-function startRecognition(){
-if(!listening||restarting||!recognition)return;
-try{
-restarting=true;
-recognition.start();
-setStatus("Poslouchám angličtinu...")
-}catch(e){
-restarting=false;
-if(listening){
-clearTimeout(restartTimer);
-restartTimer=setTimeout(()=>{
-restartTimer=null;
-startRecognition()
-},1000)
+/*
+ Translation is sequential to keep subtitles in correct order.
+ Voice output does NOT block translation requests.
+*/
+
+async function processQueue(){
+ if(processing) return;
+
+ processing = true;
+
+ try{
+  while(sentenceQueue.length){
+   const item = sentenceQueue.shift();
+
+   if(!listening || item.session !== session){
+    continue;
+   }
+
+   try{
+    setStatus("⚡ Rychlý překlad...");
+
+    const translated = await translateFast(item.text);
+
+    if(!listening || item.session !== session){
+     continue;
+    }
+
+    appendTranscript(czech,translated);
+
+    addSavedItem("sentence",item.text,translated);
+
+    // Voice is launched separately.
+    startVoiceQueue(translated);
+
+    setStatus("Přeloženo. Poslouchám dál...");
+   }catch(error){
+    if(listening && item.session === session){
+     setStatus("Chyba překladu: "+error.message);
+    }
+   }
+  }
+ }finally{
+  processing = false;
+
+  if(listening && sentenceQueue.length){
+   processQueue();
+  }
+ }
 }
+
+/* =========================
+   INDEPENDENT VOICE QUEUE
+   ========================= */
+
+let voiceQueue = [];
+let voiceProcessing = false;
+
+function startVoiceQueue(text){
+ voiceQueue.push(text);
+ processVoiceQueue();
 }
+
+async function processVoiceQueue(){
+ if(voiceProcessing) return;
+
+ voiceProcessing = true;
+
+ try{
+  while(voiceQueue.length){
+   const text = voiceQueue.shift();
+
+   if(!listening) break;
+
+   try{
+    await speakCzech(text);
+   }catch(e){
+    // Text translation remains available even if voice fails.
+   }
+  }
+ }finally{
+  voiceProcessing = false;
+
+  if(listening && voiceQueue.length){
+   processVoiceQueue();
+  }
+ }
 }
+
+/* =========================
+   DICTIONARY SEARCH
+   ========================= */
+
+async function searchDictionary(){
+ const text = $("dictionaryInput").value.trim();
+
+ if(!text){
+  dictionaryResult.hidden = false;
+  dictionaryResult.textContent = "Nejdříve napiš slovo nebo frázi.";
+  return;
+ }
+
+ dictionaryResult.hidden = false;
+ dictionaryResult.textContent = "Vyhledávám překlad...";
+
+ try{
+  const isCzech = /[ěščřžýáíéůúďťň]/i.test(text);
+
+  const url =
+   "https://api.mymemory.translated.net/get?q="+
+   encodeURIComponent(text)+
+   "&langpair="+(isCzech?"cs|en":"en|cs");
+
+  const response = await fetch(url);
+  const data = await response.json();
+
+  const translated = data?.responseData?.translatedText;
+
+  if(!translated) throw new Error("Překlad nebyl nalezen.");
+
+  const englishText = isCzech ? translated : text;
+  const czechText = isCzech ? text : translated;
+
+  addSavedItem("word",englishText,czechText,"en|cs");
+
+  dictionaryResult.innerHTML = "";
+
+  const first = document.createElement("div");
+  first.textContent = "Zadaný výraz: "+text;
+
+  const second = document.createElement("div");
+  second.style.marginTop = "7px";
+  second.textContent = "Překlad: "+translated;
+
+  const message = document.createElement("div");
+  message.style.cssText = "color:#83edb5;font-size:12px;margin-top:8px";
+  message.textContent = "Výraz byl uložen do knihovny.";
+
+  dictionaryResult.append(first,second,message);
+ }catch(e){
+  dictionaryResult.textContent = "Překlad se nepodařilo získat: "+e.message;
+ }
+}
+
+/* =========================
+   START / STOP
+   ========================= */
 
 async function startListening(){
-if(listening)return;
-if(!window.isSecureContext){
-setStatus("Mikrofon vyžaduje zabezpečenou HTTPS stránku.");
-return
-}
-if(!recognition&&!setupRecognition())return;
+ if(listening) return;
 
-listening=true;
-session++;
-sentenceQueue=[];
-clearInterim();
-english.textContent="";
-czech.textContent="";
-voiceInfo.textContent="Mikrofon je vyhrazen pro rozpoznávání.";
-clearTimeout(restartTimer);
-restartTimer=null;
-if(speechAvailable())unlockSpeech();
-startRecognition()
+ if(!window.isSecureContext){
+  setStatus("Mikrofon vyžaduje zabezpečenou HTTPS stránku.");
+  return;
+ }
+
+ if(!recognition && !setupRecognition()){
+  return;
+ }
+
+ if(speechAvailable()){
+  unlockSpeech();
+ }
+
+ listening = true;
+ session++;
+
+ sentenceQueue = [];
+ voiceQueue = [];
+
+ clearInterim();
+
+ english.textContent = "";
+ czech.textContent = "";
+
+ setStatus("Spouštím rychlé rozpoznávání...");
+
+ try{
+  recognition.start();
+ }catch(e){
+  setStatus("Mikrofon se nepodařilo spustit. Zkus znovu.");
+ }
 }
 
 function stopListening(){
-listening=false;
-session++;
-clearTimeout(restartTimer);
-restartTimer=null;
-sentenceQueue=[];
-clearInterim();
+ listening = false;
+ session++;
 
-if(recognition){try{recognition.stop()}catch(e){}}
-if(speechAvailable()){try{window.speechSynthesis.cancel()}catch(e){}}
+ clearTimeout(restartTimer);
+ restartTimer = null;
 
-processing=false;
-restarting=false;
-activeUtterance=null;
-setStatus("Mikrofon a hlas zastaveny.");
-voiceInfo.textContent="Typ hlasu: zatím neurčen"
+ sentenceQueue = [];
+ voiceQueue = [];
+
+ clearInterim();
+
+ if(recognition){
+  try{
+   recognition.stop();
+  }catch(e){}
+ }
+
+ if(speechAvailable()){
+  try{
+   window.speechSynthesis.cancel();
+  }catch(e){}
+ }
+
+ processing = false;
+ voiceProcessing = false;
+ activeUtterance = null;
+
+ setStatus("Mikrofon a dabing zastaveny.");
 }
 
-function addSentence(text){
-appendTranscript(english,text);
-sentenceQueue.push({text,session});
-processQueue()
-}
-
-async function processQueue(){
-if(processing)return;
-processing=true;
-
-try{
-while(sentenceQueue.length){
-const item=sentenceQueue.shift();
-if(!listening||item.session!==session)continue;
-
-try{
-setStatus("Překládám...");
-const translated=await translateSmart(item.text);
-if(!listening||item.session!==session)continue;
-
-appendTranscript(czech,translated);
-addSavedItem("sentence",item.text,translated);
-setStatus("Překlad hotov.");
-speakCzech(translated)
-}catch(e){
-if(listening&&item.session===session)setStatus("Překlad se nezdařil: "+e.message)
-}
-}
-}finally{
-processing=false;
-if(listening&&sentenceQueue.length)processQueue();
-else if(listening)setStatus("Poslouchám další anglické věty...")
-}
-}
-
-async function searchDictionary(){
-const text=$("dictionaryInput").value.trim();
-if(!text){
-dictionaryResult.hidden=false;
-dictionaryResult.textContent="Nejdříve napiš slovo nebo frázi.";
-return
-}
-
-dictionaryResult.hidden=false;
-dictionaryResult.textContent="Vyhledávám překlad...";
-
-try{
-const hasCzech=/[ěščřžýáíéůúďťň]/i.test(text);
-let translated;
-
-if(hasCzech){
-const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=cs|en";
-const r=await fetch(url);
-const j=await r.json();
-translated=j.responseData.translatedText
-}else{
-translated=await translateOnline(text)
-}
-
-const en=hasCzech?translated:text;
-const cs=hasCzech?text:translated;
-addSavedItem("word",en,cs,"en|cs");
-dictionaryResult.textContent="Anglicky: "+en+"\nČesky: "+cs+"\nUloženo do knihovny."
-}catch(e){
-dictionaryResult.textContent="Překlad se nepodařil: "+e.message
-}
-}
+/* =========================
+   BUTTONS
+   ========================= */
 
 $("start").addEventListener("click",startListening);
 $("stop").addEventListener("click",stopListening);
 $("test").addEventListener("click",testCzechVoice);
+
 $("libraryToggle").addEventListener("click",toggleLibrary);
 $("dictionaryButton").addEventListener("click",searchDictionary);
-$("dictionaryInput").addEventListener("keydown",e=>{if(e.key==="Enter")searchDictionary()});
+
+$("dictionaryInput").addEventListener("keydown",e=>{
+ if(e.key === "Enter"){
+  searchDictionary();
+ }
+});
+
 $("savedSearch").addEventListener("input",renderSavedItems);
 $("exportButton").addEventListener("click",exportSaved);
 $("clearButton").addEventListener("click",clearSaved);
 
-savedItems=loadSavedItems();
+/* =========================
+   INITIALIZATION
+   ========================= */
+
+savedItems = loadSavedItems();
 rebuildCache();
 renderSavedItems();
+
 setStatus("Připraveno");
+
 </script>
 </body>
 </html>
