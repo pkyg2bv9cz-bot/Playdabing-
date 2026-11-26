@@ -4,10 +4,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PlayDabing TV Beta 0.4</title>
+<title>PlayDabing TV</title>
 <style>
-* { box-sizing: border-box; }
-:root { color-scheme: dark; }
+* { box-sizing:border-box; }
+:root { color-scheme:dark; }
 body {
   min-height:100vh; margin:0; padding:28px 5.4% 22px;
   color:#f7f8ff; font-family:Arial,Helvetica,sans-serif;
@@ -19,8 +19,7 @@ body {
     linear-gradient(115deg,#02091e,#050d25 48%,#100522);
 }
 body::before {
-  content:""; position:fixed; inset:0;
-  pointer-events:none; opacity:.7;
+  content:""; position:fixed; inset:0; pointer-events:none; opacity:.7;
   background:
     repeating-linear-gradient(110deg,transparent 0 80px,rgba(28,115,255,.035) 81px 83px,transparent 84px 160px),
     radial-gradient(ellipse at 4% 65%,rgba(0,145,255,.32),transparent 26%),
@@ -35,9 +34,7 @@ body::before {
   display:block; width:100%;
   filter:drop-shadow(0 0 35px #087cff);
 }
-body > *:not(.headphones-bg) {
-  position:relative; z-index:1;
-}
+body > *:not(.headphones-bg) { position:relative; z-index:1; }
 h1 {
   margin:20px 0 3px; font-size:clamp(34px,6vw,64px);
   line-height:1.05; font-weight:900; letter-spacing:1px;
@@ -73,8 +70,7 @@ button:hover { transform:translateY(-2px); filter:brightness(1.13); }
   box-shadow:0 8px 28px rgba(130,35,255,.3),inset 0 1px rgba(255,255,255,.25);
 }
 .panel-container {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  display:grid; grid-template-columns:repeat(2,minmax(0,1fr));
   gap:24px; width:100%; max-width:1500px; margin:0 auto;
 }
 .panel {
@@ -128,22 +124,18 @@ button:hover { transform:translateY(-2px); filter:brightness(1.13); }
 .footer strong {
   display:block; color:#fff; font-size:18px; margin-bottom:3px;
 }
+.voice-info {
+  color:#cbd8f5; font-size:13px; margin:12px auto 0;
+}
 @media (max-width:700px) {
   body { padding:18px 2% 16px; }
   h1 { margin-top:14px; }
   .subtitle { margin-bottom:20px; }
   .controls { gap:9px; margin-bottom:20px; }
   button { min-height:52px; padding:13px 12px; border-radius:18px; font-size:13px; }
-  .panel-container {
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:8px;
-  }
-  .panel {
-    min-height:170px; padding:10px; border-radius:15px;
-  }
-  .panel h3 {
-    font-size:12px; letter-spacing:0; padding-bottom:9px;
-  }
+  .panel-container { grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+  .panel { min-height:170px; padding:10px; border-radius:15px; }
+  .panel h3 { font-size:12px; letter-spacing:0; padding-bottom:9px; }
   .transcript { height:120px; font-size:13px; }
   .status { margin-top:20px; min-width:210px; }
 }
@@ -154,15 +146,11 @@ button:hover { transform:translateY(-2px); filter:brightness(1.13); }
 <div class="headphones-bg" aria-hidden="true">
   <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
     <path d="M90 270 V220 A160 160 0 0 1 410 220 V270"
-      fill="none" stroke="#168cff" stroke-width="28"
-      stroke-linecap="round"/>
-    <rect x="65" y="245" width="75" height="145"
-      rx="30" fill="#087cff"/>
-    <rect x="360" y="245" width="75" height="145"
-      rx="30" fill="#923cff"/>
+      fill="none" stroke="#168cff" stroke-width="28" stroke-linecap="round"/>
+    <rect x="65" y="245" width="75" height="145" rx="30" fill="#087cff"/>
+    <rect x="360" y="245" width="75" height="145" rx="30" fill="#923cff"/>
     <path d="M140 320 Q250 440 360 320"
-      fill="none" stroke="#8b55ff" stroke-width="12"
-      stroke-linecap="round"/>
+      fill="none" stroke="#8b55ff" stroke-width="12" stroke-linecap="round"/>
   </svg>
 </div>
 
@@ -187,6 +175,7 @@ button:hover { transform:translateY(-2px); filter:brightness(1.13); }
 </div>
 
 <p class="status" id="status">Připraveno</p>
+<p class="voice-info" id="voiceInfo">Typ hlasu: zatím neurčen</p>
 
 <footer class="footer">
   <strong>PLAYDABING TV</strong>
@@ -196,7 +185,7 @@ button:hover { transform:translateY(-2px); filter:brightness(1.13); }
 </footer>
 
 <div style="text-align:center;color:#ffffff;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px;">
-  BETA VERZE 0.4
+  BETA VERZE 0.5
 </div>
 
 <script>
@@ -210,9 +199,20 @@ let speechQueue = [];
 let session = 0;
 let voices = [];
 
+let audioStream = null;
+let audioContext = null;
+let analyser = null;
+let audioSource = null;
+let pitchAnimation = null;
+
+let detectedVoiceType = "unknown";
+let pitchSamples = [];
+let lastVoiceType = "unknown";
+
 const english = document.getElementById("english");
 const czech = document.getElementById("czech");
 const statusText = document.getElementById("status");
+const voiceInfo = document.getElementById("voiceInfo");
 
 function loadVoices() {
   voices = speechSynthesis.getVoices();
@@ -224,11 +224,178 @@ if ("onvoiceschanged" in speechSynthesis) {
   speechSynthesis.onvoiceschanged = loadVoices;
 }
 
+/* --------------------------------------------------
+   ODHAD TYPU HLASU POMOCÍ VÝŠKY TÓNU
+-------------------------------------------------- */
+
+async function startVoiceAnalysis() {
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      voiceInfo.textContent = "Analýza hlasu není v tomto prohlížeči dostupná.";
+      return;
+    }
+
+    audioStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: false
+      }
+    });
+
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 4096;
+    analyser.smoothingTimeConstant = 0.15;
+
+    audioSource = audioContext.createMediaStreamSource(audioStream);
+    audioSource.connect(analyser);
+
+    pitchSamples = [];
+    detectedVoiceType = "unknown";
+    lastVoiceType = "unknown";
+
+    analyzePitch();
+  } catch (error) {
+    voiceInfo.textContent = "Analýza hlasu nebyla povolena.";
+  }
+}
+
+function estimatePitch(buffer, sampleRate) {
+  const SIZE = buffer.length;
+  let rms = 0;
+
+  for (let i = 0; i < SIZE; i++) {
+    rms += buffer[i] * buffer[i];
+  }
+
+  rms = Math.sqrt(rms / SIZE);
+
+  if (rms < 0.012) return null;
+
+  let minLag = Math.floor(sampleRate / 350);
+  let maxLag = Math.floor(sampleRate / 75);
+
+  let bestLag = -1;
+  let bestCorrelation = 0;
+
+  for (let lag = minLag; lag <= maxLag; lag++) {
+    let correlation = 0;
+
+    for (let i = 0; i < SIZE - lag; i++) {
+      correlation += buffer[i] * buffer[i + lag];
+    }
+
+    correlation /= SIZE - lag;
+
+    if (correlation > bestCorrelation) {
+      bestCorrelation = correlation;
+      bestLag = lag;
+    }
+  }
+
+  if (bestLag === -1 || bestCorrelation < 0.01) return null;
+
+  return sampleRate / bestLag;
+}
+
+function analyzePitch() {
+  if (!listening || !analyser || !audioContext) return;
+
+  const buffer = new Float32Array(analyser.fftSize);
+  analyser.getFloatTimeDomainData(buffer);
+
+  const pitch = estimatePitch(buffer, audioContext.sampleRate);
+
+  if (pitch && pitch >= 75 && pitch <= 350) {
+    pitchSamples.push(pitch);
+
+    if (pitchSamples.length > 35) {
+      pitchSamples.shift();
+    }
+
+    if (pitchSamples.length >= 8) {
+      const sorted = [...pitchSamples].sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)];
+
+      /*
+        Orientační hranice:
+        pod 165 Hz = spíše hlubší hlas
+        nad 165 Hz = spíše vyšší hlas
+
+        Nejde o spolehlivé určení pohlaví.
+      */
+
+      let newType = median < 165 ? "male" : "female";
+
+      if (newType !== lastVoiceType) {
+        lastVoiceType = newType;
+        detectedVoiceType = newType;
+
+        if (newType === "male") {
+          voiceInfo.textContent =
+            "Odhad hlasu: spíše mužský (hlubší hlas)";
+        } else {
+          voiceInfo.textContent =
+            "Odhad hlasu: spíše ženský (vyšší hlas)";
+        }
+      }
+    }
+  }
+
+  pitchAnimation = requestAnimationFrame(analyzePitch);
+}
+
+function stopVoiceAnalysis() {
+  if (pitchAnimation) {
+    cancelAnimationFrame(pitchAnimation);
+    pitchAnimation = null;
+  }
+
+  if (audioStream) {
+    audioStream.getTracks().forEach(track => track.stop());
+    audioStream = null;
+  }
+
+  if (audioContext) {
+    audioContext.close().catch(() => {});
+    audioContext = null;
+  }
+
+  analyser = null;
+  audioSource = null;
+  pitchSamples = [];
+  detectedVoiceType = "unknown";
+  lastVoiceType = "unknown";
+}
+
+/* --------------------------------------------------
+   VÝBĚR ČESKÉHO SYNTHETICKÉHO HLASU
+-------------------------------------------------- */
+
 function getCzechVoice() {
   loadVoices();
-  return voices.find(v => v.lang.toLowerCase() === "cs-cz")
-    || voices.find(v => v.lang.toLowerCase().startsWith("cs"))
-    || null;
+
+  const czechVoices = voices.filter(v =>
+    v.lang && v.lang.toLowerCase().startsWith("cs")
+  );
+
+  if (!czechVoices.length) return null;
+
+  const maleNames = /male|masculine|david|pavel|jakub|michal|adam/i;
+  const femaleNames = /female|feminine|iva|zuzana|jana|katerina|petra/i;
+
+  if (detectedVoiceType === "male") {
+    const maleVoice = czechVoices.find(v => maleNames.test(v.name));
+    if (maleVoice) return maleVoice;
+  }
+
+  if (detectedVoiceType === "female") {
+    const femaleVoice = czechVoices.find(v => femaleNames.test(v.name));
+    if (femaleVoice) return femaleVoice;
+  }
+
+  return czechVoices[0];
 }
 
 function speakCzech(text) {
@@ -243,9 +410,22 @@ function speakCzech(text) {
 
     utterance.lang = "cs-CZ";
     utterance.rate = 1.04;
-    utterance.pitch = 1;
 
     if (voice) utterance.voice = voice;
+
+    /*
+      Pokud prohlížeč nemá zvláštní mužský
+      a ženský hlas, zkusíme upravit výšku
+      dostupného hlasu.
+    */
+
+    if (detectedVoiceType === "male") {
+      utterance.pitch = 0.88;
+    } else if (detectedVoiceType === "female") {
+      utterance.pitch = 1.12;
+    } else {
+      utterance.pitch = 1;
+    }
 
     utterance.onend = resolve;
     utterance.onerror = function(event) {
@@ -259,17 +439,24 @@ function speakCzech(text) {
 async function testCzechVoice() {
   try {
     statusText.textContent = "Testuji český hlas...";
-    await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV. Mluvím nyní o něco rychleji a plynuleji.");
+    await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.");
     statusText.textContent = "Test českého hlasu dokončen.";
   } catch (error) {
     statusText.textContent = "Chyba hlasu: " + error.message;
   }
 }
 
-function appendTranscript(element, text) {
-  const placeholder = ["Zatím nic neslyším...", "Čekám na překlad..."];
+/* --------------------------------------------------
+   PŘEPIS A ROZPOZNÁVÁNÍ ANGLIČTINY
+-------------------------------------------------- */
 
-  if (placeholder.includes(element.textContent.trim())) {
+function appendTranscript(element, text) {
+  const placeholders = [
+    "Zatím nic neslyším...",
+    "Čekám na překlad..."
+  ];
+
+  if (placeholders.includes(element.textContent.trim())) {
     element.textContent = "";
   }
 
@@ -319,6 +506,7 @@ function setupRecognition() {
     if (event.error === "not-allowed" ||
         event.error === "service-not-allowed") {
       listening = false;
+      stopVoiceAnalysis();
       statusText.textContent = "Mikrofon nemá povolení.";
       return;
     }
@@ -349,7 +537,7 @@ function startRecognition() {
   }
 }
 
-function startListening() {
+async function startListening() {
   if (listening) return;
   if (!recognition && !setupRecognition()) return;
 
@@ -359,7 +547,15 @@ function startListening() {
   speechQueue = [];
   english.textContent = "";
   czech.textContent = "";
+
+  voiceInfo.textContent = "Analyzuji hlas...";
+
   startRecognition();
+  await startVoiceAnalysis();
+
+  if (listening) {
+    statusText.textContent = "Poslouchám angličtinu...";
+  }
 }
 
 function stopListening() {
@@ -372,12 +568,20 @@ function stopListening() {
     try { recognition.stop(); } catch (error) {}
   }
 
+  stopVoiceAnalysis();
   speechSynthesis.cancel();
+
   processing = false;
   speechProcessing = false;
   restarting = false;
+
   statusText.textContent = "Mikrofon a hlas zastaveny.";
+  voiceInfo.textContent = "Typ hlasu: zatím neurčen";
 }
+
+/* --------------------------------------------------
+   PŘEKLAD
+-------------------------------------------------- */
 
 function addSentence(text) {
   appendTranscript(english, text);
@@ -393,7 +597,9 @@ async function translateSentence(text) {
 
   const response = await fetch(url);
 
-  if (!response.ok) throw new Error("Překladač neodpovídá.");
+  if (!response.ok) {
+    throw new Error("Překladač neodpovídá.");
+  }
 
   const data = await response.json();
 
@@ -415,12 +621,18 @@ async function processQueue() {
 
     try {
       statusText.textContent = "Překládám: " + item.text;
+
       const translation = await translateSentence(item.text);
 
       if (!listening || item.session !== session) continue;
 
       appendTranscript(czech, translation);
-      speechQueue.push({text:translation, session:item.session});
+
+      speechQueue.push({
+        text:translation,
+        session:item.session
+      });
+
       processSpeechQueue();
 
     } catch (error) {
@@ -437,36 +649,38 @@ async function processQueue() {
   }
 }
 
+/* --------------------------------------------------
+   PLYNULEJŠÍ DABING – SPOJOVÁNÍ PŘEKLADŮ
+-------------------------------------------------- */
+
 async function processSpeechQueue() {
   if (speechProcessing) return;
   speechProcessing = true;
 
   while (speechQueue.length > 0) {
-    // Krátké čekání umožní shromáždit navazující překlady.
-    // Díky tomu hlas nemusí spouštět každou krátkou část zvlášť.
+    const first = speechQueue.shift();
+
+    if (!listening || first.session !== session) continue;
+
+    // Krátká pauza pro zachycení dalších překladů.
     await new Promise(resolve => setTimeout(resolve, 650));
 
-    if (!listening) {
-      speechQueue = [];
-      break;
-    }
+    if (!listening || first.session !== session) continue;
 
-    // Spojení připravených překladů do jednoho plynulejšího přednesu.
-    const batch = [];
-    while (speechQueue.length > 0) {
-      const item = speechQueue.shift();
-      if (listening && item.session === session) {
-        batch.push(item.text);
-      }
-    }
+    const batch = [first.text];
 
-    if (batch.length === 0) continue;
+    while (
+      speechQueue.length > 0 &&
+      speechQueue[0].session === session
+    ) {
+      batch.push(speechQueue.shift().text);
+    }
 
     try {
       statusText.textContent = "Přehrávám český překlad...";
       await speakCzech(batch.join(" "));
     } catch (error) {
-      if (listening) {
+      if (listening && first.session === session) {
         statusText.textContent = "Chyba hlasu: " + error.message;
       }
     }
