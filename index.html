@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PlayDabing TV</title>
+<title>PlayDabing TV 2.0</title>
 
 <style>
 * {
@@ -28,7 +28,7 @@ h1 {
 }
 
 .subtitle {
-  color: #aaaaaa;
+  color: #cccccc;
   font-size: 13px;
   margin-bottom: 15px;
 }
@@ -43,6 +43,7 @@ h1 {
 
 button {
   padding: 10px 14px;
+  margin: 0;
   border: 1px solid #ffffff;
   border-radius: 7px;
   font-size: 13px;
@@ -57,11 +58,7 @@ button {
   color: #ffffff;
 }
 
-button:active {
-  opacity: 0.7;
-}
-
-.translations {
+.panel-container {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
@@ -73,51 +70,51 @@ button:active {
 .panel {
   background: #111111;
   border: 1px solid #444444;
-  border-radius: 8px;
   padding: 12px;
+  border-radius: 8px;
   min-width: 0;
   min-height: 220px;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .panel h3 {
   color: #ffffff;
   font-size: 14px;
+  text-align: center;
   border-bottom: 1px solid #444444;
   padding-bottom: 9px;
   margin: 0 0 10px;
-  text-align: center;
 }
 
 #english, #czech {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
   color: #eeeeee;
   font-size: 14px;
   line-height: 1.5;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
   margin: 0;
 }
 
 .status {
   color: #cccccc;
-  font-size: 12px;
   margin-top: 14px;
-  min-height: 18px;
+  font-size: 12px;
 }
 
 .footer {
   margin-top: 25px;
-  padding: 14px 8px;
+  padding: 14px 10px;
   border-top: 1px solid #333333;
   color: #888888;
   font-size: 11px;
+  letter-spacing: 1px;
 }
 
 .footer strong {
   display: block;
   color: #ffffff;
   font-size: 13px;
-  letter-spacing: 2px;
   margin-bottom: 7px;
 }
 </style>
@@ -125,7 +122,7 @@ button:active {
 
 <body>
 
-<h1>PLAYDABING TV</h1>
+<h1>PLAYDABING TV 2.0</h1>
 <p class="subtitle">Průběžný anglicko-český dabing</p>
 
 <div class="controls">
@@ -138,11 +135,11 @@ button:active {
   </button>
 
   <button id="test" onclick="testCzechVoice()">
-    Test českého hlasu
+    Otestovat český hlas
   </button>
 </div>
 
-<div class="translations">
+<div class="panel-container">
 
   <div class="panel">
     <h3>ANGLICKÝ PŘEPIS</h3>
@@ -229,13 +226,10 @@ function speakCzech(text) {
 async function testCzechVoice() {
   try {
     statusText.textContent = "Testuji český hlas...";
-
     await speakCzech(
       "Ahoj, toto je test českého hlasu PlayDabing TV."
     );
-
     statusText.textContent = "Test českého hlasu dokončen.";
-
   } catch (error) {
     statusText.textContent = "Chyba hlasu: " + error.message;
   }
