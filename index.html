@@ -5,303 +5,185 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PlayDabing TV</title>
-
 <style>
 * { box-sizing: border-box; }
 :root { color-scheme: dark; }
-
 body {
-  min-height: 100vh;
-  margin: 0;
-  padding: 28px 5.4% 22px;
-  color: #f7f8ff;
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
+  min-height:100vh; margin:0; padding:28px 5.4% 22px;
+  color:#f7f8ff; font-family:Arial,Helvetica,sans-serif;
+  text-align:center; overflow-x:hidden; position:relative;
   background:
-    radial-gradient(ellipse at 12% 43%, rgba(0,116,255,.38), transparent 38%),
-    radial-gradient(ellipse at 88% 42%, rgba(147,0,255,.36), transparent 39%),
-    radial-gradient(ellipse at 50% -12%, rgba(0,90,220,.24), transparent 45%),
-    linear-gradient(115deg,#02091e 0%,#050d25 48%,#100522 100%);
-  overflow-x: hidden;
-  position: relative;
+    radial-gradient(ellipse at 12% 43%,rgba(0,116,255,.38),transparent 38%),
+    radial-gradient(ellipse at 88% 42%,rgba(147,0,255,.36),transparent 39%),
+    radial-gradient(ellipse at 50% -12%,rgba(0,90,220,.24),transparent 45%),
+    linear-gradient(115deg,#02091e,#050d25 48%,#100522);
 }
-
 body::before {
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.7;
+  content:""; position:fixed; inset:0;
+  pointer-events:none; opacity:.7;
   background:
-    repeating-linear-gradient(110deg, transparent 0 80px, rgba(28,115,255,.035) 81px 83px, transparent 84px 160px),
-    radial-gradient(ellipse at 4% 65%, rgba(0,145,255,.32), transparent 26%),
-    radial-gradient(ellipse at 98% 68%, rgba(171,0,255,.28), transparent 28%);
+    repeating-linear-gradient(110deg,transparent 0 80px,rgba(28,115,255,.035) 81px 83px,transparent 84px 160px),
+    radial-gradient(ellipse at 4% 65%,rgba(0,145,255,.32),transparent 26%),
+    radial-gradient(ellipse at 98% 68%,rgba(171,0,255,.28),transparent 28%);
 }
-
+.headphones-bg {
+  position:fixed; width:min(75vw,650px);
+  left:50%; top:50%; transform:translate(-50%,-50%);
+  opacity:.12; pointer-events:none; z-index:0;
+}
+.headphones-bg svg {
+  display:block; width:100%;
+  filter:drop-shadow(0 0 35px #087cff);
+}
+body > *:not(.headphones-bg) {
+  position:relative; z-index:1;
+}
 h1 {
-  position:relative;
-  margin:20px 0 3px;
-  font-size:clamp(34px,6vw,64px);
-  line-height:1.05;
-  font-weight:900;
-  letter-spacing:1px;
-  font-style:italic;
-  text-shadow:0 0 28px rgba(0,125,255,.25);
+  margin:20px 0 3px; font-size:clamp(34px,6vw,64px);
+  line-height:1.05; font-weight:900; letter-spacing:1px;
+  font-style:italic; text-shadow:0 0 28px rgba(0,125,255,.25);
 }
-
-h1::after {
-  content:" TV";
-  color:#078cff;
-}
-
+h1::after { content:" TV"; color:#078cff; }
 .subtitle {
-  position:relative;
-  color:#d5def5;
-  font-size:clamp(15px,2.4vw,27px);
+  color:#d5def5; font-size:clamp(15px,2.4vw,27px);
   margin:8px 0 28px;
 }
-
 .controls {
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:14px;
-  margin:0 auto 28px;
+  display:flex; justify-content:center; align-items:center;
+  flex-wrap:wrap; gap:14px; margin:0 auto 28px;
 }
-
 button {
-  padding:16px 27px;
-  min-height:62px;
+  padding:16px 27px; min-height:62px;
   border:1px solid rgba(112,169,255,.65);
-  border-radius:25px;
-  font-size:clamp(14px,1.6vw,19px);
-  font-weight:700;
-  cursor:pointer;
-  color:#fff;
+  border-radius:25px; font-size:clamp(14px,1.6vw,19px);
+  font-weight:700; cursor:pointer; color:#fff;
   background:linear-gradient(135deg,#078cff,#0648ed);
-  box-shadow:0 8px 28px rgba(0,100,255,.28), inset 0 1px rgba(255,255,255,.25);
-  transition:transform .18s ease, filter .18s ease;
+  box-shadow:0 8px 28px rgba(0,100,255,.28),inset 0 1px rgba(255,255,255,.25);
+  transition:transform .18s ease,filter .18s ease;
 }
-
-button:hover {
-  transform:translateY(-2px);
-  filter:brightness(1.13);
-}
-
+button:hover { transform:translateY(-2px); filter:brightness(1.13); }
 #stop {
   background:linear-gradient(145deg,#263959,#111d39);
   border-color:#536f9f;
-  box-shadow:0 8px 25px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.15);
+  box-shadow:0 8px 25px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.15);
 }
-
 #test {
   background:linear-gradient(135deg,#a43cff,#5410d8);
   border-color:#b56cff;
-  box-shadow:0 8px 28px rgba(130,35,255,.3), inset 0 1px rgba(255,255,255,.25);
+  box-shadow:0 8px 28px rgba(130,35,255,.3),inset 0 1px rgba(255,255,255,.25);
 }
-
 .panel-container {
-  position:relative;
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:24px;
-  width:100%;
-  max-width:1500px;
-  margin:0 auto;
+  gap:24px; width:100%; max-width:1500px; margin:0 auto;
 }
-
 .panel {
-  min-width:0;
-  min-height:225px;
-  padding:22px 26px 18px;
-  text-align:left;
-  border:1.5px solid rgba(48,157,255,.9);
+  min-width:0; min-height:225px; padding:22px 26px 18px;
+  text-align:left; border:1.5px solid rgba(48,157,255,.9);
   border-radius:25px;
   background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9));
-  box-shadow:0 0 24px rgba(0,112,255,.12), inset 0 1px rgba(255,255,255,.07);
+  box-shadow:0 0 24px rgba(0,112,255,.12),inset 0 1px rgba(255,255,255,.07);
   backdrop-filter:blur(12px);
 }
-
 .panel:nth-child(2) {
   border-color:rgba(157,92,255,.85);
   background:linear-gradient(135deg,rgba(34,27,76,.84),rgba(19,19,52,.92));
-  box-shadow:0 0 24px rgba(153,67,255,.13), inset 0 1px rgba(255,255,255,.07);
+  box-shadow:0 0 24px rgba(153,67,255,.13),inset 0 1px rgba(255,255,255,.07);
 }
-
 .panel h3 {
-  color:#f4f6ff;
-  font-size:clamp(15px,2vw,25px);
-  text-align:left;
-  border-bottom:1px solid rgba(120,165,235,.65);
-  padding-bottom:14px;
-  margin:0 0 14px;
-  letter-spacing:.4px;
+  color:#f4f6ff; font-size:clamp(15px,2vw,25px);
+  text-align:left; border-bottom:1px solid rgba(120,165,235,.65);
+  padding-bottom:14px; margin:0 0 14px; letter-spacing:.4px;
 }
-
 .transcript {
-  height:112px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  overflow-wrap:anywhere;
-  white-space:pre-wrap;
-  color:#dce6ff;
-  font-size:clamp(14px,1.8vw,22px);
-  line-height:1.45;
-  text-align:left;
-  scrollbar-width:thin;
-  scrollbar-color:#647da9 transparent;
+  height:112px; overflow-y:auto; overflow-x:hidden;
+  overflow-wrap:anywhere; white-space:pre-wrap;
+  color:#dce6ff; font-size:clamp(14px,1.8vw,22px);
+  line-height:1.45; text-align:left;
+  scrollbar-width:thin; scrollbar-color:#647da9 transparent;
 }
-
-.transcript p {
-  margin:0 0 8px;
-}
-
-.transcript::-webkit-scrollbar {
-  width:8px;
-}
-
+.transcript p { margin:0 0 8px; }
+.transcript::-webkit-scrollbar { width:8px; }
 .transcript::-webkit-scrollbar-thumb {
-  background:linear-gradient(#4daaff,#8462d8);
-  border-radius:8px;
+  background:linear-gradient(#4daaff,#8462d8); border-radius:8px;
 }
-
 .status {
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  gap:14px;
-  color:#fff;
-  margin:28px auto 18px;
-  padding:12px 32px;
-  min-width:250px;
-  justify-content:center;
-  font-size:18px;
-  font-weight:700;
-  border:1px solid rgba(91,151,222,.55);
-  border-radius:30px;
+  display:inline-flex; align-items:center; gap:14px;
+  color:#fff; margin:28px auto 18px; padding:12px 32px;
+  min-width:250px; justify-content:center;
+  font-size:18px; font-weight:700;
+  border:1px solid rgba(91,151,222,.55); border-radius:30px;
   background:linear-gradient(110deg,rgba(0,160,118,.18),rgba(13,28,62,.85));
   box-shadow:0 0 22px rgba(0,220,145,.08);
 }
-
 .status::before {
-  content:"";
-  width:13px;
-  height:13px;
-  border-radius:50%;
-  background:#00f08a;
-  box-shadow:0 0 14px #00f08a;
+  content:""; width:13px; height:13px; border-radius:50%;
+  background:#00f08a; box-shadow:0 0 14px #00f08a;
 }
-
 .footer {
-  position:relative;
-  margin-top:14px;
-  padding:20px 10px 8px;
+  margin-top:14px; padding:20px 10px 8px;
   border-top:1px solid rgba(83,142,230,.55);
-  color:#d8e0f5;
-  font-size:14px;
-  line-height:1.5;
-  letter-spacing:.2px;
+  color:#d8e0f5; font-size:14px; line-height:1.5;
 }
-
 .footer strong {
-  display:block;
-  color:#fff;
-  font-size:18px;
-  margin-bottom:3px;
+  display:block; color:#fff; font-size:18px; margin-bottom:3px;
 }
-
-body > div:last-of-type {
-  position:relative;
-  color:#c8d4f4 !important;
-  font-size:12px !important;
-}
-
 @media (max-width:700px) {
-  body {
-    padding:18px 4% 16px;
-  }
-
-  h1 {
-    margin-top:14px;
-  }
-
-  .subtitle {
-    margin-bottom:20px;
-  }
-
-  .controls {
-    gap:9px;
-    margin-bottom:20px;
-  }
-
-  button {
-    min-height:52px;
-    padding:13px 17px;
-    border-radius:18px;
-  }
-
+  body { padding:18px 2% 16px; }
+  h1 { margin-top:14px; }
+  .subtitle { margin-bottom:20px; }
+  .controls { gap:9px; margin-bottom:20px; }
+  button { min-height:52px; padding:13px 12px; border-radius:18px; font-size:13px; }
   .panel-container {
-    grid-template-columns:1fr;
-    gap:14px;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
   }
-
   .panel {
-    min-height:170px;
-    padding:17px 18px;
-    border-radius:20px;
+    min-height:170px; padding:10px; border-radius:15px;
   }
-
-  .transcript {
-    height:85px;
+  .panel h3 {
+    font-size:12px; letter-spacing:0; padding-bottom:9px;
   }
-
-  .status {
-    margin-top:20px;
-    min-width:210px;
-  }
+  .transcript { height:120px; font-size:13px; }
+  .status { margin-top:20px; min-width:210px; }
 }
 </style>
 </head>
-
 <body>
+
+<div class="headphones-bg" aria-hidden="true">
+  <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+    <path d="M90 270 V220 A160 160 0 0 1 410 220 V270"
+      fill="none" stroke="#168cff" stroke-width="28"
+      stroke-linecap="round"/>
+    <rect x="65" y="245" width="75" height="145"
+      rx="30" fill="#087cff"/>
+    <rect x="360" y="245" width="75" height="145"
+      rx="30" fill="#923cff"/>
+    <path d="M140 320 Q250 440 360 320"
+      fill="none" stroke="#8b55ff" stroke-width="12"
+      stroke-linecap="round"/>
+  </svg>
+</div>
 
 <h1>PLAYDABING</h1>
 <p class="subtitle">Překlad angličtiny do češtiny</p>
 
 <div class="controls">
-
-  <button id="start" onclick="startListening()">
-    Spustit mikrofon
-  </button>
-
-  <button id="stop" onclick="stopListening()">
-    Zastavit
-  </button>
-
-  <button id="test" onclick="testCzechVoice()">
-    Otestovat český hlas
-  </button>
-
+  <button id="start" onclick="startListening()">Spustit mikrofon</button>
+  <button id="stop" onclick="stopListening()">Zastavit</button>
+  <button id="test" onclick="testCzechVoice()">Otestovat český hlas</button>
 </div>
 
 <div class="panel-container">
-
   <div class="panel">
     <h3>ANGLICKÝ PŘEPIS</h3>
-    <div id="english" class="transcript">
-      Zatím nic neslyším...
-    </div>
+    <div id="english" class="transcript">Zatím nic neslyším...</div>
   </div>
-
   <div class="panel">
     <h3>ČESKÝ PŘEKLAD</h3>
-    <div id="czech" class="transcript">
-      Čekám na překlad...
-    </div>
+    <div id="czech" class="transcript">Čekám na překlad...</div>
   </div>
-
 </div>
 
 <p class="status" id="status">Připraveno</p>
@@ -313,21 +195,18 @@ body > div:last-of-type {
   © 2026 PlayDabing TV
 </footer>
 
-<div style="text-align:center; color:#ffffff; font-size:12px; margin-top:20px; padding-bottom:10px; letter-spacing:1px;">
+<div style="text-align:center;color:#ffffff;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px;">
   BETA VERZE 0.3
 </div>
 
 <script>
 let recognition = null;
 let listening = false;
-
 let processing = false;
 let speechProcessing = false;
 let restarting = false;
-
 let sentenceQueue = [];
 let speechQueue = [];
-
 let session = 0;
 let voices = [];
 
@@ -347,17 +226,13 @@ if ("onvoiceschanged" in speechSynthesis) {
 
 function getCzechVoice() {
   loadVoices();
-
-  return voices.find(v =>
-    v.lang.toLowerCase() === "cs-cz"
-  ) || voices.find(v =>
-    v.lang.toLowerCase().startsWith("cs")
-  ) || null;
+  return voices.find(v => v.lang.toLowerCase() === "cs-cz")
+    || voices.find(v => v.lang.toLowerCase().startsWith("cs"))
+    || null;
 }
 
 function speakCzech(text) {
   return new Promise((resolve, reject) => {
-
     if (!("speechSynthesis" in window)) {
       reject(new Error("Hlas není podporován."));
       return;
@@ -370,12 +245,9 @@ function speakCzech(text) {
     utterance.rate = 0.95;
     utterance.pitch = 1;
 
-    if (voice) {
-      utterance.voice = voice;
-    }
+    if (voice) utterance.voice = voice;
 
     utterance.onend = resolve;
-
     utterance.onerror = function(event) {
       reject(new Error(event.error || "Přehrávání selhalo."));
     };
@@ -387,26 +259,15 @@ function speakCzech(text) {
 async function testCzechVoice() {
   try {
     statusText.textContent = "Testuji český hlas...";
-
-    await speakCzech(
-      "Ahoj, toto je test českého hlasu PlayDabing TV."
-    );
-
+    await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.");
     statusText.textContent = "Test českého hlasu dokončen.";
-
   } catch (error) {
     statusText.textContent = "Chyba hlasu: " + error.message;
   }
 }
 
-/* Přidání textu a automatické posunutí dolů */
-
 function appendTranscript(element, text) {
-
-  const placeholder = [
-    "Zatím nic neslyším...",
-    "Čekám na překlad..."
-  ];
+  const placeholder = ["Zatím nic neslyším...", "Čekám na překlad..."];
 
   if (placeholder.includes(element.textContent.trim())) {
     element.textContent = "";
@@ -414,236 +275,157 @@ function appendTranscript(element, text) {
 
   const paragraph = document.createElement("p");
   paragraph.textContent = text;
-
   element.appendChild(paragraph);
-
   element.scrollTop = element.scrollHeight;
 }
 
 function setupRecognition() {
-
   const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
-    statusText.textContent =
-      "Rozpoznávání řeči není podporováno.";
+    statusText.textContent = "Rozpoznávání řeči není podporováno.";
     return false;
   }
 
   recognition = new SpeechRecognition();
-
   recognition.lang = "en-US";
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.maxAlternatives = 1;
 
   recognition.onresult = function(event) {
-
     let finalText = "";
     let interimText = "";
 
     for (let i = event.resultIndex; i < event.results.length; i++) {
-
       const result = event.results[i];
       const phrase = result[0].transcript.trim();
 
-      if (result.isFinal && phrase) {
-        finalText += phrase + " ";
-      } else if (phrase) {
-        interimText += phrase + " ";
-      }
+      if (result.isFinal && phrase) finalText += phrase + " ";
+      else if (phrase) interimText += phrase + " ";
     }
 
-    if (finalText.trim()) {
-      addSentence(finalText.trim());
-    }
+    if (finalText.trim()) addSentence(finalText.trim());
 
     if (interimText.trim()) {
-      statusText.textContent =
-        "Rozpoznávám: " + interimText.trim();
+      statusText.textContent = "Rozpoznávám: " + interimText.trim();
     }
   };
 
   recognition.onerror = function(event) {
-
     if (!listening) return;
 
     if (event.error === "not-allowed" ||
         event.error === "service-not-allowed") {
-
       listening = false;
       statusText.textContent = "Mikrofon nemá povolení.";
       return;
     }
 
-    if (event.error !== "no-speech" &&
-        event.error !== "aborted") {
-
-      statusText.textContent =
-        "Chyba mikrofonu: " + event.error;
+    if (event.error !== "no-speech" && event.error !== "aborted") {
+      statusText.textContent = "Chyba mikrofonu: " + event.error;
     }
   };
 
   recognition.onend = function() {
-
     restarting = false;
-
-    if (listening) {
-      setTimeout(startRecognition, 500);
-    }
+    if (listening) setTimeout(startRecognition, 500);
   };
 
   return true;
 }
 
 function startRecognition() {
-
   if (!listening || restarting || !recognition) return;
 
   try {
-
     restarting = true;
     recognition.start();
-
     statusText.textContent = "Poslouchám angličtinu...";
-
   } catch (error) {
-
     restarting = false;
-
-    if (listening) {
-      setTimeout(startRecognition, 1000);
-    }
+    if (listening) setTimeout(startRecognition, 1000);
   }
 }
 
 function startListening() {
-
   if (listening) return;
-
   if (!recognition && !setupRecognition()) return;
 
   listening = true;
   session++;
-
   sentenceQueue = [];
   speechQueue = [];
-
   english.textContent = "";
   czech.textContent = "";
-
   startRecognition();
 }
 
 function stopListening() {
-
   listening = false;
   session++;
-
   sentenceQueue = [];
   speechQueue = [];
 
   if (recognition) {
-    try {
-      recognition.stop();
-    } catch (error) {}
+    try { recognition.stop(); } catch (error) {}
   }
 
   speechSynthesis.cancel();
-
   processing = false;
   speechProcessing = false;
   restarting = false;
-
   statusText.textContent = "Mikrofon a hlas zastaveny.";
 }
 
 function addSentence(text) {
-
   appendTranscript(english, text);
-
-  sentenceQueue.push({
-    text: text,
-    session: session
-  });
-
-  statusText.textContent =
-    "Věta zachycena. Čekám na překlad...";
-
+  sentenceQueue.push({text:text, session:session});
+  statusText.textContent = "Věta zachycena. Čekám na překlad...";
   processQueue();
 }
 
-/* Překlad */
-
 async function translateSentence(text) {
-
   const url =
     "https://api.mymemory.translated.net/get?q=" +
-    encodeURIComponent(text) +
-    "&langpair=en|cs";
+    encodeURIComponent(text) + "&langpair=en|cs";
 
   const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Překladač neodpovídá.");
-  }
+  if (!response.ok) throw new Error("Překladač neodpovídá.");
 
   const data = await response.json();
 
-  if (!data.responseData ||
-      !data.responseData.translatedText) {
-
+  if (!data.responseData || !data.responseData.translatedText) {
     throw new Error("Překlad není dostupný.");
   }
 
   return data.responseData.translatedText;
 }
 
-/* Překlad běží nezávisle na přehrávání */
-
 async function processQueue() {
-
   if (processing) return;
-
   processing = true;
 
   while (sentenceQueue.length > 0) {
-
     const item = sentenceQueue.shift();
 
-    if (!listening || item.session !== session) {
-      continue;
-    }
+    if (!listening || item.session !== session) continue;
 
     try {
+      statusText.textContent = "Překládám: " + item.text;
+      const translation = await translateSentence(item.text);
 
-      statusText.textContent =
-        "Překládám: " + item.text;
-
-      const translation =
-        await translateSentence(item.text);
-
-      if (!listening || item.session !== session) {
-        continue;
-      }
+      if (!listening || item.session !== session) continue;
 
       appendTranscript(czech, translation);
-
-      speechQueue.push({
-        text: translation,
-        session: item.session
-      });
-
+      speechQueue.push({text:translation, session:item.session});
       processSpeechQueue();
 
     } catch (error) {
-
       if (listening && item.session === session) {
-
-        statusText.textContent =
-          "Chyba: " + error.message;
+        statusText.textContent = "Chyba: " + error.message;
       }
     }
   }
@@ -651,41 +433,25 @@ async function processQueue() {
   processing = false;
 
   if (listening && !speechProcessing) {
-
-    statusText.textContent =
-      "Poslouchám další anglické věty...";
+    statusText.textContent = "Poslouchám další anglické věty...";
   }
 }
 
-/* Přehrávání českých vět ve správném pořadí */
-
 async function processSpeechQueue() {
-
   if (speechProcessing) return;
-
   speechProcessing = true;
 
   while (speechQueue.length > 0) {
-
     const item = speechQueue.shift();
 
-    if (!listening || item.session !== session) {
-      continue;
-    }
+    if (!listening || item.session !== session) continue;
 
     try {
-
-      statusText.textContent =
-        "Přehrávám český překlad...";
-
+      statusText.textContent = "Přehrávám český překlad...";
       await speakCzech(item.text);
-
     } catch (error) {
-
       if (listening && item.session === session) {
-
-        statusText.textContent =
-          "Chyba hlasu: " + error.message;
+        statusText.textContent = "Chyba hlasu: " + error.message;
       }
     }
   }
@@ -693,12 +459,9 @@ async function processSpeechQueue() {
   speechProcessing = false;
 
   if (listening && sentenceQueue.length === 0) {
-
-    statusText.textContent =
-      "Poslouchám další anglické věty...";
+    statusText.textContent = "Poslouchám další anglické věty...";
   }
 }
 </script>
-
 </body>
 </html>
