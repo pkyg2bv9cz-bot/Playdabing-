@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050d25">
-<title>PlayDabing TV Beta 0.8</title>
+<title>PlayDabing TV Beta 0.9</title>
 
 <style>
 *{box-sizing:border-box}
@@ -140,7 +140,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </footer>
 
 <div style="text-align:center;color:white;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px">
- BETA VERZE 0.8
+ BETA VERZE 0.9
 </div>
 
 <script>
@@ -154,24 +154,26 @@ const dictionaryResult=$("dictionaryResult");
 const STORAGE_KEY="playdabing_tv_saved_v06";
 
 let recognition=null, listening=false, processing=false;
-let speechProcessing=false, restarting=false;
-let sentenceQueue=[], speechQueue=[], wordQueue=[];
+let restarting=false;
+let sentenceQueue=[], wordQueue=[];
 let session=0, voices=[], audioStream=null, audioContext=null;
 let analyser=null, audioSource=null, pitchAnimation=null;
 let detectedVoiceType="unknown", pitchSamples=[], lastVoiceType="unknown";
 let interimElement=null, savedItems=[], translationCache=new Map();
+let speechUnlocked=false;
+let activeUtterance=null;
 
+/* CHYBY */
 window.addEventListener("error",event=>{
- statusText.textContent="Chyba aplikace: "+(event.message||"neznámá chyba");
+ setStatus("Chyba aplikace: "+(event.message||"neznámá chyba"));
 });
 window.addEventListener("unhandledrejection",event=>{
- statusText.textContent="Chyba: "+(event.reason?.message||"operace se nezdařila");
+ setStatus("Chyba: "+(event.reason?.message||"operace se nezdařila"));
 });
-
 function setStatus(message){statusText.textContent=message}
 function speechAvailable(){
  return "speechSynthesis" in window &&
-        typeof SpeechSynthesisUtterance!=="undefined";
+ typeof SpeechSynthesisUtterance!=="undefined";
 }
 
 /* KNIHOVNA */
@@ -325,7 +327,7 @@ function exportSaved(){
  }
 }
 
-/* HLAS */
+/* ČESKÝ HLAS */
 function loadVoices(){
  if(!speechAvailable()){voices=[];return}
  try{voices=window.speechSynthesis.getVoices()||[]}catch(error){voices=[]}
@@ -340,39 +342,77 @@ function getCzechVoice(){
  loadVoices();
  const cs=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith("cs"));
  if(!cs.length)return null;
+
  const male=/male|masculine|david|pavel|jakub|michal|adam/i;
  const female=/female|feminine|iva|zuzana|jana|katerina|petra/i;
+
  if(detectedVoiceType==="male")return cs.find(v=>male.test(v.name))||cs[0];
  if(detectedVoiceType==="female")return cs.find(v=>female.test(v.name))||cs[0];
  return cs[0];
 }
 
-/* OPRAVENÉ ČESKÉ PŘEDČÍTÁNÍ */
+/*
+ PŘÍPRAVA HLASU:
+ Spouští se přímo po kliknutí na tlačítko mikrofonu.
+ Některé mobilní prohlížeče potřebují první hlasový požadavek
+ vyvolat přímo uživatelskou akcí.
+*/
+function unlockSpeech(){
+ if(!speechAvailable())return false;
+
+ const synth=window.speechSynthesis;
+ try{
+  synth.cancel();
+  synth.resume();
+
+  const primer=new SpeechSynthesisUtterance(" ");
+  primer.lang="cs-CZ";
+  primer.volume=0;
+  primer.rate=1;
+
+  primer.onend=()=>{speechUnlocked=true};
+  primer.onerror=()=>{speechUnlocked=true};
+
+  synth.speak(primer);
+  speechUnlocked=true;
+  return true;
+ }catch(error){
+  speechUnlocked=false;
+  return false;
+ }
+}
+
+/* PŘEDČÍTÁNÍ JEDNÉ CELÉ VĚTY */
 function speakCzech(text){
  return new Promise((resolve,reject)=>{
   if(!speechAvailable()){
-   reject(new Error("České předčítání není v tomto prohlížeči dostupné."));
+   reject(new Error("Prohlížeč nepodporuje hlasové předčítání."));
    return;
   }
 
+  text=String(text||"").trim();
+  if(!text){resolve();return}
+
   const synth=window.speechSynthesis;
   const utterance=new SpeechSynthesisUtterance(text);
+  activeUtterance=utterance;
 
   utterance.lang="cs-CZ";
   utterance.rate=1.0;
-  utterance.pitch=detectedVoiceType==="male" ? 0.88 :
-                  detectedVoiceType==="female" ? 1.12 : 1;
+  utterance.pitch=detectedVoiceType==="male"?0.88:
+                  detectedVoiceType==="female"?1.12:1;
 
   const voice=getCzechVoice();
   if(voice)utterance.voice=voice;
 
   let finished=false;
-  let watchdog;
+  let watchdog=null;
 
   function finish(error){
    if(finished)return;
    finished=true;
    clearTimeout(watchdog);
+   if(activeUtterance===utterance)activeUtterance=null;
    if(error)reject(error);
    else resolve();
   }
@@ -382,25 +422,18 @@ function speakCzech(text){
   };
 
   utterance.onend=()=>finish();
+
   utterance.onerror=event=>{
-   finish(new Error(event.error||"Přehrávání selhalo."));
+   finish(new Error(event.error||"Český hlas se nepodařilo spustit."));
   };
 
   watchdog=setTimeout(()=>{
-   finish(new Error("Český hlas se neozval."));
-  },25000);
+   finish(new Error("Český hlas se nespustil. Zkus znovu tlačítko mikrofonu."));
+  },45000);
 
   try{
    synth.resume();
-
-   setTimeout(()=>{
-    if(finished)return;
-    try{
-     synth.speak(utterance);
-    }catch(error){
-     finish(error);
-    }
-   },150);
+   synth.speak(utterance);
   }catch(error){
    finish(error);
   }
@@ -435,6 +468,7 @@ async function startVoiceAnalysis(){
 
   audioContext=new AudioContextClass();
   if(audioContext.state==="suspended")await audioContext.resume();
+
   analyser=audioContext.createAnalyser();
   analyser.fftSize=4096;
   audioSource=audioContext.createMediaStreamSource(audioStream);
@@ -460,6 +494,7 @@ function estimatePitch(buffer,sampleRate){
 
  const minLag=Math.floor(sampleRate/350),maxLag=Math.floor(sampleRate/75);
  let bestLag=-1,bestCorrelation=0;
+
  for(let lag=minLag;lag<=maxLag;lag++){
   let correlation=0;
   for(let i=0;i<buffer.length-lag;i++)correlation+=buffer[i]*buffer[i+lag];
@@ -474,6 +509,7 @@ function estimatePitch(buffer,sampleRate){
 
 function analyzePitch(){
  if(!listening||!analyser||!audioContext)return;
+
  const buffer=new Float32Array(analyser.fftSize);
  analyser.getFloatTimeDomainData(buffer);
  const pitch=estimatePitch(buffer,audioContext.sampleRate);
@@ -481,14 +517,18 @@ function analyzePitch(){
  if(pitch&&pitch>=75&&pitch<=350){
   pitchSamples.push(pitch);
   if(pitchSamples.length>35)pitchSamples.shift();
+
   if(pitchSamples.length>=8){
    const sorted=[...pitchSamples].sort((a,b)=>a-b);
    const median=sorted[Math.floor(sorted.length/2)];
    const type=median<165?"male":"female";
+
    if(type!==lastVoiceType){
     lastVoiceType=type;
     detectedVoiceType=type;
-    voiceInfo.textContent=type==="male"?"Odhad hlasu: spíše hlubší hlas":"Odhad hlasu: spíše vyšší hlas";
+    voiceInfo.textContent=type==="male"?
+     "Odhad hlasu: spíše hlubší hlas":
+     "Odhad hlasu: spíše vyšší hlas";
    }
   }
  }
@@ -498,6 +538,7 @@ function analyzePitch(){
 function stopVoiceAnalysis(){
  if(pitchAnimation)cancelAnimationFrame(pitchAnimation);
  pitchAnimation=null;
+
  if(audioStream){
   audioStream.getTracks().forEach(t=>t.stop());
   audioStream=null;
@@ -513,13 +554,17 @@ function stopVoiceAnalysis(){
  lastVoiceType="unknown";
 }
 
-/* PŘEKLAD */
+/* ONLINE PŘEKLAD */
 async function translateOnline(text,direction="en|cs"){
- const url="https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair="+direction;
+ const url="https://api.mymemory.translated.net/get?q="+
+  encodeURIComponent(text)+"&langpair="+direction;
+
  const response=await fetch(url);
  if(!response.ok)throw new Error("Online překladač neodpovídá.");
+
  const data=await response.json();
  const result=data?.responseData?.translatedText?.trim();
+
  if(!result)throw new Error("Překlad není dostupný.");
  return result;
 }
@@ -527,7 +572,10 @@ async function translateOnline(text,direction="en|cs"){
 function findCachedTranslation(text){
  const key=cacheKey(text);
  if(translationCache.has(key))return translationCache.get(key);
- const item=savedItems.find(x=>x.direction==="en|cs"&&normalize(x.english)===normalize(text));
+
+ const item=savedItems.find(x=>
+  x.direction==="en|cs"&&normalize(x.english)===normalize(text)
+ );
  return item?.czech||null;
 }
 
@@ -536,32 +584,46 @@ async function translateSentence(text){
  return cached||await translateOnline(text,"en|cs");
 }
 
-/* AUTOMATICKÉ UKLÁDÁNÍ SLOV */
+/* SAMOSTATNÁ FRONTa SLOVÍČEK */
 function extractWords(text){
- return [...new Set((text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[]).map(w=>w.toLowerCase()))].filter(w=>w.length>1);
+ return [...new Set(
+  (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[])
+  .map(w=>w.toLowerCase())
+ )].filter(w=>w.length>1);
 }
 
 function queueAutomaticWords(text){
  extractWords(text).forEach(word=>{
-  const saved=savedItems.some(x=>x.type==="word"&&normalize(x.english)===normalize(word));
+  const saved=savedItems.some(x=>
+   x.type==="word"&&normalize(x.english)===normalize(word)
+  );
   const queued=wordQueue.some(x=>normalize(x)===normalize(word));
+
   if(!saved&&!queued)wordQueue.push(word);
- });
+  });
  runWordWorker();
 }
 
 async function runWordWorker(){
  if(runWordWorker.running)return;
  runWordWorker.running=true;
+
  try{
   while(wordQueue.length){
    const word=wordQueue.shift();
-   if(savedItems.some(x=>x.type==="word"&&normalize(x.english)===normalize(word)))continue;
+
+   if(savedItems.some(x=>
+    x.type==="word"&&normalize(x.english)===normalize(word)
+   ))continue;
+
    try{
-    const translation=await translateOnline(word);
+    const translation=await translateOnline(word,"en|cs");
     addSavedItem("word",word,translation);
-   }catch(error){}
-   await new Promise(resolve=>setTimeout(resolve,300));
+   }catch(error){
+    // Chyba překladu slovíčka nesmí zastavit překlad vět.
+   }
+
+   await new Promise(resolve=>setTimeout(resolve,500));
   }
  }finally{
   runWordWorker.running=false;
@@ -571,7 +633,9 @@ async function runWordWorker(){
 
 /* PŘEPIS */
 function appendTranscript(element,text){
- if(["Zatím nic neslyším...","Čekám na překlad..."].includes(element.textContent.trim()))element.textContent="";
+ if(["Zatím nic neslyším...","Čekám na překlad..."].includes(element.textContent.trim())){
+  element.textContent="";
+ }
  const p=document.createElement("p");
  p.textContent=text;
  element.appendChild(p);
@@ -601,6 +665,7 @@ function clearInterim(){
 /* ROZPOZNÁVÁNÍ ŘEČI */
 function setupRecognition(){
  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
  if(!SpeechRecognition){
   setStatus("Rozpoznávání řeči není podporováno. Zkus Chrome.");
   return false;
@@ -614,21 +679,26 @@ function setupRecognition(){
 
  recognition.onresult=event=>{
   let finalText="",interimText="";
+
   for(let i=event.resultIndex;i<event.results.length;i++){
    const result=event.results[i];
    const phrase=result[0].transcript.trim();
+
    if(result.isFinal&&phrase)finalText+=phrase+" ";
    else if(phrase)interimText+=phrase+" ";
   }
+
   if(finalText.trim()){
    clearInterim();
    addSentence(finalText.trim());
   }
+
   if(interimText.trim())updateInterim(interimText.trim());
  };
 
  recognition.onerror=event=>{
   if(!listening)return;
+
   if(event.error==="not-allowed"||event.error==="service-not-allowed"){
    listening=false;
    stopVoiceAnalysis();
@@ -642,11 +712,13 @@ function setupRecognition(){
   restarting=false;
   if(listening)setTimeout(startRecognition,400);
  };
+
  return true;
 }
 
 function startRecognition(){
  if(!listening||restarting||!recognition)return;
+
  try{
   restarting=true;
   recognition.start();
@@ -657,25 +729,28 @@ function startRecognition(){
  }
 }
 
+/* SPUŠTĚNÍ A ZASTAVENÍ */
 async function startListening(){
  if(listening)return;
+
  if(!window.isSecureContext){
   setStatus("Mikrofon vyžaduje zabezpečenou HTTPS stránku.");
   return;
  }
+
  if(!recognition&&!setupRecognition())return;
 
+ /*
+  Příprava hlasu se provede přímo po kliknutí.
+  Teprve potom se rozběhne rozpoznávání a překlad.
+ */
  if(speechAvailable()){
-  try{
-   window.speechSynthesis.cancel();
-   window.speechSynthesis.resume();
-  }catch(error){}
+  unlockSpeech();
  }
 
  listening=true;
  session++;
  sentenceQueue=[];
- speechQueue=[];
  clearInterim();
  english.textContent="";
  czech.textContent="";
@@ -689,13 +764,13 @@ function stopListening(){
  listening=false;
  session++;
  sentenceQueue=[];
- speechQueue=[];
  wordQueue=[];
  clearInterim();
 
  if(recognition){
   try{recognition.stop()}catch(error){}
  }
+
  stopVoiceAnalysis();
 
  if(speechAvailable()){
@@ -703,13 +778,13 @@ function stopListening(){
  }
 
  processing=false;
- speechProcessing=false;
  restarting=false;
+ activeUtterance=null;
  setStatus("Mikrofon a hlas zastaveny.");
  voiceInfo.textContent="Typ hlasu: zatím neurčen";
 }
 
-/* PŘEKLAD DOKONČENÝCH VĚT */
+/* HLAVNÍ FRONTa VĚT – MÁ PŘEDNOST */
 function addSentence(text){
  appendTranscript(english,text);
  sentenceQueue.push({text,session});
@@ -720,75 +795,52 @@ function addSentence(text){
 async function processQueue(){
  if(processing)return;
  processing=true;
+
  try{
   while(sentenceQueue.length){
    const item=sentenceQueue.shift();
+
    if(!listening||item.session!==session)continue;
+
    try{
-    setStatus("Překládám větu...");
+    setStatus("Překládám celou větu...");
+
+    // Nejdříve se přeloží celá věta.
     const translation=await translateSentence(item.text);
+
     if(!listening||item.session!==session)continue;
 
+    // Překlad se zobrazí a uloží samostatně.
     appendTranscript(czech,translation);
     addSavedItem("sentence",item.text,translation);
+
+    // Slovíčka se spustí odděleně na pozadí.
+    // Nečekáme na ně a neblokují předčítání.
     queueAutomaticWords(item.text);
 
-    speechQueue.push({text:translation,session:item.session});
-    processSpeechQueue();
+    // Hlavní priorita: okamžité přečtení české věty.
+    setStatus("Překlad hotov. Spouštím český hlas...");
+
+    try{
+     await speakCzech(translation);
+    }catch(speechError){
+     if(listening&&item.session===session){
+      setStatus("Překlad je hotový, ale hlas selhal: "+speechError.message);
+     }
+    }
 
    }catch(error){
     if(listening&&item.session===session){
-     setStatus("Chyba překladu: "+error.message);
+     setStatus("Chyba překladu věty: "+error.message);
     }
    }
   }
  }finally{
   processing=false;
-  if(listening&&sentenceQueue.length)processQueue();
- }
-}
 
-/* OPRAVENÁ FRONTa ČESKÉHO HLASU */
-async function processSpeechQueue(){
- if(speechProcessing)return;
- speechProcessing=true;
-
- try{
-  while(speechQueue.length){
-   const first=speechQueue.shift();
-
-   if(!listening||first.session!==session)continue;
-
-   if(speechAvailable()){
-    try{
-     window.speechSynthesis.resume();
-    }catch(error){}
-   }
-
-   await new Promise(resolve=>setTimeout(resolve,250));
-
-   if(!listening||first.session!==session)continue;
-
-   const batch=[first.text];
-
-   while(speechQueue.length&&speechQueue[0].session===session){
-    batch.push(speechQueue.shift().text);
-   }
-
-   try{
-    await speakCzech(batch.join(" "));
-   }catch(error){
-    if(listening&&first.session===session){
-     setStatus("Problém s českým hlasem: "+error.message);
-    }
-   }
-  }
- }finally{
-  speechProcessing=false;
-
-  if(listening&&speechQueue.length){
-   processSpeechQueue();
-  }else if(listening&&sentenceQueue.length===0){
+  if(listening&&sentenceQueue.length){
+   processQueue();
+  }else if(listening){
    setStatus("Poslouchám další anglické věty...");
   }
  }
@@ -797,6 +849,7 @@ async function processSpeechQueue(){
 /* VYHLEDÁVÁNÍ VE SLOVNÍKU */
 async function searchDictionary(){
  const text=$("dictionaryInput").value.trim();
+
  if(!text){
   dictionaryResult.hidden=false;
   dictionaryResult.textContent="Nejdříve napiš slovo nebo krátkou frázi.";
@@ -810,23 +863,30 @@ async function searchDictionary(){
   const hasCzechChars=/[ěščřžýáíéůúďťň]/i.test(text);
   const direction=hasCzechChars?"cs|en":"en|cs";
   const translated=await translateOnline(text,direction);
+
   const englishText=direction==="en|cs"?text:translated;
   const czechText=direction==="en|cs"?translated:text;
+
   addSavedItem("word",englishText,czechText,direction);
 
   dictionaryResult.replaceChildren();
+
   const a=document.createElement("div");
   const b=document.createElement("div");
   const c=document.createElement("div");
   const strongA=document.createElement("strong");
   const strongB=document.createElement("strong");
+
   strongA.textContent="Zadaný výraz: ";
   strongB.textContent="Překlad: ";
+
   a.append(strongA,document.createTextNode(text));
   b.style.marginTop="7px";
   b.append(strongB,document.createTextNode(translated));
+
   c.style.cssText="color:#83edb5;font-size:12px;margin-top:8px";
   c.textContent="Výraz byl uložen do knihovny.";
+
   dictionaryResult.append(a,b,c);
  }catch(error){
   dictionaryResult.textContent="Překlad se nepodařilo získat: "+error.message;
@@ -839,9 +899,11 @@ $("stop").addEventListener("click",stopListening);
 $("test").addEventListener("click",testCzechVoice);
 $("libraryToggle").addEventListener("click",toggleLibrary);
 $("dictionaryButton").addEventListener("click",searchDictionary);
+
 $("dictionaryInput").addEventListener("keydown",event=>{
  if(event.key==="Enter")searchDictionary();
 });
+
 $("savedSearch").addEventListener("input",renderSavedItems);
 $("exportButton").addEventListener("click",exportSaved);
 $("clearButton").addEventListener("click",clearSaved);
