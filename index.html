@@ -7,142 +7,271 @@
 <title>PlayDabing TV</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+:root { color-scheme: dark; }
 
 body {
-  background: #000000;
-  color: #ffffff;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 12px;
+  min-height: 100vh;
   margin: 0;
+  padding: 28px 5.4% 22px;
+  color: #f7f8ff;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  background:
+    radial-gradient(ellipse at 12% 43%, rgba(0,116,255,.38), transparent 38%),
+    radial-gradient(ellipse at 88% 42%, rgba(147,0,255,.36), transparent 39%),
+    radial-gradient(ellipse at 50% -12%, rgba(0,90,220,.24), transparent 45%),
+    linear-gradient(115deg,#02091e 0%,#050d25 48%,#100522 100%);
+  overflow-x: hidden;
+  position: relative;
+}
+
+body::before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.7;
+  background:
+    repeating-linear-gradient(110deg, transparent 0 80px, rgba(28,115,255,.035) 81px 83px, transparent 84px 160px),
+    radial-gradient(ellipse at 4% 65%, rgba(0,145,255,.32), transparent 26%),
+    radial-gradient(ellipse at 98% 68%, rgba(171,0,255,.28), transparent 28%);
 }
 
 h1 {
-  color: #ffffff;
-  font-size: 25px;
-  letter-spacing: 2px;
-  margin: 10px 0 5px;
+  position:relative;
+  margin:20px 0 3px;
+  font-size:clamp(34px,6vw,64px);
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:1px;
+  font-style:italic;
+  text-shadow:0 0 28px rgba(0,125,255,.25);
+}
+
+h1::after {
+  content:" TV";
+  color:#078cff;
 }
 
 .subtitle {
-  color: #cccccc;
-  font-size: 13px;
-  margin-bottom: 15px;
+  position:relative;
+  color:#d5def5;
+  font-size:clamp(15px,2.4vw,27px);
+  margin:8px 0 28px;
 }
 
 .controls {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 15px;
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:14px;
+  margin:0 auto 28px;
 }
 
 button {
-  padding: 10px 14px;
-  margin: 0;
-  border: 1px solid #ffffff;
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  background: #ffffff;
-  color: #000000;
+  padding:16px 27px;
+  min-height:62px;
+  border:1px solid rgba(112,169,255,.65);
+  border-radius:25px;
+  font-size:clamp(14px,1.6vw,19px);
+  font-weight:700;
+  cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,#078cff,#0648ed);
+  box-shadow:0 8px 28px rgba(0,100,255,.28), inset 0 1px rgba(255,255,255,.25);
+  transition:transform .18s ease, filter .18s ease;
+}
+
+button:hover {
+  transform:translateY(-2px);
+  filter:brightness(1.13);
 }
 
 #stop {
-  background: #000000;
-  color: #ffffff;
+  background:linear-gradient(145deg,#263959,#111d39);
+  border-color:#536f9f;
+  box-shadow:0 8px 25px rgba(0,0,0,.2), inset 0 1px rgba(255,255,255,.15);
+}
+
+#test {
+  background:linear-gradient(135deg,#a43cff,#5410d8);
+  border-color:#b56cff;
+  box-shadow:0 8px 28px rgba(130,35,255,.3), inset 0 1px rgba(255,255,255,.25);
 }
 
 .panel-container {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  width: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+  width:100%;
+  max-width:1500px;
+  margin:0 auto;
 }
 
 .panel {
-  background: #111111;
-  border: 1px solid #444444;
-  padding: 9px;
-  border-radius: 8px;
-  min-width: 0;
-  min-height: 93px;
-  text-align: left;
+  min-width:0;
+  min-height:225px;
+  padding:22px 26px 18px;
+  text-align:left;
+  border:1.5px solid rgba(48,157,255,.9);
+  border-radius:25px;
+  background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9));
+  box-shadow:0 0 24px rgba(0,112,255,.12), inset 0 1px rgba(255,255,255,.07);
+  backdrop-filter:blur(12px);
+}
+
+.panel:nth-child(2) {
+  border-color:rgba(157,92,255,.85);
+  background:linear-gradient(135deg,rgba(34,27,76,.84),rgba(19,19,52,.92));
+  box-shadow:0 0 24px rgba(153,67,255,.13), inset 0 1px rgba(255,255,255,.07);
 }
 
 .panel h3 {
-  color: #ffffff;
-  font-size: 12px;
-  text-align: center;
-  border-bottom: 1px solid #444444;
-  padding-bottom: 7px;
-  margin: 0 0 8px;
+  color:#f4f6ff;
+  font-size:clamp(15px,2vw,25px);
+  text-align:left;
+  border-bottom:1px solid rgba(120,165,235,.65);
+  padding-bottom:14px;
+  margin:0 0 14px;
+  letter-spacing:.4px;
 }
 
 .transcript {
-  height: 58px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-  color: #eeeeee;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: left;
-  scrollbar-width: thin;
-  scrollbar-color: #666666 #111111;
+  height:112px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+  color:#dce6ff;
+  font-size:clamp(14px,1.8vw,22px);
+  line-height:1.45;
+  text-align:left;
+  scrollbar-width:thin;
+  scrollbar-color:#647da9 transparent;
 }
 
 .transcript p {
-  margin: 0 0 8px;
+  margin:0 0 8px;
 }
 
 .transcript::-webkit-scrollbar {
-  width: 4px;
+  width:8px;
 }
 
 .transcript::-webkit-scrollbar-thumb {
-  background: #666666;
-  border-radius: 5px;
+  background:linear-gradient(#4daaff,#8462d8);
+  border-radius:8px;
 }
 
 .status {
-  color: #cccccc;
-  margin-top: 14px;
-  font-size: 12px;
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  color:#fff;
+  margin:28px auto 18px;
+  padding:12px 32px;
+  min-width:250px;
+  justify-content:center;
+  font-size:18px;
+  font-weight:700;
+  border:1px solid rgba(91,151,222,.55);
+  border-radius:30px;
+  background:linear-gradient(110deg,rgba(0,160,118,.18),rgba(13,28,62,.85));
+  box-shadow:0 0 22px rgba(0,220,145,.08);
+}
+
+.status::before {
+  content:"";
+  width:13px;
+  height:13px;
+  border-radius:50%;
+  background:#00f08a;
+  box-shadow:0 0 14px #00f08a;
 }
 
 .footer {
-  margin-top: 25px;
-  padding: 14px 10px;
-  border-top: 1px solid #333333;
-  color: #888888;
-  font-size: 11px;
-  letter-spacing: 1px;
+  position:relative;
+  margin-top:14px;
+  padding:20px 10px 8px;
+  border-top:1px solid rgba(83,142,230,.55);
+  color:#d8e0f5;
+  font-size:14px;
+  line-height:1.5;
+  letter-spacing:.2px;
 }
 
 .footer strong {
-  display: block;
-  color: #ffffff;
-  font-size: 13px;
-  margin-bottom: 7px;
+  display:block;
+  color:#fff;
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+body > div:last-of-type {
+  position:relative;
+  color:#c8d4f4 !important;
+  font-size:12px !important;
+}
+
+@media (max-width:700px) {
+  body {
+    padding:18px 4% 16px;
+  }
+
+  h1 {
+    margin-top:14px;
+  }
+
+  .subtitle {
+    margin-bottom:20px;
+  }
+
+  .controls {
+    gap:9px;
+    margin-bottom:20px;
+  }
+
+  button {
+    min-height:52px;
+    padding:13px 17px;
+    border-radius:18px;
+  }
+
+  .panel-container {
+    grid-template-columns:1fr;
+    gap:14px;
+  }
+
+  .panel {
+    min-height:170px;
+    padding:17px 18px;
+    border-radius:20px;
+  }
+
+  .transcript {
+    height:85px;
+  }
+
+  .status {
+    margin-top:20px;
+    min-width:210px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<h1>PLAYDABING TV</h1>
+<h1>PLAYDABING</h1>
 <p class="subtitle">Překlad angličtiny do češtiny</p>
 
 <div class="controls">
+
   <button id="start" onclick="startListening()">
     Spustit mikrofon
   </button>
@@ -154,18 +283,23 @@ button {
   <button id="test" onclick="testCzechVoice()">
     Otestovat český hlas
   </button>
+
 </div>
 
 <div class="panel-container">
 
   <div class="panel">
     <h3>ANGLICKÝ PŘEPIS</h3>
-    <div id="english" class="transcript">Zatím nic neslyším...</div>
+    <div id="english" class="transcript">
+      Zatím nic neslyším...
+    </div>
   </div>
 
   <div class="panel">
     <h3>ČESKÝ PŘEKLAD</h3>
-    <div id="czech" class="transcript">Čekám na překlad...</div>
+    <div id="czech" class="transcript">
+      Čekám na překlad...
+    </div>
   </div>
 
 </div>
@@ -180,7 +314,7 @@ button {
 </footer>
 
 <div style="text-align:center; color:#ffffff; font-size:12px; margin-top:20px; padding-bottom:10px; letter-spacing:1px;">
-  BETA VERZE 0.2
+  BETA VERZE 0.3
 </div>
 
 <script>
@@ -223,6 +357,7 @@ function getCzechVoice() {
 
 function speakCzech(text) {
   return new Promise((resolve, reject) => {
+
     if (!("speechSynthesis" in window)) {
       reject(new Error("Hlas není podporován."));
       return;
@@ -258,6 +393,7 @@ async function testCzechVoice() {
     );
 
     statusText.textContent = "Test českého hlasu dokončen.";
+
   } catch (error) {
     statusText.textContent = "Chyba hlasu: " + error.message;
   }
@@ -266,6 +402,7 @@ async function testCzechVoice() {
 /* Přidání textu a automatické posunutí dolů */
 
 function appendTranscript(element, text) {
+
   const placeholder = [
     "Zatím nic neslyším...",
     "Čekám na překlad..."
@@ -284,6 +421,7 @@ function appendTranscript(element, text) {
 }
 
 function setupRecognition() {
+
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
@@ -302,10 +440,12 @@ function setupRecognition() {
   recognition.maxAlternatives = 1;
 
   recognition.onresult = function(event) {
+
     let finalText = "";
     let interimText = "";
 
     for (let i = event.resultIndex; i < event.results.length; i++) {
+
       const result = event.results[i];
       const phrase = result[0].transcript.trim();
 
@@ -327,10 +467,12 @@ function setupRecognition() {
   };
 
   recognition.onerror = function(event) {
+
     if (!listening) return;
 
     if (event.error === "not-allowed" ||
         event.error === "service-not-allowed") {
+
       listening = false;
       statusText.textContent = "Mikrofon nemá povolení.";
       return;
@@ -338,12 +480,14 @@ function setupRecognition() {
 
     if (event.error !== "no-speech" &&
         event.error !== "aborted") {
+
       statusText.textContent =
         "Chyba mikrofonu: " + event.error;
     }
   };
 
   recognition.onend = function() {
+
     restarting = false;
 
     if (listening) {
@@ -355,14 +499,18 @@ function setupRecognition() {
 }
 
 function startRecognition() {
+
   if (!listening || restarting || !recognition) return;
 
   try {
+
     restarting = true;
     recognition.start();
 
     statusText.textContent = "Poslouchám angličtinu...";
+
   } catch (error) {
+
     restarting = false;
 
     if (listening) {
@@ -372,6 +520,7 @@ function startRecognition() {
 }
 
 function startListening() {
+
   if (listening) return;
 
   if (!recognition && !setupRecognition()) return;
@@ -389,6 +538,7 @@ function startListening() {
 }
 
 function stopListening() {
+
   listening = false;
   session++;
 
@@ -411,6 +561,7 @@ function stopListening() {
 }
 
 function addSentence(text) {
+
   appendTranscript(english, text);
 
   sentenceQueue.push({
@@ -427,6 +578,7 @@ function addSentence(text) {
 /* Překlad */
 
 async function translateSentence(text) {
+
   const url =
     "https://api.mymemory.translated.net/get?q=" +
     encodeURIComponent(text) +
@@ -442,6 +594,7 @@ async function translateSentence(text) {
 
   if (!data.responseData ||
       !data.responseData.translatedText) {
+
     throw new Error("Překlad není dostupný.");
   }
 
@@ -451,11 +604,13 @@ async function translateSentence(text) {
 /* Překlad běží nezávisle na přehrávání */
 
 async function processQueue() {
+
   if (processing) return;
 
   processing = true;
 
   while (sentenceQueue.length > 0) {
+
     const item = sentenceQueue.shift();
 
     if (!listening || item.session !== session) {
@@ -463,6 +618,7 @@ async function processQueue() {
     }
 
     try {
+
       statusText.textContent =
         "Překládám: " + item.text;
 
@@ -483,7 +639,9 @@ async function processQueue() {
       processSpeechQueue();
 
     } catch (error) {
+
       if (listening && item.session === session) {
+
         statusText.textContent =
           "Chyba: " + error.message;
       }
@@ -493,6 +651,7 @@ async function processQueue() {
   processing = false;
 
   if (listening && !speechProcessing) {
+
     statusText.textContent =
       "Poslouchám další anglické věty...";
   }
@@ -501,11 +660,13 @@ async function processQueue() {
 /* Přehrávání českých vět ve správném pořadí */
 
 async function processSpeechQueue() {
+
   if (speechProcessing) return;
 
   speechProcessing = true;
 
   while (speechQueue.length > 0) {
+
     const item = speechQueue.shift();
 
     if (!listening || item.session !== session) {
@@ -513,13 +674,16 @@ async function processSpeechQueue() {
     }
 
     try {
+
       statusText.textContent =
         "Přehrávám český překlad...";
 
       await speakCzech(item.text);
 
     } catch (error) {
+
       if (listening && item.session === session) {
+
         statusText.textContent =
           "Chyba hlasu: " + error.message;
       }
@@ -529,6 +693,7 @@ async function processSpeechQueue() {
   speechProcessing = false;
 
   if (listening && sentenceQueue.length === 0) {
+
     statusText.textContent =
       "Poslouchám další anglické věty...";
   }
