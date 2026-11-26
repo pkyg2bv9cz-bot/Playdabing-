@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PlayDabing TV</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #080d19;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 28px 20px;
+  text-align: center;
+  background: #111c31;
+  border-bottom: 1px solid #263b5c;
+}
+h1 { margin: 0; font-size: 30px; }
+h1 span { color: #38bdf8; }
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 25px 18px;
+}
+.card {
+  background: #142239;
+  border: 1px solid #294363;
+  border-radius: 16px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+h2 { margin-top: 0; }
+p { color: #bdcce0; line-height: 1.6; }
+button {
+  background: #168bd2;
+  color: white;
+  border: 0;
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 10px;
+}
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+.status { color: #38bdf8; }
+footer {
+  text-align: center;
+  color: #71839d;
+  padding: 25px;
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>PLAY<span>DABING</span> TV</h1>
+  <p>Tvůj svět. Tvůj český dabing.</p>
+</header>
+<main>
+  <div class="card">
+    <h2>🎬 AI český dabing</h2>
+    <p>Proměň anglickou řeč v český mluvený překlad.</p>
+    <button onclick="alert('PlayDabing TV se připravuje!')">
+      Spustit překladač
+    </button>
+  </div>
+  <div class="card">
+    <h2>🌍 Nastavení jazyků</h2>
+    <p>Zdrojový jazyk</p>
+    <select>
+      <option>Angličtina</option>
+    </select>
+    <p>Cílový jazyk</p>
+    <select>
+      <option>Čeština</option>
+    </select>
+  </div>
+  <div class="card">
+    <h2>🔊 Nastavení hlasu</h2>
+    <p>Český AI hlas</p>
+    <select>
+      <option>Český hlas 1</option>
+      <option>Český hlas 2</option>
+    </select>
+    <p class="status">● Připraveno k vývoji</p>
+  </div>
+</main>
+<footer>PlayDabing TV © 2026</footer>
+</body>
+</html>
