@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -7,10 +8,12 @@
 <title>PlayDabing TV Beta 0.9.1</title>
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
+
 <style>
 *{box-sizing:border-box}
 :root{color-scheme:dark}
 [hidden]{display:none!important}
+
 body{
  min-height:100vh;margin:0;padding:28px 5.4% 22px;color:#f7f8ff;
  font-family:Arial,Helvetica,sans-serif;text-align:center;overflow-x:hidden;
@@ -18,53 +21,175 @@ body{
  radial-gradient(ellipse at 88% 42%,rgba(147,0,255,.36),transparent 39%),
  linear-gradient(115deg,#02091e,#050d25 48%,#100522)
 }
-body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.7;
- background:repeating-linear-gradient(110deg,transparent 0 80px,rgba(28,115,255,.035) 81px 83px,transparent 84px 160px)}
+
+body:before{
+ content:"";position:fixed;inset:0;pointer-events:none;opacity:.7;
+ background:repeating-linear-gradient(110deg,transparent 0 80px,rgba(28,115,255,.035) 81px 83px,transparent 84px 160px)
+}
+
 body>*{position:relative;z-index:1}
-h1{margin:20px 0 3px;font-size:clamp(34px,6vw,64px);font-weight:900;font-style:italic}
+
+h1{
+ margin:20px 0 3px;font-size:clamp(34px,6vw,64px);
+ font-weight:900;font-style:italic
+}
+
 h1:after{content:" TV";color:#078cff}
-.subtitle{color:#d5def5;font-size:clamp(15px,2.4vw,27px);margin:8px 0 28px}
-.controls{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:14px;margin:0 auto 28px}
-button{padding:14px 22px;min-height:52px;border:1px solid rgba(112,169,255,.65);
- border-radius:20px;font-size:15px;font-weight:700;cursor:pointer;color:white;
- background:linear-gradient(135deg,#078cff,#0648ed);box-shadow:0 8px 28px rgba(0,100,255,.28)}
+
+.subtitle{
+ color:#d5def5;font-size:clamp(15px,2.4vw,27px);
+ margin:8px 0 28px
+}
+
+.controls{
+ display:flex;justify-content:center;align-items:center;
+ flex-wrap:wrap;gap:14px;margin:0 auto 28px
+}
+
+button{
+ padding:14px 22px;min-height:52px;
+ border:1px solid rgba(112,169,255,.65);
+ border-radius:20px;font-size:15px;font-weight:700;
+ cursor:pointer;color:white;
+ background:linear-gradient(135deg,#078cff,#0648ed);
+ box-shadow:0 8px 28px rgba(0,100,255,.28)
+}
+
 button:disabled{opacity:.5;cursor:not-allowed}
+
 #stop{background:linear-gradient(145deg,#263959,#111d39)}
 #test{background:linear-gradient(135deg,#a43cff,#5410d8)}
-.panel-container{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;width:100%;max-width:1500px;margin:auto}
-.panel{min-width:0;min-height:225px;padding:22px 26px 18px;text-align:left;
+
+.panel-container{
+ display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:24px;width:100%;max-width:1500px;margin:auto
+}
+
+.panel{
+ min-width:0;min-height:225px;padding:22px 26px 18px;text-align:left;
  border:1.5px solid rgba(48,157,255,.9);border-radius:25px;
- background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9))}
-.panel:nth-child(2){border-color:rgba(157,92,255,.85);background:linear-gradient(135deg,rgba(34,27,76,.84),rgba(19,19,52,.92))}
-.panel h3{font-size:clamp(15px,2vw,25px);border-bottom:1px solid #7890bb;padding-bottom:14px;margin:0 0 14px}
-.transcript{height:150px;overflow-y:auto;overflow-wrap:anywhere;white-space:pre-wrap;color:#dce6ff;font-size:clamp(14px,1.8vw,22px);line-height:1.45}
+ background:linear-gradient(135deg,rgba(12,37,78,.82),rgba(13,22,51,.9))
+}
+
+.panel:nth-child(2){
+ border-color:rgba(157,92,255,.85);
+ background:linear-gradient(135deg,rgba(34,27,76,.84),rgba(19,19,52,.92))
+}
+
+.panel h3{
+ font-size:clamp(15px,2vw,25px);border-bottom:1px solid #7890bb;
+ padding-bottom:14px;margin:0 0 14px
+}
+
+.transcript{
+ height:150px;overflow-y:auto;overflow-wrap:anywhere;
+ white-space:pre-wrap;color:#dce6ff;
+ font-size:clamp(14px,1.8vw,22px);line-height:1.45
+}
+
 .transcript p{margin:0 0 8px}
-.interim{color:#8ebaff;font-style:italic;border-left:2px solid #399aff;padding-left:8px}
-.status{display:inline-flex;align-items:center;gap:14px;color:white;margin:28px auto 18px;padding:12px 32px;min-width:250px;justify-content:center;font-size:16px;font-weight:700;border:1px solid #45658d;border-radius:30px;background:#102b3a}
-.status:before{content:"";width:11px;height:11px;border-radius:50%;background:#00f08a;box-shadow:0 0 14px #00f08a}
+
+.interim{
+ color:#8ebaff;font-style:italic;
+ border-left:2px solid #399aff;padding-left:8px
+}
+
+.status{
+ display:inline-flex;align-items:center;gap:14px;color:white;
+ margin:28px auto 18px;padding:12px 32px;min-width:250px;
+ justify-content:center;font-size:16px;font-weight:700;
+ border:1px solid #45658d;border-radius:30px;background:#102b3a
+}
+
+.status:before{
+ content:"";width:11px;height:11px;border-radius:50%;
+ background:#00f08a;box-shadow:0 0 14px #00f08a
+}
+
 .voice-info{color:#cbd8f5;font-size:13px;margin:12px auto 0}
-.library-toggle{display:block;margin:30px auto 12px;background:linear-gradient(135deg,#853cff,#4211b5);border-color:#be82ff;min-width:min(90%,300px)}
-.saved-section{max-width:1100px;margin:15px auto;padding:22px;text-align:left;border:1px solid #7182ff;border-radius:22px;background:linear-gradient(135deg,rgba(17,30,72,.95),rgba(28,17,65,.95))}
+
+.library-toggle{
+ display:block;margin:30px auto 12px;
+ background:linear-gradient(135deg,#853cff,#4211b5);
+ border-color:#be82ff;min-width:min(90%,300px)
+}
+
+.saved-section{
+ max-width:1100px;margin:15px auto;padding:22px;text-align:left;
+ border:1px solid #7182ff;border-radius:22px;
+ background:linear-gradient(135deg,rgba(17,30,72,.95),rgba(28,17,65,.95))
+}
+
 .saved-section h2{text-align:center}
-.saved-note{text-align:center;color:#bdcbed;font-size:13px;line-height:1.5}
-.dictionary-search,.saved-toolbar{display:flex;gap:9px;margin:18px 0;flex-wrap:wrap}
-.dictionary-search input,.saved-search{flex:1;min-width:150px;padding:13px 15px;border-radius:13px;border:1px solid #5878bd;background:#08152f;color:white;font-size:16px}
-.dictionary-result,.saved-item{padding:14px;margin:12px 0;border-radius:13px;background:rgba(5,15,40,.75);border:1px solid rgba(85,140,255,.4);line-height:1.5;overflow-wrap:anywhere}
+
+.saved-note{
+ text-align:center;color:#bdcbed;font-size:13px;line-height:1.5
+}
+
+.dictionary-search,.saved-toolbar{
+ display:flex;gap:9px;margin:18px 0;flex-wrap:wrap
+}
+
+.dictionary-search input,.saved-search{
+ flex:1;min-width:150px;padding:13px 15px;border-radius:13px;
+ border:1px solid #5878bd;background:#08152f;color:white;font-size:16px
+}
+
+.dictionary-result,.saved-item{
+ padding:14px;margin:12px 0;border-radius:13px;
+ background:rgba(5,15,40,.75);border:1px solid rgba(85,140,255,.4);
+ line-height:1.5;overflow-wrap:anywhere
+}
+
 .dictionary-result strong{color:#8fc7ff}
-.saved-toolbar button,.small-button{min-height:38px;padding:9px 13px;font-size:13px;border-radius:12px}
+
+.saved-toolbar button,.small-button{
+ min-height:38px;padding:9px 13px;font-size:13px;border-radius:12px
+}
+
 .saved-list{display:grid;gap:10px}
-.saved-item{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin:0}
+
+.saved-item{
+ display:flex;gap:12px;align-items:flex-start;
+ justify-content:space-between;margin:0
+}
+
 .saved-item-main{min-width:0;flex:1}
-.saved-type{font-size:10px;letter-spacing:1px;color:#8bbaff;font-weight:bold}
-.saved-english{font-size:16px;font-weight:bold;margin:5px 0;color:white}
+
+.saved-type{
+ font-size:10px;letter-spacing:1px;color:#8bbaff;font-weight:bold
+}
+
+.saved-english{
+ font-size:16px;font-weight:bold;margin:5px 0;color:white
+}
+
 .saved-czech{font-size:14px;color:#c5d6ff}
+
 .saved-date{font-size:10px;color:#8195bd;margin-top:6px}
-.delete-button{min-height:32px;padding:6px 10px;border-radius:9px;background:linear-gradient(135deg,#a52d53,#6d173c)}
+
+.delete-button{
+ min-height:32px;padding:6px 10px;border-radius:9px;
+ background:linear-gradient(135deg,#a52d53,#6d173c)
+}
+
 .saved-count{color:#a9c7ff;font-size:13px}
+
 .empty-list{text-align:center;color:#aebcda;padding:20px}
-.save-message{min-height:20px;color:#85edbd;font-size:13px;text-align:center}
-.footer{margin-top:28px;padding:20px 10px 8px;border-top:1px solid #538ee6;color:#d8e0f5;font-size:14px;line-height:1.5}
-.footer strong{display:block;color:white;font-size:18px;margin-bottom:3px}
+
+.save-message{
+ min-height:20px;color:#85edbd;font-size:13px;text-align:center
+}
+
+.footer{
+ margin-top:28px;padding:20px 10px 8px;border-top:1px solid #538ee6;
+ color:#d8e0f5;font-size:14px;line-height:1.5
+}
+
+.footer strong{
+ display:block;color:white;font-size:18px;margin-bottom:3px
+}
+
 @media(max-width:700px){
  body{padding:18px 2% 16px}
  h1{margin-top:14px}
@@ -99,6 +224,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <h3>ANGLICKÝ PŘEPIS</h3>
   <div id="english" class="transcript">Zatím nic neslyším...</div>
  </div>
+
  <div class="panel">
   <h3>ČESKÝ PŘEKLAD</h3>
   <div id="czech" class="transcript">Čekám na překlad...</div>
@@ -114,12 +240,17 @@ button:disabled{opacity:.5;cursor:not-allowed}
 
 <section class="saved-section" id="savedSection" hidden>
  <h2>📚 Moje knihovna</h2>
- <p class="saved-note">Zde najdeš automaticky ukládaná anglická slovíčka i celé věty s českým překladem. Knihovna zůstává uložená v tomto prohlížeči.</p>
+
+ <p class="saved-note">
+ Zde najdeš automaticky ukládaná anglická slovíčka i celé věty s českým překladem.
+ Knihovna zůstává uložená v tomto prohlížeči.
+ </p>
 
  <div class="dictionary-search">
   <input id="dictionaryInput" type="text" placeholder="Napiš české nebo anglické slovo...">
   <button id="dictionaryButton">Vyhledat</button>
  </div>
+
  <div id="dictionaryResult" class="dictionary-result" hidden></div>
 
  <div class="saved-toolbar">
@@ -147,43 +278,80 @@ button:disabled{opacity:.5;cursor:not-allowed}
 "use strict";
 
 const $ = id => document.getElementById(id);
-const english=$("english"), czech=$("czech"), statusText=$("status");
-const voiceInfo=$("voiceInfo"), savedList=$("savedList");
-const savedCount=$("savedCount"), saveMessage=$("saveMessage");
+
+const english=$("english");
+const czech=$("czech");
+const statusText=$("status");
+const voiceInfo=$("voiceInfo");
+const savedList=$("savedList");
+const savedCount=$("savedCount");
+const saveMessage=$("saveMessage");
 const dictionaryResult=$("dictionaryResult");
+
 const STORAGE_KEY="playdabing_tv_saved_v06";
 
-let recognition=null, listening=false, processing=false;
+let recognition=null;
+let listening=false;
+let processing=false;
 let restarting=false;
-let sentenceQueue=[], wordQueue=[];
-let session=0, voices=[], audioStream=null, audioContext=null;
-let analyser=null, audioSource=null, pitchAnimation=null;
-let detectedVoiceType="unknown", pitchSamples=[], lastVoiceType="unknown";
-let interimElement=null, savedItems=[], translationCache=new Map();
+
+let sentenceQueue=[];
+let wordQueue=[];
+
+let session=0;
+let voices=[];
+let audioStream=null;
+let audioContext=null;
+
+let analyser=null;
+let audioSource=null;
+let pitchAnimation=null;
+
+let detectedVoiceType="unknown";
+let pitchSamples=[];
+let lastVoiceType="unknown";
+
+let interimElement=null;
+let savedItems=[];
+let translationCache=new Map();
+
 let speechUnlocked=false;
 let activeUtterance=null;
 
 /* CHYBY */
+
 window.addEventListener("error",event=>{
  setStatus("Chyba aplikace: "+(event.message||"neznámá chyba"));
 });
+
 window.addEventListener("unhandledrejection",event=>{
  setStatus("Chyba: "+(event.reason?.message||"operace se nezdařila"));
 });
-function setStatus(message){statusText.textContent=message}
+
+function setStatus(message){
+ statusText.textContent=message;
+}
+
 function speechAvailable(){
  return "speechSynthesis" in window &&
  typeof SpeechSynthesisUtterance!=="undefined";
 }
 
 /* KNIHOVNA */
+
 function toggleLibrary(){
  const section=$("savedSection");
  const button=$("libraryToggle");
+
  const opening=section.hidden;
+
  section.hidden=!opening;
  button.setAttribute("aria-expanded",String(opening));
- button.textContent=opening?"📚 Zavřít knihovnu":"📚 Otevřít knihovnu slovíček a vět";
+
+ button.textContent=opening
+  ?"📚 Zavřít knihovnu"
+  :"📚 Otevřít knihovnu slovíček a vět";
+
  if(opening)renderSavedItems();
 }
 
@@ -191,7 +359,9 @@ function loadSavedItems(){
  try{
   const data=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
   return Array.isArray(data)?data:[];
- }catch(error){return []}
+ }catch(error){
+  return [];
+ }
 }
 
 function persistSavedItems(){
@@ -205,7 +375,9 @@ function persistSavedItems(){
 }
 
 function normalize(text){
- return String(text||"").trim().toLocaleLowerCase("en-US")
+ return String(text||"")
+  .trim()
+  .toLocaleLowerCase("en-US")
   .replace(/[.!?,;:]+$/g,"")
   .replace(/\s+/g," ");
 }
@@ -216,6 +388,7 @@ function cacheKey(text,direction="en|cs"){
 
 function rebuildCache(){
  translationCache.clear();
+
  savedItems.forEach(item=>{
   if(item.direction==="en|cs"&&item.english&&item.czech){
    translationCache.set(cacheKey(item.english),item.czech);
@@ -226,6 +399,7 @@ function rebuildCache(){
 function addSavedItem(type,englishText,czechText,direction="en|cs"){
  englishText=String(englishText||"").trim();
  czechText=String(czechText||"").trim();
+
  if(!englishText||!czechText)return false;
 
  const duplicate=savedItems.some(item=>
@@ -233,25 +407,40 @@ function addSavedItem(type,englishText,czechText,direction="en|cs"){
   normalize(item.english)===normalize(englishText) &&
   normalize(item.czech)===normalize(czechText)
  );
+
  if(duplicate)return false;
 
  savedItems.unshift({
   id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),
-  type,english:englishText,czech:czechText,direction,
+  type,
+  english:englishText,
+  czech:czechText,
+  direction,
   createdAt:new Date().toISOString()
  });
+
  persistSavedItems();
- if(direction==="en|cs")translationCache.set(cacheKey(englishText),czechText);
+
+ if(direction==="en|cs"){
+  translationCache.set(cacheKey(englishText),czechText);
+ }
+
  renderSavedItems();
+
  return true;
 }
 
 function renderSavedItems(){
  const query=normalize($("savedSearch").value);
+
  const filtered=savedItems.filter(item=>
-  !query||normalize(item.english).includes(query)||normalize(item.czech).includes(query)
+  !query||
+  normalize(item.english).includes(query)||
+  normalize(item.czech).includes(query)
  );
+
  savedCount.textContent="Uloženo: "+savedItems.length+" | Zobrazeno: "+filtered.length;
+
  savedList.replaceChildren();
 
  if(!filtered.length){
@@ -265,6 +454,7 @@ function renderSavedItems(){
  filtered.forEach(item=>{
   const wrapper=document.createElement("div");
   wrapper.className="saved-item";
+
   const main=document.createElement("div");
   main.className="saved-item-main";
 
@@ -282,7 +472,9 @@ function renderSavedItems(){
 
   const date=document.createElement("div");
   date.className="saved-date";
-  date.textContent=item.createdAt?new Date(item.createdAt).toLocaleString("cs-CZ"):"";
+  date.textContent=item.createdAt
+   ?new Date(item.createdAt).toLocaleString("cs-CZ")
+   :"";
 
   main.append(type,en,cs,date);
 
@@ -298,32 +490,45 @@ function renderSavedItems(){
 
 function deleteSaved(id){
  savedItems=savedItems.filter(item=>item.id!==id);
+
  persistSavedItems();
  rebuildCache();
  renderSavedItems();
+
  saveMessage.textContent="Záznam byl smazán.";
 }
 
 function clearSaved(){
  if(!confirm("Opravdu chceš smazat celý uložený slovník?"))return;
+
  savedItems=[];
  translationCache.clear();
+
  persistSavedItems();
  renderSavedItems();
+
  saveMessage.textContent="Knihovna byla vymazána.";
 }
 
 function exportSaved(){
  try{
-  const blob=new Blob([JSON.stringify(savedItems,null,2)],{type:"application/json"});
+  const blob=new Blob(
+   [JSON.stringify(savedItems,null,2)],
+   {type:"application/json"}
+  );
+
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
+
   a.href=url;
   a.download="playdabing-knihovna.json";
+
   document.body.appendChild(a);
   a.click();
   a.remove();
+
   setTimeout(()=>URL.revokeObjectURL(url),1500);
+
   saveMessage.textContent="Export knihovny byl připraven.";
  }catch(error){
   saveMessage.textContent="Export se nepodařil.";
@@ -331,9 +536,18 @@ function exportSaved(){
 }
 
 /* ČESKÝ HLAS */
+
 function loadVoices(){
- if(!speechAvailable()){voices=[];return}
- try{voices=window.speechSynthesis.getVoices()||[]}catch(error){voices=[]}
+ if(!speechAvailable()){
+  voices=[];
+  return;
+ }
+
+ try{
+  voices=window.speechSynthesis.getVoices()||[];
+ }catch(error){
+  voices=[];
+ }
 }
 
 if(speechAvailable()){
@@ -343,14 +557,24 @@ if(speechAvailable()){
 
 function getCzechVoice(){
  loadVoices();
- const cs=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith("cs"));
+
+ const cs=voices.filter(v=>
+  v.lang&&v.lang.toLowerCase().startsWith("cs")
+ );
+
  if(!cs.length)return null;
 
  const male=/male|masculine|david|pavel|jakub|michal|adam/i;
  const female=/female|feminine|iva|zuzana|jana|katerina|petra/i;
 
- if(detectedVoiceType==="male")return cs.find(v=>male.test(v.name))||cs[0];
- if(detectedVoiceType==="female")return cs.find(v=>female.test(v.name))||cs[0];
+ if(detectedVoiceType==="male"){
+  return cs.find(v=>male.test(v.name))||cs[0];
+ }
+
+ if(detectedVoiceType==="female"){
+  return cs.find(v=>female.test(v.name))||cs[0];
+ }
+
  return cs[0];
 }
 
@@ -358,11 +582,13 @@ function unlockSpeech(){
  if(!speechAvailable())return false;
 
  const synth=window.speechSynthesis;
+
  try{
   synth.cancel();
   synth.resume();
 
   const primer=new SpeechSynthesisUtterance(" ");
+
   primer.lang="cs-CZ";
   primer.volume=0;
   primer.rate=1;
@@ -371,6 +597,7 @@ function unlockSpeech(){
   primer.onerror=()=>{speechUnlocked=true};
 
   synth.speak(primer);
+
   speechUnlocked=true;
   return true;
  }catch(error){
@@ -387,18 +614,27 @@ function speakCzech(text){
   }
 
   text=String(text||"").trim();
-  if(!text){resolve();return}
+
+  if(!text){
+   resolve();
+   return;
+  }
 
   const synth=window.speechSynthesis;
   const utterance=new SpeechSynthesisUtterance(text);
+
   activeUtterance=utterance;
 
   utterance.lang="cs-CZ";
   utterance.rate=1.0;
-  utterance.pitch=detectedVoiceType==="male"?0.88:
-                  detectedVoiceType==="female"?1.12:1;
+  utterance.pitch=detectedVoiceType==="male"
+   ?0.88
+   :detectedVoiceType==="female"
+    ?1.12
+    :1;
 
   const voice=getCzechVoice();
+
   if(voice)utterance.voice=voice;
 
   let finished=false;
@@ -406,9 +642,14 @@ function speakCzech(text){
 
   function finish(error){
    if(finished)return;
+
    finished=true;
    clearTimeout(watchdog);
-   if(activeUtterance===utterance)activeUtterance=null;
+
+   if(activeUtterance===utterance){
+    activeUtterance=null;
+   }
+
    if(error)reject(error);
    else resolve();
   }
@@ -441,11 +682,15 @@ async function testCzechVoice(){
   setStatus("Tento prohlížeč nepodporuje český hlas.");
   return;
  }
+
  try{
   window.speechSynthesis.cancel();
   window.speechSynthesis.resume();
+
   setStatus("Testuji český hlas...");
+
   await speakCzech("Ahoj, toto je test českého hlasu PlayDabing TV.");
+
   setStatus("Test českého hlasu dokončen.");
  }catch(error){
   setStatus("Chyba hlasu: "+error.message);
@@ -453,28 +698,45 @@ async function testCzechVoice(){
 }
 
 /* ANALÝZA HLASU */
+
 async function startVoiceAnalysis(){
  try{
   if(!navigator.mediaDevices?.getUserMedia)return;
+
   audioStream=await navigator.mediaDevices.getUserMedia({audio:true});
-  if(!listening){stopVoiceAnalysis();return}
+
+  if(!listening){
+   stopVoiceAnalysis();
+   return;
+  }
 
   const AudioContextClass=window.AudioContext||window.webkitAudioContext;
-  if(!AudioContextClass){stopVoiceAnalysis();return}
+
+  if(!AudioContextClass){
+   stopVoiceAnalysis();
+   return;
+  }
 
   audioContext=new AudioContextClass();
-  if(audioContext.state==="suspended")await audioContext.resume();
+
+  if(audioContext.state==="suspended"){
+   await audioContext.resume();
+  }
 
   analyser=audioContext.createAnalyser();
   analyser.fftSize=4096;
+
   audioSource=audioContext.createMediaStreamSource(audioStream);
   audioSource.connect(analyser);
+
   pitchSamples=[];
   detectedVoiceType="unknown";
   lastVoiceType="unknown";
+
   analyzePitch();
  }catch(error){
   voiceInfo.textContent="Analýza hlasu není dostupná – překlad funguje dál.";
+
   if(audioStream){
    audioStream.getTracks().forEach(t=>t.stop());
    audioStream=null;
@@ -484,109 +746,150 @@ async function startVoiceAnalysis(){
 
 function estimatePitch(buffer,sampleRate){
  let rms=0;
- for(let i=0;i<buffer.length;i++)rms+=buffer[i]*buffer[i];
+
+ for(let i=0;i<buffer.length;i++){
+  rms+=buffer[i]*buffer[i];
+ }
+
  rms=Math.sqrt(rms/buffer.length);
+
  if(rms<.012)return null;
 
- const minLag=Math.floor(sampleRate/350),maxLag=Math.floor(sampleRate/75);
- let bestLag=-1,bestCorrelation=0;
+ const minLag=Math.floor(sampleRate/350);
+ const maxLag=Math.floor(sampleRate/75);
+
+ let bestLag=-1;
+ let bestCorrelation=0;
 
  for(let lag=minLag;lag<=maxLag;lag++){
   let correlation=0;
-  for(let i=0;i<buffer.length-lag;i++)correlation+=buffer[i]*buffer[i+lag];
+
+  for(let i=0;i<buffer.length-lag;i++){
+   correlation+=buffer[i]*buffer[i+lag];
+  }
+
   correlation/=buffer.length-lag;
+
   if(correlation>bestCorrelation){
    bestCorrelation=correlation;
    bestLag=lag;
   }
  }
- return bestLag<0||bestCorrelation<.01?null:sampleRate/bestLag;
+
+ return bestLag<0||bestCorrelation<.01
+  ?null
+  :sampleRate/bestLag;
 }
 
 function analyzePitch(){
  if(!listening||!analyser||!audioContext)return;
 
  const buffer=new Float32Array(analyser.fftSize);
+
  analyser.getFloatTimeDomainData(buffer);
+
  const pitch=estimatePitch(buffer,audioContext.sampleRate);
 
  if(pitch&&pitch>=75&&pitch<=350){
   pitchSamples.push(pitch);
-  if(pitchSamples.length>35)pitchSamples.shift();
+
+  if(pitchSamples.length>35){
+   pitchSamples.shift();
+  }
 
   if(pitchSamples.length>=8){
    const sorted=[...pitchSamples].sort((a,b)=>a-b);
    const median=sorted[Math.floor(sorted.length/2)];
+
    const type=median<165?"male":"female";
 
    if(type!==lastVoiceType){
     lastVoiceType=type;
     detectedVoiceType=type;
-    voiceInfo.textContent=type==="male"?
-     "Odhad hlasu: spíše hlubší hlas":
-     "Odhad hlasu: spíše vyšší hlas";
+
+    voiceInfo.textContent=type==="male"
+     ?"Odhad hlasu: spíše hlubší hlas"
+     :"Odhad hlasu: spíše vyšší hlas";
    }
   }
  }
+
  pitchAnimation=requestAnimationFrame(analyzePitch);
 }
 
 function stopVoiceAnalysis(){
- if(pitchAnimation)cancelAnimationFrame(pitchAnimation);
+ if(pitchAnimation){
+  cancelAnimationFrame(pitchAnimation);
+ }
+
  pitchAnimation=null;
 
  if(audioStream){
   audioStream.getTracks().forEach(t=>t.stop());
   audioStream=null;
  }
+
  if(audioContext){
   audioContext.close().catch(()=>{});
   audioContext=null;
  }
+
  analyser=null;
  audioSource=null;
  pitchSamples=[];
+
  detectedVoiceType="unknown";
  lastVoiceType="unknown";
 }
 
 /* ONLINE PŘEKLAD */
+
 async function translateOnline(text,direction="en|cs"){
  const url="https://api.mymemory.translated.net/get?q="+
   encodeURIComponent(text)+"&langpair="+direction;
 
  const response=await fetch(url);
- if(!response.ok)throw new Error("Online překladač neodpovídá.");
+
+ if(!response.ok){
+  throw new Error("Online překladač neodpovídá.");
+ }
 
  const data=await response.json();
  const result=data?.responseData?.translatedText?.trim();
 
- if(!result)throw new Error("Překlad není dostupný.");
+ if(!result){
+  throw new Error("Překlad není dostupný.");
+ }
+
  return result;
 }
 
 /* INTELIGENTNÍ KNIHOVNA 0.9.1 */
 
-/* Hledání přesného uloženého překladu. */
 function findCachedTranslation(text){
  const key=cacheKey(text);
- if(translationCache.has(key)return translationCache.get(key);
+
+ /* OPRAVA CHYBY – správně uzavřená podmínka */
+ if(translationCache.has(key)){
+  return translationCache.get(key);
+ }
 
  const item=savedItems.find(x=>
-  x.direction==="en|cs"&&normalize(x.english)===normalize(text)
+  x.direction==="en|cs"&&
+  normalize(x.english)===normalize(text)
  );
+
  return item?.czech||null;
 }
 
-/* Odstraní speciální znaky pro bezpečné použití v regulárním výrazu. */
+/* Bezpečné použití výrazů v regulárním výrazu */
+
 function escapeRegExp(text){
  return String(text).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
 }
 
-/*
- Připraví známé věty, fráze a slovíčka.
- Nejdelší výrazy mají přednost.
-*/
+/* Připraví známé věty, fráze a slovíčka. */
+
 function getLibraryEntries(){
  return savedItems
   .filter(item=>
@@ -598,16 +901,14 @@ function getLibraryEntries(){
   .sort((a,b)=>b.english.length-a.english.length);
 }
 
-/*
- Najde výskyt známého výrazu v anglické větě.
- Hranice slov zabrání tomu, aby například "he" nahradilo část
- slova "hello".
-*/
+/* Najde známý výraz v anglickém textu. */
+
 function findLibraryMatch(text,position,entries){
  const remaining=text.slice(position);
 
  for(const item of entries){
   const englishText=item.english.trim();
+
   if(!englishText)continue;
 
   const pattern=escapeRegExp(englishText)
@@ -629,15 +930,19 @@ function findLibraryMatch(text,position,entries){
    };
   }
  }
+
  return null;
 }
 
-/* Překlad neznámé části textu online. */
+/* Překlad neznámé části online. */
+
 async function translateUnknownChunk(text){
  const clean=text.trim();
+
  if(!clean)return "";
 
  const cached=findCachedTranslation(clean);
+
  if(cached)return cached;
 
  return await translateOnline(clean,"en|cs");
@@ -651,19 +956,25 @@ async function translateUnknownChunk(text){
  3. Známá jednotlivá slovíčka.
  4. Online překlad pouze neznámých částí.
 */
+
 async function translateUsingLibrary(text){
  text=String(text||"").trim();
+
  if(!text)return "";
 
  /* 1 – Přesná shoda celé věty. */
+
  const wholeSentence=findCachedTranslation(text);
+
  if(wholeSentence)return wholeSentence;
 
  const entries=getLibraryEntries();
  const matches=[];
+
  let position=0;
 
  /* 2 a 3 – Vyhledání známých výrazů uvnitř textu. */
+
  while(position<text.length){
   const match=findLibraryMatch(text,position,entries);
 
@@ -674,23 +985,27 @@ async function translateUsingLibrary(text){
     translation:match.translation,
     english:match.english
    });
+
    position+=match.length;
   }else{
    position++;
   }
  }
 
- /* Odstranění případných překrývajících se shod. */
+ /* Odstranění překrývajících se shod. */
+
  const filtered=[];
  let lastEnd=0;
 
  for(const match of matches){
   if(match.start<lastEnd)continue;
+
   filtered.push(match);
   lastEnd=match.end;
  }
 
- /* 4 – Online překlad pouze částí, které knihovna nezná. */
+ /* 4 – Online překlad pouze neznámých částí. */
+
  let output="";
  let cursor=0;
 
@@ -709,6 +1024,7 @@ async function translateUsingLibrary(text){
  }
 
  /* Překlad poslední neznámé části. */
+
  const remaining=text.slice(cursor);
 
  if(remaining.trim()){
@@ -718,6 +1034,7 @@ async function translateUsingLibrary(text){
  }
 
  /* Oprava mezer před interpunkcí. */
+
  output=output
   .replace(/\s+([,.!?;:])/g,"$1")
   .replace(/([,.!?;:])([A-Za-zÁ-Žá-ž])/g,"$1 $2")
@@ -728,18 +1045,21 @@ async function translateUsingLibrary(text){
 }
 
 /* Celá věta se nejprve hledá v knihovně. */
+
 async function translateSentence(text){
  const cached=findCachedTranslation(text);
+
  if(cached)return cached;
 
  return await translateUsingLibrary(text);
 }
 
 /* AUTOMATICKÉ UČENÍ SLOVÍČEK */
+
 function extractWords(text){
  return [...new Set(
   (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[])
-  .map(w=>w.toLowerCase())
+   .map(w=>w.toLowerCase())
  )].filter(w=>w.length>1);
 }
 
@@ -748,15 +1068,22 @@ function queueAutomaticWords(text){
   const saved=savedItems.some(x=>
    x.type==="word"&&normalize(x.english)===normalize(word)
   );
-  const queued=wordQueue.some(x=>normalize(x)===normalize(word));
 
-  if(!saved&&!queued)wordQueue.push(word);
+  const queued=wordQueue.some(x=>
+   normalize(x)===normalize(word)
+  );
+
+  if(!saved&&!queued){
+   wordQueue.push(word);
+  }
  });
+
  runWordWorker();
 }
 
 async function runWordWorker(){
  if(runWordWorker.running)return;
+
  runWordWorker.running=true;
 
  try{
@@ -765,7 +1092,9 @@ async function runWordWorker(){
 
    if(savedItems.some(x=>
     x.type==="word"&&normalize(x.english)===normalize(word)
-   ))continue;
+   )){
+    continue;
+   }
 
    try{
     const translation=await translateOnline(word,"en|cs");
@@ -778,31 +1107,46 @@ async function runWordWorker(){
   }
  }finally{
   runWordWorker.running=false;
-  if(wordQueue.length)runWordWorker();
+
+  if(wordQueue.length){
+   runWordWorker();
+  }
  }
 }
 
 /* PŘEPIS */
+
 function appendTranscript(element,text){
- if(["Zatím nic neslyším...","Čekám na překlad..."].includes(element.textContent.trim())){
+ if([
+  "Zatím nic neslyším...",
+  "Čekám na překlad..."
+ ].includes(element.textContent.trim())){
   element.textContent="";
  }
+
  const p=document.createElement("p");
  p.textContent=text;
+
  element.appendChild(p);
  element.scrollTop=element.scrollHeight;
+
  return p;
 }
 
 function updateInterim(text){
  if(!interimElement){
-  if(english.textContent.trim()==="Zatím nic neslyším...")english.textContent="";
+  if(english.textContent.trim()==="Zatím nic neslyším..."){
+   english.textContent="";
+  }
+
   interimElement=document.createElement("p");
   interimElement.className="interim";
   english.appendChild(interimElement);
  }
+
  interimElement.textContent=text;
  english.scrollTop=english.scrollHeight;
+
  setStatus("Rozpoznávám: "+text);
 }
 
@@ -814,8 +1158,10 @@ function clearInterim(){
 }
 
 /* ROZPOZNÁVÁNÍ ŘEČI */
+
 function setupRecognition(){
- const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+ const SpeechRecognition=
+  window.SpeechRecognition||window.webkitSpeechRecognition;
 
  if(!SpeechRecognition){
   setStatus("Rozpoznávání řeči není podporováno. Zkus Chrome.");
@@ -823,20 +1169,25 @@ function setupRecognition(){
  }
 
  recognition=new SpeechRecognition();
+
  recognition.lang="en-US";
  recognition.continuous=true;
  recognition.interimResults=true;
  recognition.maxAlternatives=1;
 
  recognition.onresult=event=>{
-  let finalText="",interimText="";
+  let finalText="";
+  let interimText="";
 
   for(let i=event.resultIndex;i<event.results.length;i++){
    const result=event.results[i];
    const phrase=result[0].transcript.trim();
 
-   if(result.isFinal&&phrase)finalText+=phrase+" ";
-   else if(phrase)interimText+=phrase+" ";
+   if(result.isFinal&&phrase){
+    finalText+=phrase+" ";
+   }else if(phrase){
+    interimText+=phrase+" ";
+   }
   }
 
   if(finalText.trim()){
@@ -844,15 +1195,21 @@ function setupRecognition(){
    addSentence(finalText.trim());
   }
 
-  if(interimText.trim())updateInterim(interimText.trim());
+  if(interimText.trim()){
+   updateInterim(interimText.trim());
+  }
  };
 
  recognition.onerror=event=>{
   if(!listening)return;
 
-  if(event.error==="not-allowed"||event.error==="service-not-allowed"){
+  if(
+   event.error==="not-allowed"||
+   event.error==="service-not-allowed"
+  ){
    listening=false;
    stopVoiceAnalysis();
+
    setStatus("Mikrofon nemá povolení. Povol ho v nastavení Chrome.");
   }else if(event.error!=="no-speech"&&event.error!=="aborted"){
    setStatus("Chyba mikrofonu: "+event.error);
@@ -861,7 +1218,10 @@ function setupRecognition(){
 
  recognition.onend=()=>{
   restarting=false;
-  if(listening)setTimeout(startRecognition,400);
+
+  if(listening){
+   setTimeout(startRecognition,400);
+  }
  };
 
  return true;
@@ -873,14 +1233,19 @@ function startRecognition(){
  try{
   restarting=true;
   recognition.start();
+
   setStatus("Poslouchám angličtinu...");
  }catch(error){
   restarting=false;
-  if(listening)setTimeout(startRecognition,1000);
+
+  if(listening){
+   setTimeout(startRecognition,1000);
+  }
  }
 }
 
 /* SPUŠTĚNÍ A ZASTAVENÍ */
+
 async function startListening(){
  if(listening)return;
 
@@ -889,7 +1254,9 @@ async function startListening(){
   return;
  }
 
- if(!recognition&&!setupRecognition())return;
+ if(!recognition&&!setupRecognition()){
+  return;
+ }
 
  if(speechAvailable()){
   unlockSpeech();
@@ -897,10 +1264,13 @@ async function startListening(){
 
  listening=true;
  session++;
+
  sentenceQueue=[];
  clearInterim();
+
  english.textContent="";
  czech.textContent="";
+
  voiceInfo.textContent="Analyzuji hlas...";
 
  startRecognition();
@@ -910,57 +1280,79 @@ async function startListening(){
 function stopListening(){
  listening=false;
  session++;
+
  sentenceQueue=[];
  wordQueue=[];
+
  clearInterim();
 
  if(recognition){
-  try{recognition.stop()}catch(error){}
+  try{
+   recognition.stop();
+  }catch(error){}
  }
 
  stopVoiceAnalysis();
 
  if(speechAvailable()){
-  try{window.speechSynthesis.cancel()}catch(error){}
+  try{
+   window.speechSynthesis.cancel();
+  }catch(error){}
  }
 
  processing=false;
  restarting=false;
  activeUtterance=null;
+
  setStatus("Mikrofon a hlas zastaveny.");
  voiceInfo.textContent="Typ hlasu: zatím neurčen";
 }
 
 /* HLAVNÍ FRONDA VĚT */
+
 function addSentence(text){
  appendTranscript(english,text);
- sentenceQueue.push({text,session});
+
+ sentenceQueue.push({
+  text,
+  session
+ });
+
  setStatus("Věta zachycena. Připravuji překlad...");
+
  processQueue();
 }
 
 async function processQueue(){
  if(processing)return;
+
  processing=true;
 
  try{
   while(sentenceQueue.length){
    const item=sentenceQueue.shift();
 
-   if(!listening||item.session!==session)continue;
+   if(!listening||item.session!==session){
+    continue;
+   }
 
    try{
     setStatus("Hledám překlad v knihovně...");
 
     /* Inteligentní překlad s knihovnou. */
+
     const translation=await translateSentence(item.text);
 
-    if(!listening||item.session!==session)continue;
+    if(!listening||item.session!==session){
+     continue;
+    }
 
     appendTranscript(czech,translation);
+
     addSavedItem("sentence",item.text,translation);
 
     /* Slovíčka se ukládají na pozadí. */
+
     queueAutomaticWords(item.text);
 
     setStatus("Překlad hotov. Spouštím český hlas...");
@@ -991,6 +1383,7 @@ async function processQueue(){
 }
 
 /* VYHLEDÁVÁNÍ VE SLOVNÍKU */
+
 async function searchDictionary(){
  const text=$("dictionaryInput").value.trim();
 
@@ -1006,10 +1399,16 @@ async function searchDictionary(){
  try{
   const hasCzechChars=/[ěščřžýáíéůúďťň]/i.test(text);
   const direction=hasCzechChars?"cs|en":"en|cs";
+
   const translated=await translateOnline(text,direction);
 
-  const englishText=direction==="en|cs"?text:translated;
-  const czechText=direction==="en|cs"?translated:text;
+  const englishText=direction==="en|cs"
+   ?text
+   :translated;
+
+  const czechText=direction==="en|cs"
+   ?translated
+   :text;
 
   addSavedItem("word",englishText,czechText,direction);
 
@@ -1018,6 +1417,7 @@ async function searchDictionary(){
   const a=document.createElement("div");
   const b=document.createElement("div");
   const c=document.createElement("div");
+
   const strongA=document.createElement("strong");
   const strongB=document.createElement("strong");
 
@@ -1025,6 +1425,7 @@ async function searchDictionary(){
   strongB.textContent="Překlad: ";
 
   a.append(strongA,document.createTextNode(text));
+
   b.style.marginTop="7px";
   b.append(strongB,document.createTextNode(translated));
 
@@ -1032,20 +1433,25 @@ async function searchDictionary(){
   c.textContent="Výraz byl uložen do knihovny.";
 
   dictionaryResult.append(a,b,c);
+
  }catch(error){
   dictionaryResult.textContent="Překlad se nepodařilo získat: "+error.message;
  }
 }
 
 /* TLAČÍTKA */
+
 $("start").addEventListener("click",startListening);
 $("stop").addEventListener("click",stopListening);
 $("test").addEventListener("click",testCzechVoice);
+
 $("libraryToggle").addEventListener("click",toggleLibrary);
 $("dictionaryButton").addEventListener("click",searchDictionary);
 
 $("dictionaryInput").addEventListener("keydown",event=>{
- if(event.key==="Enter")searchDictionary();
+ if(event.key==="Enter"){
+  searchDictionary();
+ }
 });
 
 $("savedSearch").addEventListener("input",renderSavedItems);
@@ -1053,11 +1459,14 @@ $("exportButton").addEventListener("click",exportSaved);
 $("clearButton").addEventListener("click",clearSaved);
 
 /* START APLIKACE */
+
 savedItems=loadSavedItems();
+
 rebuildCache();
 renderSavedItems();
-setStatus("Připraveno");
-</script>
 
+setStatus("Připraveno");
+
+</script>
 </body>
 </html>
