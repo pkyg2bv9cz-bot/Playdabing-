@@ -61,7 +61,7 @@ button {
 .panel-container {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -70,30 +70,47 @@ button {
 .panel {
   background: #111111;
   border: 1px solid #444444;
-  padding: 12px;
+  padding: 9px;
   border-radius: 8px;
   min-width: 0;
-  min-height: 220px;
+  min-height: 93px;
   text-align: left;
-  overflow-wrap: anywhere;
 }
 
 .panel h3 {
   color: #ffffff;
-  font-size: 14px;
+  font-size: 12px;
   text-align: center;
   border-bottom: 1px solid #444444;
-  padding-bottom: 9px;
-  margin: 0 0 10px;
+  padding-bottom: 7px;
+  margin: 0 0 8px;
 }
 
-#english, #czech {
-  white-space: pre-wrap;
+.transcript {
+  height: 58px;
+  overflow-y: auto;
+  overflow-x: hidden;
   overflow-wrap: anywhere;
+  white-space: pre-wrap;
   color: #eeeeee;
-  font-size: 14px;
-  line-height: 1.5;
-  margin: 0;
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: #666666 #111111;
+}
+
+.transcript p {
+  margin: 0 0 8px;
+}
+
+.transcript::-webkit-scrollbar {
+  width: 4px;
+}
+
+.transcript::-webkit-scrollbar-thumb {
+  background: #666666;
+  border-radius: 5px;
 }
 
 .status {
@@ -143,12 +160,12 @@ button {
 
   <div class="panel">
     <h3>ANGLICKÝ PŘEPIS</h3>
-    <p id="english">Zatím nic neslyším...</p>
+    <div id="english" class="transcript">Zatím nic neslyším...</div>
   </div>
 
   <div class="panel">
     <h3>ČESKÝ PŘEKLAD</h3>
-    <p id="czech">Čekám na překlad...</p>
+    <div id="czech" class="transcript">Čekám na překlad...</div>
   </div>
 
 </div>
@@ -163,15 +180,20 @@ button {
 </footer>
 
 <div style="text-align:center; color:#ffffff; font-size:12px; margin-top:20px; padding-bottom:10px; letter-spacing:1px;">
-  BETA VERZE 0.1
+  BETA VERZE 0.2
 </div>
 
 <script>
 let recognition = null;
 let listening = false;
+
 let processing = false;
+let speechProcessing = false;
 let restarting = false;
+
 let sentenceQueue = [];
+let speechQueue = [];
+
 let session = 0;
 let voices = [];
 
@@ -230,13 +252,35 @@ function speakCzech(text) {
 async function testCzechVoice() {
   try {
     statusText.textContent = "Testuji český hlas...";
+
     await speakCzech(
       "Ahoj, toto je test českého hlasu PlayDabing TV."
     );
+
     statusText.textContent = "Test českého hlasu dokončen.";
   } catch (error) {
     statusText.textContent = "Chyba hlasu: " + error.message;
   }
+}
+
+/* Přidání textu a automatické posunutí dolů */
+
+function appendTranscript(element, text) {
+  const placeholder = [
+    "Zatím nic neslyším...",
+    "Čekám na překlad..."
+  ];
+
+  if (placeholder.includes(element.textContent.trim())) {
+    element.textContent = "";
+  }
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = text;
+
+  element.appendChild(paragraph);
+
+  element.scrollTop = element.scrollHeight;
 }
 
 function setupRecognition() {
@@ -316,6 +360,7 @@ function startRecognition() {
   try {
     restarting = true;
     recognition.start();
+
     statusText.textContent = "Poslouchám angličtinu...";
   } catch (error) {
     restarting = false;
@@ -333,7 +378,9 @@ function startListening() {
 
   listening = true;
   session++;
+
   sentenceQueue = [];
+  speechQueue = [];
 
   english.textContent = "";
   czech.textContent = "";
@@ -344,7 +391,9 @@ function startListening() {
 function stopListening() {
   listening = false;
   session++;
+
   sentenceQueue = [];
+  speechQueue = [];
 
   if (recognition) {
     try {
@@ -355,14 +404,14 @@ function stopListening() {
   speechSynthesis.cancel();
 
   processing = false;
+  speechProcessing = false;
   restarting = false;
 
   statusText.textContent = "Mikrofon a hlas zastaveny.";
 }
 
 function addSentence(text) {
-  english.textContent +=
-    (english.textContent ? "\n" : "") + text;
+  appendTranscript(english, text);
 
   sentenceQueue.push({
     text: text,
@@ -374,6 +423,8 @@ function addSentence(text) {
 
   processQueue();
 }
+
+/* Překlad */
 
 async function translateSentence(text) {
   const url =
@@ -396,6 +447,8 @@ async function translateSentence(text) {
 
   return data.responseData.translatedText;
 }
+
+/* Překlad běží nezávisle na přehrávání */
 
 async function processQueue() {
   if (processing) return;
@@ -420,13 +473,14 @@ async function processQueue() {
         continue;
       }
 
-      czech.textContent +=
-        (czech.textContent ? "\n" : "") + translation;
+      appendTranscript(czech, translation);
 
-      statusText.textContent =
-        "Přehrávám český překlad...";
+      speechQueue.push({
+        text: translation,
+        session: item.session
+      });
 
-      await speakCzech(translation);
+      processSpeechQueue();
 
     } catch (error) {
       if (listening && item.session === session) {
@@ -438,7 +492,43 @@ async function processQueue() {
 
   processing = false;
 
-  if (listening) {
+  if (listening && !speechProcessing) {
+    statusText.textContent =
+      "Poslouchám další anglické věty...";
+  }
+}
+
+/* Přehrávání českých vět ve správném pořadí */
+
+async function processSpeechQueue() {
+  if (speechProcessing) return;
+
+  speechProcessing = true;
+
+  while (speechQueue.length > 0) {
+    const item = speechQueue.shift();
+
+    if (!listening || item.session !== session) {
+      continue;
+    }
+
+    try {
+      statusText.textContent =
+        "Přehrávám český překlad...";
+
+      await speakCzech(item.text);
+
+    } catch (error) {
+      if (listening && item.session === session) {
+        statusText.textContent =
+          "Chyba hlasu: " + error.message;
+      }
+    }
+  }
+
+  speechProcessing = false;
+
+  if (listening && sentenceQueue.length === 0) {
     statusText.textContent =
       "Poslouchám další anglické věty...";
   }
