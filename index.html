@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#050d25">
-<title>PlayDabing TV Beta 0.9</title>
+<title>PlayDabing TV Beta 0.9.1</title>
 <link rel="manifest" href="./manifest.json">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -141,7 +140,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 </footer>
 
 <div style="text-align:center;color:white;font-size:12px;margin-top:20px;padding-bottom:10px;letter-spacing:1px">
- BETA VERZE 0.9
+ BETA VERZE 0.9.1
 </div>
 
 <script>
@@ -206,8 +205,11 @@ function persistSavedItems(){
 }
 
 function normalize(text){
- return String(text||"").trim().toLocaleLowerCase("en-US").replace(/[.!?,;:]+$/g,"");
+ return String(text||"").trim().toLocaleLowerCase("en-US")
+  .replace(/[.!?,;:]+$/g,"")
+  .replace(/\s+/g," ");
 }
+
 function cacheKey(text,direction="en|cs"){
  return direction+"|"+normalize(text);
 }
@@ -352,12 +354,6 @@ function getCzechVoice(){
  return cs[0];
 }
 
-/*
- PŘÍPRAVA HLASU:
- Spouští se přímo po kliknutí na tlačítko mikrofonu.
- Některé mobilní prohlížeče potřebují první hlasový požadavek
- vyvolat přímo uživatelskou akcí.
-*/
 function unlockSpeech(){
  if(!speechAvailable())return false;
 
@@ -383,7 +379,6 @@ function unlockSpeech(){
  }
 }
 
-/* PŘEDČÍTÁNÍ JEDNÉ CELÉ VĚTY */
 function speakCzech(text){
  return new Promise((resolve,reject)=>{
   if(!speechAvailable()){
@@ -570,9 +565,12 @@ async function translateOnline(text,direction="en|cs"){
  return result;
 }
 
+/* INTELIGENTNÍ KNIHOVNA 0.9.1 */
+
+/* Hledání přesného uloženého překladu. */
 function findCachedTranslation(text){
  const key=cacheKey(text);
- if(translationCache.has(key))return translationCache.get(key);
+ if(translationCache.has(key)return translationCache.get(key);
 
  const item=savedItems.find(x=>
   x.direction==="en|cs"&&normalize(x.english)===normalize(text)
@@ -580,12 +578,164 @@ function findCachedTranslation(text){
  return item?.czech||null;
 }
 
-async function translateSentence(text){
- const cached=findCachedTranslation(text);
- return cached||await translateOnline(text,"en|cs");
+/* Odstraní speciální znaky pro bezpečné použití v regulárním výrazu. */
+function escapeRegExp(text){
+ return String(text).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
 }
 
-/* SAMOSTATNÁ FRONTa SLOVÍČEK */
+/*
+ Připraví známé věty, fráze a slovíčka.
+ Nejdelší výrazy mají přednost.
+*/
+function getLibraryEntries(){
+ return savedItems
+  .filter(item=>
+   item.direction==="en|cs"&&
+   item.english&&
+   item.czech&&
+   (item.type==="sentence"||item.type==="word")
+  )
+  .sort((a,b)=>b.english.length-a.english.length);
+}
+
+/*
+ Najde výskyt známého výrazu v anglické větě.
+ Hranice slov zabrání tomu, aby například "he" nahradilo část
+ slova "hello".
+*/
+function findLibraryMatch(text,position,entries){
+ const remaining=text.slice(position);
+
+ for(const item of entries){
+  const englishText=item.english.trim();
+  if(!englishText)continue;
+
+  const pattern=escapeRegExp(englishText)
+   .replace(/\s+/g,"\\s+");
+
+  const regex=new RegExp(
+   "^(?<![A-Za-z])"+pattern+"(?![A-Za-z])",
+   "i"
+  );
+
+  const match=remaining.match(regex);
+
+  if(match){
+   return {
+    length:match[0].length,
+    translation:item.czech,
+    english:match[0],
+    type:item.type
+   };
+  }
+ }
+ return null;
+}
+
+/* Překlad neznámé části textu online. */
+async function translateUnknownChunk(text){
+ const clean=text.trim();
+ if(!clean)return "";
+
+ const cached=findCachedTranslation(clean);
+ if(cached)return cached;
+
+ return await translateOnline(clean,"en|cs");
+}
+
+/*
+ INTELIGENTNÍ PŘEKLAD
+
+ 1. Celá známá věta.
+ 2. Známé fráze a uložené věty.
+ 3. Známá jednotlivá slovíčka.
+ 4. Online překlad pouze neznámých částí.
+*/
+async function translateUsingLibrary(text){
+ text=String(text||"").trim();
+ if(!text)return "";
+
+ /* 1 – Přesná shoda celé věty. */
+ const wholeSentence=findCachedTranslation(text);
+ if(wholeSentence)return wholeSentence;
+
+ const entries=getLibraryEntries();
+ const matches=[];
+ let position=0;
+
+ /* 2 a 3 – Vyhledání známých výrazů uvnitř textu. */
+ while(position<text.length){
+  const match=findLibraryMatch(text,position,entries);
+
+  if(match){
+   matches.push({
+    start:position,
+    end:position+match.length,
+    translation:match.translation,
+    english:match.english
+   });
+   position+=match.length;
+  }else{
+   position++;
+  }
+ }
+
+ /* Odstranění případných překrývajících se shod. */
+ const filtered=[];
+ let lastEnd=0;
+
+ for(const match of matches){
+  if(match.start<lastEnd)continue;
+  filtered.push(match);
+  lastEnd=match.end;
+ }
+
+ /* 4 – Online překlad pouze částí, které knihovna nezná. */
+ let output="";
+ let cursor=0;
+
+ for(const match of filtered){
+  const unknown=text.slice(cursor,match.start);
+
+  if(unknown.trim()){
+   const translatedUnknown=await translateUnknownChunk(unknown);
+   output+=translatedUnknown;
+  }else{
+   output+=unknown;
+  }
+
+  output+=" "+match.translation;
+  cursor=match.end;
+ }
+
+ /* Překlad poslední neznámé části. */
+ const remaining=text.slice(cursor);
+
+ if(remaining.trim()){
+  output+=await translateUnknownChunk(remaining);
+ }else{
+  output+=remaining;
+ }
+
+ /* Oprava mezer před interpunkcí. */
+ output=output
+  .replace(/\s+([,.!?;:])/g,"$1")
+  .replace(/([,.!?;:])([A-Za-zÁ-Žá-ž])/g,"$1 $2")
+  .replace(/\s+/g," ")
+  .trim();
+
+ return output;
+}
+
+/* Celá věta se nejprve hledá v knihovně. */
+async function translateSentence(text){
+ const cached=findCachedTranslation(text);
+ if(cached)return cached;
+
+ return await translateUsingLibrary(text);
+}
+
+/* AUTOMATICKÉ UČENÍ SLOVÍČEK */
 function extractWords(text){
  return [...new Set(
   (text.match(/[A-Za-z]+(?:'[A-Za-z]+)?/g)||[])
@@ -601,7 +751,7 @@ function queueAutomaticWords(text){
   const queued=wordQueue.some(x=>normalize(x)===normalize(word));
 
   if(!saved&&!queued)wordQueue.push(word);
-  });
+ });
  runWordWorker();
 }
 
@@ -621,7 +771,7 @@ async function runWordWorker(){
     const translation=await translateOnline(word,"en|cs");
     addSavedItem("word",word,translation);
    }catch(error){
-    // Chyba překladu slovíčka nesmí zastavit překlad vět.
+    /* Chyba překladu slovíčka nesmí zastavit překlad věty. */
    }
 
    await new Promise(resolve=>setTimeout(resolve,500));
@@ -741,10 +891,6 @@ async function startListening(){
 
  if(!recognition&&!setupRecognition())return;
 
- /*
-  Příprava hlasu se provede přímo po kliknutí.
-  Teprve potom se rozběhne rozpoznávání a překlad.
- */
  if(speechAvailable()){
   unlockSpeech();
  }
@@ -785,7 +931,7 @@ function stopListening(){
  voiceInfo.textContent="Typ hlasu: zatím neurčen";
 }
 
-/* HLAVNÍ FRONTa VĚT – MÁ PŘEDNOST */
+/* HLAVNÍ FRONDA VĚT */
 function addSentence(text){
  appendTranscript(english,text);
  sentenceQueue.push({text,session});
@@ -804,22 +950,19 @@ async function processQueue(){
    if(!listening||item.session!==session)continue;
 
    try{
-    setStatus("Překládám celou větu...");
+    setStatus("Hledám překlad v knihovně...");
 
-    // Nejdříve se přeloží celá věta.
+    /* Inteligentní překlad s knihovnou. */
     const translation=await translateSentence(item.text);
 
     if(!listening||item.session!==session)continue;
 
-    // Překlad se zobrazí a uloží samostatně.
     appendTranscript(czech,translation);
     addSavedItem("sentence",item.text,translation);
 
-    // Slovíčka se spustí odděleně na pozadí.
-    // Nečekáme na ně a neblokují předčítání.
+    /* Slovíčka se ukládají na pozadí. */
     queueAutomaticWords(item.text);
 
-    // Hlavní priorita: okamžité přečtení české věty.
     setStatus("Překlad hotov. Spouštím český hlas...");
 
     try{
