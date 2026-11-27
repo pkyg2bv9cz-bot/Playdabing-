@@ -108,6 +108,8 @@ button, select {
   }
 }
 
+/* START BUTTON */
+
 .start-button {
   width: 100%;
   border: 2px solid #00e5f0;
@@ -198,69 +200,287 @@ select:focus {
   margin-bottom: 8px;
 }
 
-/* TRANSLATION */
+/* ROBOTIC TALKING MOUTH */
 
-.translation-box {
-  min-height: 175px;
+.sound-panel {
+  overflow: hidden;
+  position: relative;
+  transition: border-color .25s, box-shadow .25s;
 }
 
-.translation-line {
-  padding: 13px;
-  border-radius: 12px;
-  background: #080808;
-  margin-top: 10px;
-  line-height: 1.5;
-  word-break: break-word;
+.sound-panel.listening {
+  border-color: #00e5f066;
+  box-shadow: 0 0 20px #00e5f018;
 }
 
-.original {
-  color: #ddd;
-  border: 1px solid #303030;
-}
-
-.translated {
-  color: #00e5f0;
-  border: 1px solid #00e5f055;
-  font-weight: bold;
-}
-
-.tag {
-  font-size: 10px;
-  color: #888;
-  margin-bottom: 5px;
-}
-
-/* SOUND */
-
-.wave {
+.robot-stage {
+  position: relative;
+  width: 100%;
+  height: 230px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 65px;
-  gap: 4px;
+  overflow: hidden;
+  margin-top: 8px;
 }
 
-.wave span {
-  display: block;
-  width: 4px;
-  height: 8px;
-  background: #00e5f0;
-  border-radius: 5px;
+.robot-glow {
+  position: absolute;
+  width: 210px;
+  height: 130px;
+  background: radial-gradient(
+    ellipse,
+    #00e5f025 0%,
+    #00e5f010 40%,
+    transparent 75%
+  );
+  filter: blur(15px);
+  transition: opacity .2s;
   opacity: .5;
 }
 
-.wave.active span {
-  opacity: 1;
-  animation: wave .7s infinite alternate;
+.robot-mouth {
+  width: min(100%, 340px);
+  height: 190px;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 8px #00e5f044);
+  --mouth-open: 0;
 }
 
-.wave span:nth-child(2n) { animation-delay: .2s; }
-.wave span:nth-child(3n) { animation-delay: .4s; }
-.wave span:nth-child(4n) { animation-delay: .1s; }
+.mouth-core {
+  position: absolute;
+  inset: 15% 10%;
+  border-radius: 50%;
+  background: #020707;
+  border: 1px solid #17494c;
+  box-shadow: inset 0 0 35px #00e5f01a;
+  overflow: hidden;
+}
 
-@keyframes wave {
-  from { height: 8px; }
-  to { height: 42px; }
+/* Inside of mouth */
+
+.mouth-inner {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 0%;
+  transform: translateY(-50%);
+  background: #001a1b;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #00e5f055;
+  transition: height .08s linear;
+}
+
+/* Teeth / digital light */
+
+.mouth-teeth {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  top: 50%;
+  height: 0;
+  transform: translateY(-50%);
+  overflow: hidden;
+  display: flex;
+  justify-content: space-evenly;
+  transition: height .08s linear;
+}
+
+.mouth-teeth span {
+  width: 7px;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    #d5ffff,
+    #39e9f3 35%,
+    #008f9c
+  );
+  border-radius: 2px;
+  box-shadow: 0 0 5px #00e5f0;
+}
+
+/* Upper robot jaw */
+
+.upper-jaw {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  transform-origin: center bottom;
+  transform: translateY(calc(var(--mouth-open) * -0.22px));
+  transition: transform .08s linear;
+  z-index: 4;
+}
+
+/* Lower robot jaw */
+
+.lower-jaw {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  transform-origin: center top;
+  transform: translateY(calc(var(--mouth-open) * 0.22px));
+  transition: transform .08s linear;
+  z-index: 4;
+}
+
+.jaw-piece {
+  position: absolute;
+  left: 5%;
+  right: 5%;
+  height: 75%;
+  background: linear-gradient(
+    180deg,
+    #e6f2f4 0%,
+    #87989d 18%,
+    #34464a 42%,
+    #a8c1c6 58%,
+    #24383b 85%,
+    #0c1618 100%
+  );
+  border: 1px solid #66f7ff;
+  box-shadow:
+    inset 0 0 7px #ffffff55,
+    0 0 7px #00e5f044;
+}
+
+.upper-jaw .jaw-piece {
+  top: 8%;
+  border-radius: 48% 48% 18% 18%;
+  clip-path: polygon(0 0,100% 0,94% 65%,78% 90%,50% 100%,22% 90%,6% 65%);
+}
+
+.lower-jaw .jaw-piece {
+  bottom: 8%;
+  border-radius: 18% 18% 48% 48%;
+  clip-path: polygon(6% 0,22% 10%,50% 0,78% 10%,94% 0,100% 35%,94% 65%,78% 90%,50% 100%,22% 90%,6% 65%,0 35%);
+}
+
+/* Metal segment lines */
+
+.jaw-lines {
+  position: absolute;
+  inset: 8px 12%;
+  display: flex;
+  justify-content: space-evenly;
+  pointer-events: none;
+}
+
+.jaw-lines span {
+  width: 2px;
+  height: 100%;
+  background: #16292c;
+  box-shadow: 1px 0 #c2e1e4;
+  opacity: .75;
+}
+
+.jaw-bolts {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.jaw-bolts span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #183b3e;
+  border: 1px solid #b9e8ed;
+  box-shadow: 0 0 5px #00e5f0;
+}
+
+.upper-jaw .jaw-bolts {
+  top: 15px;
+}
+
+.lower-jaw .jaw-bolts {
+  bottom: 15px;
+}
+
+/* Sound rings */
+
+.sound-ring {
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 75px;
+  transform: translateY(-50%);
+  opacity: .15;
+  transition: opacity .15s;
+  z-index: 1;
+}
+
+.sound-ring.left {
+  left: 5%;
+  border-left: 3px solid #00e5f0;
+  border-radius: 50%;
+}
+
+.sound-ring.right {
+  right: 5%;
+  border-right: 3px solid #00e5f0;
+  border-radius: 50%;
+}
+
+.sound-panel.listening .sound-ring {
+  opacity: .6;
+}
+
+.sound-panel.speaking .sound-ring {
+  opacity: 1;
+  box-shadow: 0 0 15px #00e5f055;
+}
+
+/* HISTORY */
+
+.info-card {
+  background: #101010;
+  border: 1px solid #252525;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+}
+
+.info-card p {
+  color: #aaa;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.small-button {
+  border: 1px solid #00e5f0;
+  background: #111;
+  color: #00e5f0;
+  padding: 10px;
+  border-radius: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.page-title {
+  font-size: 25px;
+  margin: 20px 0;
+}
+
+.history-item {
+  border-bottom: 1px solid #252525;
+  padding: 12px 0;
+  color: #aaa;
 }
 
 /* NAVIGATION */
@@ -297,51 +517,6 @@ select:focus {
   color: #00e5f0;
 }
 
-/* OTHER PAGES */
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-}
-
-.page-title {
-  font-size: 25px;
-  margin: 20px 0;
-}
-
-.info-card {
-  background: #101010;
-  border: 1px solid #252525;
-  padding: 20px;
-  border-radius: 18px;
-  margin-bottom: 12px;
-}
-
-.info-card p {
-  color: #aaa;
-  margin-top: 8px;
-  line-height: 1.5;
-}
-
-.small-button {
-  border: 1px solid #00e5f0;
-  background: #111;
-  color: #00e5f0;
-  padding: 10px;
-  border-radius: 12px;
-  width: 100%;
-  margin-top: 10px;
-}
-
-.history-item {
-  border-bottom: 1px solid #252525;
-  padding: 12px 0;
-  color: #aaa;
-}
-
 .notice {
   font-size: 11px;
   color: #666;
@@ -349,7 +524,6 @@ select:focus {
   line-height: 1.5;
   margin-top: 18px;
 }
-
 </style>
 </head>
 
@@ -359,7 +533,7 @@ select:focus {
 
 <header class="header">
   <div class="logo">▶ PlayDabing<span> TV</span></div>
-  <div class="beta">BETA 0.1</div>
+  <div class="beta">BETA 0.2</div>
 </header>
 
 <!-- HOME -->
@@ -384,6 +558,8 @@ select:focus {
   <span class="status-dot" id="statusDot"></span>
   <span id="statusText">Připraveno ke spuštění</span>
 </div>
+
+<!-- LANGUAGES -->
 
 <div class="panel">
   <div class="setting-row">
@@ -412,41 +588,66 @@ select:focus {
   </div>
 </div>
 
-<div class="panel">
-  <div class="label">Český hlas</div>
-  <select id="voiceSelect">
-    <option value="">Automatický český hlas</option>
-  </select>
-</div>
+<!-- LIVE SOUND / ROBOT MOUTH -->
 
-<div class="panel">
+<div class="panel sound-panel" id="soundPanel">
+
   <div class="label">Živý zvuk</div>
-  <div class="wave" id="wave">
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-    <span></span><span></span><span></span><span></span>
-  </div>
-</div>
 
-<div class="panel translation-box">
-  <div class="label">Průběžný překlad</div>
+  <div class="robot-stage">
 
-  <div class="translation-line original">
-    <div class="tag">ORIGINÁL</div>
-    <div id="originalText">Zde se zobrazí rozpoznaná řeč…</div>
+    <div class="robot-glow" id="robotGlow"></div>
+
+    <div class="sound-ring left"></div>
+    <div class="sound-ring right"></div>
+
+    <div class="robot-mouth" id="robotMouth">
+
+      <div class="mouth-core">
+
+        <div class="mouth-inner" id="mouthInner"></div>
+
+        <div class="mouth-teeth" id="mouthTeeth">
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+      </div>
+
+      <div class="upper-jaw" id="upperJaw">
+        <div class="jaw-piece">
+          <div class="jaw-lines">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="jaw-bolts">
+            <span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="lower-jaw" id="lowerJaw">
+        <div class="jaw-piece">
+          <div class="jaw-lines">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+          </div>
+          <div class="jaw-bolts">
+            <span></span><span></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="translation-line translated">
-    <div class="tag">ČESKÝ PŘEKLAD</div>
-    <div id="translatedText">Zde se zobrazí český překlad…</div>
-  </div>
 </div>
 
 <p class="notice">
-  PlayDabing TV Beta 0.1<br>
+  PlayDabing TV Beta 0.2<br>
   Rozpoznávání řeči vyžaduje podporovaný prohlížeč a internet.
 </p>
 
@@ -493,10 +694,10 @@ select:focus {
   <h1 class="page-title">Oblíbené</h1>
 
   <div class="info-card">
-    <h3>♡ Oblíbené hlasy</h3>
+    <h3>♡ Oblíbené</h3>
     <p>
       Zde budou tvoje uložená nastavení
-      a oblíbené hlasy.
+      a oblíbené funkce.
     </p>
   </div>
 </section>
@@ -515,34 +716,12 @@ select:focus {
   </div>
 </section>
 
-<!-- SETTINGS -->
-
-<section class="page" id="settings">
-  <h1 class="page-title">Nastavení</h1>
-
-  <div class="info-card">
-    <h3>🎙️ Mikrofon</h3>
-    <p>Oprávnění mikrofonu se vyžádá při spuštění dabingu.</p>
-    <button class="small-button" id="micTest">
-      Otestovat mikrofon
-    </button>
-  </div>
-
-  <div class="info-card">
-    <h3>🔊 Český hlas</h3>
-    <p>Hlas se vybírá podle dostupných hlasů v telefonu.</p>
-  </div>
-
-  <div class="info-card">
-    <h3>ℹ️ O aplikaci</h3>
-    <p>PlayDabing TV</p>
-    <p>Beta 0.1</p>
-  </div>
-</section>
-
 </div>
 
+<!-- NAVIGATION -->
+
 <nav class="bottom-nav">
+
   <div class="nav-item active" data-page="home">
     <span class="icon">🎙️</span>Dabing
   </div>
@@ -562,6 +741,7 @@ select:focus {
   <div class="nav-item" data-page="premium">
     <span class="icon">♛</span>Premium
   </div>
+
 </nav>
 
 <script>
@@ -572,17 +752,29 @@ const startButton = document.getElementById("startButton");
 const micCircle = document.getElementById("micCircle");
 const statusDot = document.getElementById("statusDot");
 const statusText = document.getElementById("statusText");
-const wave = document.getElementById("wave");
-
-const originalText = document.getElementById("originalText");
-const translatedText = document.getElementById("translatedText");
 
 const sourceLanguage = document.getElementById("sourceLanguage");
-const voiceSelect = document.getElementById("voiceSelect");
+
+const soundPanel = document.getElementById("soundPanel");
+const robotMouth = document.getElementById("robotMouth");
+const mouthInner = document.getElementById("mouthInner");
+const mouthTeeth = document.getElementById("mouthTeeth");
+const upperJaw = document.getElementById("upperJaw");
+const lowerJaw = document.getElementById("lowerJaw");
+const robotGlow = document.getElementById("robotGlow");
 
 let recognition = null;
 let isRunning = false;
 let voices = [];
+
+let microphoneStream = null;
+let audioContext = null;
+let analyser = null;
+let audioData = null;
+let animationFrame = null;
+
+let currentMouth = 0;
+let lastSpeechTime = 0;
 
 /* NAVIGATION */
 
@@ -610,27 +802,7 @@ document.querySelectorAll(".nav-item").forEach(item => {
 /* VOICES */
 
 function loadVoices() {
-
   voices = speechSynthesis.getVoices();
-
-  voiceSelect.innerHTML =
-    '<option value="">Automatický český hlas</option>';
-
-  voices.forEach((voice, index) => {
-
-    if (voice.lang.toLowerCase().startsWith("cs")) {
-
-      const option = document.createElement("option");
-
-      option.value = index;
-      option.textContent = voice.name;
-
-      voiceSelect.appendChild(option);
-
-    }
-
-  });
-
 }
 
 speechSynthesis.onvoiceschanged = loadVoices;
@@ -650,21 +822,21 @@ function speakCzech(text) {
   utter.rate = 1;
   utter.pitch = 1;
 
-  const selected = voiceSelect.value;
+  const czechVoice = voices.find(v =>
+    v.lang.toLowerCase().startsWith("cs")
+  );
 
-  if (selected !== "") {
-    utterance.voice = voices[Number(selected)];
-  } else {
-
-    const czechVoice = voices.find(v =>
-      v.lang.toLowerCase().startsWith("cs")
-    );
-
-    if (czechVoice) {
-      utterance.voice = czechVoice;
-    }
-
+  if (czechVoice) {
+    utterance.voice = czechVoice;
   }
+
+  utterance.onstart = () => {
+    lastSpeechTime = Date.now();
+  };
+
+  utterance.onend = () => {
+    lastSpeechTime = Date.now();
+  };
 
   speechSynthesis.speak(utterance);
 
@@ -673,8 +845,6 @@ function speakCzech(text) {
 /* TRANSLATION */
 
 async function translateText(text) {
-
-  translatedText.textContent = "Překládám…";
 
   try {
 
@@ -687,7 +857,6 @@ async function translateText(text) {
       encodeURIComponent(language + "|cs");
 
     const response = await fetch(url);
-
     const data = await response.json();
 
     const translation =
@@ -695,22 +864,15 @@ async function translateText(text) {
 
     if (translation) {
 
-      translatedText.textContent = translation;
-
       addHistory(text, translation);
 
       speakCzech(translation);
-
-    } else {
-
-      translatedText.textContent = "Překlad se nepodařil.";
 
     }
 
   } catch (error) {
 
-    translatedText.textContent =
-      "Chyba překladu. Zkontroluj internet.";
+    console.error("Translation error:", error);
 
   }
 
@@ -750,12 +912,9 @@ function renderHistory() {
   const historyList = document.getElementById("historyList");
 
   if (!history.length) {
-
     historyList.innerHTML =
       "<p>Historie překladů je prázdná.</p>";
-
     return;
-
   }
 
   historyList.innerHTML = "";
@@ -763,7 +922,6 @@ function renderHistory() {
   history.forEach(item => {
 
     const div = document.createElement("div");
-
     div.className = "history-item";
 
     div.innerHTML = `
@@ -801,23 +959,115 @@ document.getElementById("clearHistory").onclick = () => {
 
 renderHistory();
 
-/* MICROPHONE PERMISSION */
+/* MICROPHONE + AUDIO ANALYSER */
 
-async function requestMicrophone() {
+async function startMicrophone() {
 
-  if (!navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia) {
+  microphoneStream =
+    await navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+      }
+    });
 
-    throw new Error("Mikrofon není podporován.");
+  audioContext =
+    new (window.AudioContext || window.webkitAudioContext)();
+
+  if (audioContext.state === "suspended") {
+    await audioContext.resume();
+  }
+
+  const source =
+    audioContext.createMediaStreamSource(microphoneStream);
+
+  analyser = audioContext.createAnalyser();
+  analyser.fftSize = 512;
+  analyser.smoothingTimeConstant = 0.65;
+
+  source.connect(analyser);
+
+  audioData = new Uint8Array(analyser.fftSize);
+
+  animateRobotMouth();
+
+}
+
+/* ROBOT MOUTH MOVEMENT */
+
+function animateRobotMouth() {
+
+  if (!isRunning || !analyser) return;
+
+  analyser.getByteTimeDomainData(audioData);
+
+  let sum = 0;
+
+  for (let i = 0; i < audioData.length; i++) {
+
+    const normalized = (audioData[i] - 128) / 128;
+    sum += normalized * normalized;
 
   }
 
-  const stream =
-    await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
+  const rms = Math.sqrt(sum / audioData.length);
 
-  stream.getTracks().forEach(track => track.stop());
+  /* Convert sound level into mouth opening */
+
+  let targetOpen = Math.min(
+    100,
+    Math.max(0, (rms - 0.015) * 550)
+  );
+
+  /* Smooth movement */
+
+  currentMouth += (targetOpen - currentMouth) * 0.35;
+
+  updateRobotMouth(currentMouth);
+
+  if (rms > 0.035) {
+    lastSpeechTime = Date.now();
+  }
+
+  animationFrame =
+    requestAnimationFrame(animateRobotMouth);
+
+}
+
+/* APPLY OPENING */
+
+function updateRobotMouth(amount) {
+
+  const opening = Math.max(0, Math.min(100, amount));
+
+  /* Jaw movement */
+
+  upperJaw.style.transform =
+    `translateY(${-opening * 0.20}px)`;
+
+  lowerJaw.style.transform =
+    `translateY(${opening * 0.20}px)`;
+
+  /* Mouth interior grows with sound */
+
+  mouthInner.style.height =
+    `${Math.max(0, opening * 0.55)}%`;
+
+  mouthTeeth.style.height =
+    `${Math.max(0, opening * 0.38)}%`;
+
+  robotMouth.style.filter =
+    `drop-shadow(0 0 ${5 + opening * 0.12}px #00e5f055)`;
+
+  robotGlow.style.opacity =
+    `${0.35 + opening / 150}`;
+
+  if (opening > 8) {
+    soundPanel.classList.add("speaking");
+  } else {
+    soundPanel.classList.remove("speaking");
+  }
 
 }
 
@@ -848,7 +1098,6 @@ function createRecognition() {
 
   rec.onresult = async event => {
 
-    let interim = "";
     let finalText = "";
 
     for (let i = event.resultIndex;
@@ -859,24 +1108,12 @@ function createRecognition() {
 
       if (result.isFinal) {
         finalText += result[0].transcript;
-      } else {
-        interim += result[0].transcript;
       }
 
     }
 
-    if (interim) {
-      originalText.textContent = interim;
-    }
-
     if (finalText.trim()) {
-
-      const text = finalText.trim();
-
-      originalText.textContent = text;
-
-      await translateText(text);
-
+      await translateText(finalText.trim());
     }
 
   };
@@ -889,7 +1126,6 @@ function createRecognition() {
         event.error === "service-not-allowed") {
 
       stopDubbing();
-
       statusText.textContent =
         "Mikrofon nebyl povolen.";
 
@@ -913,7 +1149,7 @@ function createRecognition() {
 
 }
 
-/* START */
+/* START DUBBING */
 
 async function startDubbing() {
 
@@ -921,11 +1157,21 @@ async function startDubbing() {
 
     statusText.textContent = "Žádám o přístup k mikrofonu…";
 
-    await requestMicrophone();
+    if (!navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia) {
+
+      throw new Error("Mikrofon není dostupný.");
+
+    }
+
+    await startMicrophone();
 
     recognition = createRecognition();
 
-    if (!recognition) return;
+    if (!recognition) {
+      stopDubbing();
+      return;
+    }
 
     recognition.start();
 
@@ -935,12 +1181,17 @@ async function startDubbing() {
     startButton.innerHTML = "■ ZASTAVIT DABING";
 
     micCircle.classList.add("active");
-    wave.classList.add("active");
 
     statusDot.classList.add("active");
     statusText.textContent = "Mikrofon aktivní – poslouchám";
 
+    soundPanel.classList.add("listening");
+
+    animateRobotMouth();
+
   } catch (error) {
+
+    console.error(error);
 
     statusText.textContent =
       "Mikrofon nepovolil přístup.";
@@ -949,9 +1200,43 @@ async function startDubbing() {
       "Povol mikrofon v nastavení telefonu a zkus to znovu."
     );
 
-    console.error(error);
+    cleanupAudio();
 
   }
+
+}
+
+/* CLEANUP AUDIO */
+
+function cleanupAudio() {
+
+  if (animationFrame) {
+    cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  }
+
+  if (microphoneStream) {
+
+    microphoneStream.getTracks().forEach(track => {
+      track.stop();
+    });
+
+    microphoneStream = null;
+
+  }
+
+  if (audioContext) {
+
+    try {
+      audioContext.close();
+    } catch (e) {}
+
+    audioContext = null;
+
+  }
+
+  analyser = null;
+  audioData = null;
 
 }
 
@@ -963,22 +1248,33 @@ function stopDubbing() {
 
   if (recognition) {
 
+    recognition.onend = null;
+
     try {
       recognition.stop();
     } catch (e) {}
+
+    recognition = null;
 
   }
 
   speechSynthesis.cancel();
 
+  cleanupAudio();
+
+  currentMouth = 0;
+  updateRobotMouth(0);
+
   startButton.classList.remove("active");
   startButton.innerHTML = "▶ START DABING";
 
   micCircle.classList.remove("active");
-  wave.classList.remove("active");
 
   statusDot.classList.remove("active");
   statusText.textContent = "Dabing zastaven";
+
+  soundPanel.classList.remove("listening");
+  soundPanel.classList.remove("speaking");
 
 }
 
@@ -990,26 +1286,6 @@ startButton.onclick = () => {
     stopDubbing();
   } else {
     startDubbing();
-  }
-
-};
-
-/* MIC TEST */
-
-document.getElementById("micTest").onclick = async () => {
-
-  try {
-
-    await requestMicrophone();
-
-    alert("Mikrofon je dostupný. Oprávnění funguje.");
-
-  } catch (error) {
-
-    alert(
-      "Mikrofon není povolen nebo není dostupný."
-    );
-
   }
 
 };
