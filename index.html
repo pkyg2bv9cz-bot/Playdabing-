@@ -3,255 +3,353 @@
 <html lang="cs">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#09090d">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050505">
 <title>PlayDabing TV</title>
 
 <style>
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    margin: 0;
-    min-height: 100vh;
-    background: #09090d;
-    color: white;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    display: flex;
-    justify-content: center;
-    padding: 24px 18px;
+  background: #050505;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button, select {
+  font: inherit;
 }
 
 .app {
-    width: 100%;
-    max-width: 440px;
-    min-height: 90vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  padding: 18px 15px 110px;
 }
 
+/* HEADER */
+
 .header {
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
 }
 
 .logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
+  font-size: 25px;
+  font-weight: 900;
+  letter-spacing: -1px;
 }
 
-.logo-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 13px;
-    background: linear-gradient(135deg, #438cff, #9b63ff);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 19px;
-}
-
-.logo h1 {
-    font-size: 25px;
-    margin: 0;
-    font-weight: 700;
-    letter-spacing: -0.8px;
-}
-
-.subtitle {
-    color: #92909d;
-    font-size: 13px;
-    margin-top: 10px;
-}
-
-.languages {
-    display: flex;
-    width: 100%;
-    gap: 12px;
-}
-
-.language-box {
-    flex: 1;
-    padding: 17px 15px;
-    border-radius: 18px;
-    min-height: 100px;
-}
-
-.english {
-    background: linear-gradient(145deg, #15263b, #101722);
-    border: 1px solid #243c58;
-}
-
-.czech {
-    background: linear-gradient(145deg, #282039, #171420);
-    border: 1px solid #3c3158;
-}
-
-.language-label {
-    font-size: 12px;
-    letter-spacing: 1px;
-    font-weight: 700;
-}
-
-.english .language-label {
-    color: #70aaff;
-}
-
-.czech .language-label {
-    color: #b89aff;
-}
-
-.language-title {
-    font-size: 15px;
-    font-weight: 600;
-    margin-top: 10px;
-}
-
-.language-description {
-    font-size: 11px;
-    color: #92909d;
-    margin-top: 5px;
-}
-
-.microphone-area {
-    margin-top: 65px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.mic-button {
-    width: 118px;
-    height: 118px;
-    border: 1px solid rgba(143, 111, 255, 0.5);
-    border-radius: 50%;
-    background: linear-gradient(145deg, #202039, #12121d);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s ease;
-    box-shadow: 0 0 30px rgba(94, 72, 190, 0.12);
-    -webkit-tap-highlight-color: transparent;
-}
-
-.mic-inner {
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #34305b, #24203b);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.3s;
-}
-
-.mic-button:active {
-    transform: scale(0.94);
-}
-
-.mic-button.active {
-    border-color: #6f8fff;
-    box-shadow: 0 0 40px rgba(104, 101, 255, 0.3);
-}
-
-.mic-button.active .mic-inner {
-    background: linear-gradient(135deg, #386dce, #8751d8);
-}
-
-.mic-icon {
-    font-size: 36px;
-}
-
-.status {
-    color: #a5a2af;
-    font-size: 13px;
-    margin-top: 18px;
-}
-
-.status-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #4acb8a;
-    margin-right: 7px;
-}
-
-.wave-container {
-    height: 75px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    margin-top: 24px;
-}
-
-.wave {
-    width: 3px;
-    height: 12px;
-    border-radius: 10px;
-    background: linear-gradient(to top, #568eff, #a477ff);
-    opacity: 0.45;
-    transform: scaleY(0.5);
-}
-
-.wave-container.active .wave {
-    opacity: 1;
-    animation: wave 0.7s ease-in-out infinite alternate;
-}
-
-.wave:nth-child(2n) {
-    animation-delay: 0.12s;
-}
-
-.wave:nth-child(3n) {
-    animation-delay: 0.24s;
-}
-
-.wave:nth-child(4n) {
-    animation-delay: 0.36s;
-}
-
-@keyframes wave {
-    from {
-        transform: scaleY(0.4);
-    }
-
-    to {
-        transform: scaleY(3);
-    }
-}
-
-.footer {
-    margin-top: auto;
-    padding-top: 50px;
-    padding-bottom: 20px;
-    text-align: center;
-    color: #797784;
-    font-size: 12px;
+.logo span {
+  color: #00e5f0;
 }
 
 .beta {
-    color: #a68cff;
-    margin-left: 8px;
+  color: #00e5f0;
+  border: 1px solid #00e5f0;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 11px;
 }
 
-@media (max-width: 360px) {
-    .logo h1 {
-        font-size: 22px;
-    }
+/* MAIN */
 
-    .language-box {
-        padding: 14px 12px;
-    }
+.subtitle {
+  color: #aaa;
+  text-align: center;
+  font-size: 13px;
+  margin-bottom: 25px;
 }
+
+.hero {
+  text-align: center;
+  padding: 20px 0 10px;
+}
+
+.mic-circle {
+  width: 155px;
+  height: 155px;
+  margin: 0 auto 24px;
+  border-radius: 50%;
+  border: 3px solid #00e5f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 20px #00e5f044,
+              inset 0 0 20px #00e5f022;
+  transition: .3s;
+}
+
+.mic-circle.active {
+  animation: pulse 1.5s infinite;
+}
+
+.mic-icon {
+  font-size: 64px;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px #00e5f055;
+  }
+  50% {
+    box-shadow: 0 0 35px #00e5f0aa;
+  }
+  100% {
+    box-shadow: 0 0 10px #00e5f055;
+  }
+}
+
+.start-button {
+  width: 100%;
+  border: 2px solid #00e5f0;
+  border-radius: 60px;
+  padding: 19px 15px;
+  background: #071416;
+  color: white;
+  font-size: 21px;
+  font-weight: bold;
+  box-shadow: 0 0 18px #00e5f033;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.start-button:active {
+  transform: scale(.97);
+}
+
+.start-button.active {
+  color: #ff5252;
+  border-color: #ff5252;
+  background: #1b0808;
+  box-shadow: 0 0 20px #ff525233;
+}
+
+/* STATUS */
+
+.status {
+  text-align: center;
+  margin: 17px 0 25px;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.status-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  background: #777;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.status-dot.active {
+  background: #00e676;
+  box-shadow: 0 0 10px #00e676;
+}
+
+/* SETTINGS */
+
+.panel {
+  background: #101010;
+  border: 1px solid #252525;
+  border-radius: 18px;
+  padding: 15px;
+  margin-bottom: 14px;
+}
+
+.panel-title {
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 10px;
+}
+
+select {
+  width: 100%;
+  background: #151515;
+  color: white;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 14px 12px;
+  outline: none;
+}
+
+select:focus {
+  border-color: #00e5f0;
+}
+
+.setting-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.label {
+  color: #aaa;
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+/* TRANSLATION */
+
+.translation-box {
+  min-height: 175px;
+}
+
+.translation-line {
+  padding: 13px;
+  border-radius: 12px;
+  background: #080808;
+  margin-top: 10px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.original {
+  color: #ddd;
+  border: 1px solid #303030;
+}
+
+.translated {
+  color: #00e5f0;
+  border: 1px solid #00e5f055;
+  font-weight: bold;
+}
+
+.tag {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 5px;
+}
+
+/* SOUND */
+
+.wave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 65px;
+  gap: 4px;
+}
+
+.wave span {
+  display: block;
+  width: 4px;
+  height: 8px;
+  background: #00e5f0;
+  border-radius: 5px;
+  opacity: .5;
+}
+
+.wave.active span {
+  opacity: 1;
+  animation: wave .7s infinite alternate;
+}
+
+.wave span:nth-child(2n) { animation-delay: .2s; }
+.wave span:nth-child(3n) { animation-delay: .4s; }
+.wave span:nth-child(4n) { animation-delay: .1s; }
+
+@keyframes wave {
+  from { height: 8px; }
+  to { height: 42px; }
+}
+
+/* NAVIGATION */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #080808ee;
+  backdrop-filter: blur(12px);
+  border-top: 1px solid #222;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
+  z-index: 10;
+}
+
+.nav-item {
+  text-align: center;
+  color: #777;
+  font-size: 10px;
+  cursor: pointer;
+  flex: 1;
+}
+
+.nav-item .icon {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 4px;
+}
+
+.nav-item.active {
+  color: #00e5f0;
+}
+
+/* OTHER PAGES */
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.page-title {
+  font-size: 25px;
+  margin: 20px 0;
+}
+
+.info-card {
+  background: #101010;
+  border: 1px solid #252525;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 12px;
+}
+
+.info-card p {
+  color: #aaa;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.small-button {
+  border: 1px solid #00e5f0;
+  background: #111;
+  color: #00e5f0;
+  padding: 10px;
+  border-radius: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.history-item {
+  border-bottom: 1px solid #252525;
+  padding: 12px 0;
+  color: #aaa;
+}
+
+.notice {
+  font-size: 11px;
+  color: #666;
+  text-align: center;
+  line-height: 1.5;
+  margin-top: 18px;
+}
+
 </style>
 </head>
 
@@ -259,259 +357,678 @@ body {
 
 <div class="app">
 
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">▶</div>
-            <h1>PlayDabing TV</h1>
-        </div>
+<header class="header">
+  <div class="logo">▶ PlayDabing<span> TV</span></div>
+  <div class="beta">BETA 0.1</div>
+</header>
 
-        <div class="subtitle">
-            Živý překlad a dabing v reálném čase
-        </div>
-    </header>
+<!-- HOME -->
 
-    <div class="languages">
+<section class="page active" id="home">
 
-        <div class="language-box english">
-            <div class="language-label">🇬🇧 ANGLIČTINA</div>
-            <div class="language-title">English</div>
-            <div class="language-description">Původní jazyk</div>
-        </div>
+<p class="subtitle">AI český dabing pro filmy, seriály a hry</p>
 
-        <div class="language-box czech">
-            <div class="language-label">🇨🇿 ČEŠTINA</div>
-            <div class="language-title">Čeština</div>
-            <div class="language-description">Český dabing</div>
-        </div>
+<div class="hero">
 
-    </div>
+  <div class="mic-circle" id="micCircle">
+    <span class="mic-icon">🎙️</span>
+  </div>
 
-    <div class="microphone-area">
-
-        <button class="mic-button" id="micButton" aria-label="Spustit mikrofon">
-            <div class="mic-inner">
-                <span class="mic-icon">🎙️</span>
-            </div>
-        </button>
-
-        <div class="status" id="status">
-            <span class="status-dot"></span>
-            Připraveno
-        </div>
-
-        <div class="wave-container" id="waves">
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div><div class="wave"></div>
-            <div class="wave"></div>
-        </div>
-
-    </div>
-
-    <footer class="footer">
-        Vytvořil Jan Chaloupka
-        <span class="beta">• BETA 0.0.1</span>
-    </footer>
+  <button class="start-button" id="startButton">
+    ▶ START DABING
+  </button>
 
 </div>
 
+<div class="status">
+  <span class="status-dot" id="statusDot"></span>
+  <span id="statusText">Připraveno ke spuštění</span>
+</div>
+
+<div class="panel">
+  <div class="setting-row">
+
+    <div>
+      <div class="label">Původní jazyk</div>
+      <select id="sourceLanguage">
+        <option value="en-US">Angličtina</option>
+        <option value="en-GB">Angličtina UK</option>
+        <option value="de-DE">Němčina</option>
+        <option value="fr-FR">Francouzština</option>
+        <option value="es-ES">Španělština</option>
+        <option value="it-IT">Italština</option>
+        <option value="pl-PL">Polština</option>
+        <option value="sk-SK">Slovenština</option>
+      </select>
+    </div>
+
+    <div>
+      <div class="label">Cílový jazyk</div>
+      <select id="targetLanguage">
+        <option value="cs">Čeština</option>
+      </select>
+    </div>
+
+  </div>
+</div>
+
+<div class="panel">
+  <div class="label">Český hlas</div>
+  <select id="voiceSelect">
+    <option value="">Automatický český hlas</option>
+  </select>
+</div>
+
+<div class="panel">
+  <div class="label">Živý zvuk</div>
+  <div class="wave" id="wave">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+</div>
+
+<div class="panel translation-box">
+  <div class="label">Průběžný překlad</div>
+
+  <div class="translation-line original">
+    <div class="tag">ORIGINÁL</div>
+    <div id="originalText">Zde se zobrazí rozpoznaná řeč…</div>
+  </div>
+
+  <div class="translation-line translated">
+    <div class="tag">ČESKÝ PŘEKLAD</div>
+    <div id="translatedText">Zde se zobrazí český překlad…</div>
+  </div>
+</div>
+
+<p class="notice">
+  PlayDabing TV Beta 0.1<br>
+  Rozpoznávání řeči vyžaduje podporovaný prohlížeč a internet.
+</p>
+
+</section>
+
+<!-- LIBRARY -->
+
+<section class="page" id="library">
+  <h1 class="page-title">Knihovna</h1>
+
+  <div class="info-card">
+    <h3>🎬 PlayDabing TV</h3>
+    <p>
+      Tvoje knihovna filmů a obsahu.
+      Další funkce připravujeme.
+    </p>
+  </div>
+
+  <div class="info-card">
+    <h3>📺 Živý dabing</h3>
+    <p>
+      Spusť dabing z hlavní obrazovky
+      a poslouchej překlad.
+    </p>
+  </div>
+</section>
+
+<!-- HISTORY -->
+
+<section class="page" id="history">
+  <h1 class="page-title">Historie</h1>
+
+  <div class="info-card">
+    <div id="historyList">
+      <p>Historie překladů se zobrazí zde.</p>
+    </div>
+    <button class="small-button" id="clearHistory">Vymazat historii</button>
+  </div>
+</section>
+
+<!-- FAVORITES -->
+
+<section class="page" id="favorites">
+  <h1 class="page-title">Oblíbené</h1>
+
+  <div class="info-card">
+    <h3>♡ Oblíbené hlasy</h3>
+    <p>
+      Zde budou tvoje uložená nastavení
+      a oblíbené hlasy.
+    </p>
+  </div>
+</section>
+
+<!-- PREMIUM -->
+
+<section class="page" id="premium">
+  <h1 class="page-title">Premium</h1>
+
+  <div class="info-card">
+    <h2>👑 PlayDabing Premium</h2>
+    <p>
+      Budoucí prémiové funkce,
+      kvalitnější hlasy a rozšířené možnosti dabingu.
+    </p>
+  </div>
+</section>
+
+<!-- SETTINGS -->
+
+<section class="page" id="settings">
+  <h1 class="page-title">Nastavení</h1>
+
+  <div class="info-card">
+    <h3>🎙️ Mikrofon</h3>
+    <p>Oprávnění mikrofonu se vyžádá při spuštění dabingu.</p>
+    <button class="small-button" id="micTest">
+      Otestovat mikrofon
+    </button>
+  </div>
+
+  <div class="info-card">
+    <h3>🔊 Český hlas</h3>
+    <p>Hlas se vybírá podle dostupných hlasů v telefonu.</p>
+  </div>
+
+  <div class="info-card">
+    <h3>ℹ️ O aplikaci</h3>
+    <p>PlayDabing TV</p>
+    <p>Beta 0.1</p>
+  </div>
+</section>
+
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item active" data-page="home">
+    <span class="icon">🎙️</span>Dabing
+  </div>
+
+  <div class="nav-item" data-page="library">
+    <span class="icon">🎬</span>Knihovna
+  </div>
+
+  <div class="nav-item" data-page="history">
+    <span class="icon">◷</span>Historie
+  </div>
+
+  <div class="nav-item" data-page="favorites">
+    <span class="icon">♡</span>Oblíbené
+  </div>
+
+  <div class="nav-item" data-page="premium">
+    <span class="icon">♛</span>Premium
+  </div>
+</nav>
+
 <script>
-const micButton = document.getElementById("micButton");
-const status = document.getElementById("status");
-const waves = document.getElementById("waves");
 
-const SpeechRecognition =
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition;
+/* ELEMENTS */
 
-let recognition;
-let listening = false;
+const startButton = document.getElementById("startButton");
+const micCircle = document.getElementById("micCircle");
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+const wave = document.getElementById("wave");
 
-let translationQueue = [];
-let speakingQueue = [];
+const originalText = document.getElementById("originalText");
+const translatedText = document.getElementById("translatedText");
 
-let translating = false;
-let speaking = false;
+const sourceLanguage = document.getElementById("sourceLanguage");
+const voiceSelect = document.getElementById("voiceSelect");
 
-function setStatus(text) {
-    status.innerHTML =
-        '<span class="status-dot"></span>' + text;
-}
+let recognition = null;
+let isRunning = false;
+let voices = [];
 
-function startListening() {
+/* NAVIGATION */
 
-    if (!SpeechRecognition) {
-        setStatus("Rozpoznávání není podporováno");
-        return;
+document.querySelectorAll(".nav-item").forEach(item => {
+
+  item.addEventListener("click", () => {
+
+    const page = item.dataset.page;
+
+    document.querySelectorAll(".page").forEach(p => {
+      p.classList.remove("active");
+    });
+
+    document.querySelectorAll(".nav-item").forEach(n => {
+      n.classList.remove("active");
+    });
+
+    document.getElementById(page).classList.add("active");
+    item.classList.add("active");
+
+  });
+
+});
+
+/* VOICES */
+
+function loadVoices() {
+
+  voices = speechSynthesis.getVoices();
+
+  voiceSelect.innerHTML =
+    '<option value="">Automatický český hlas</option>';
+
+  voices.forEach((voice, index) => {
+
+    if (voice.lang.toLowerCase().startsWith("cs")) {
+
+      const option = document.createElement("option");
+
+      option.value = index;
+      option.textContent = voice.name;
+
+      voiceSelect.appendChild(option);
+
     }
 
-    recognition = new SpeechRecognition();
+  });
 
-    recognition.lang = "en-US";
-    recognition.continuous = true;
-    recognition.interimResults = false;
-
-    recognition.onstart = () => {
-        listening = true;
-        micButton.classList.add("active");
-        waves.classList.add("active");
-        setStatus("Poslouchám angličtinu...");
-    };
-
-    recognition.onresult = (event) => {
-
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-
-            if (event.results[i].isFinal) {
-
-                const text =
-                    event.results[i][0].transcript.trim();
-
-                if (text !== "") {
-                    translationQueue.push(text);
-                    processTranslationQueue();
-                }
-            }
-        }
-    };
-
-    recognition.onerror = (event) => {
-
-        if (event.error === "not-allowed" ||
-            event.error === "service-not-allowed") {
-
-            listening = false;
-            micButton.classList.remove("active");
-            waves.classList.remove("active");
-            setStatus("Povolte přístup k mikrofonu");
-
-        } else if (event.error !== "no-speech") {
-
-            setStatus("Chyba mikrofonu: " + event.error);
-        }
-    };
-
-    recognition.onend = () => {
-
-        if (listening) {
-            try {
-                recognition.start();
-            } catch (error) {}
-        }
-    };
-
-    try {
-        recognition.start();
-    } catch (error) {
-        setStatus("Mikrofon se nepodařilo spustit");
-    }
 }
 
-function stopListening() {
+speechSynthesis.onvoiceschanged = loadVoices;
+loadVoices();
 
-    listening = false;
+/* SPEAK CZECH */
 
-    if (recognition) {
-        try {
-            recognition.stop();
-        } catch (error) {}
+function speakCzech(text) {
+
+  if (!text) return;
+
+  speechSynthesis.cancel();
+
+  const utterance = new SpeechSynthesisUtterance(text);
+
+  utterance.lang = "cs-CZ";
+  utter.rate = 1;
+  utter.pitch = 1;
+
+  const selected = voiceSelect.value;
+
+  if (selected !== "") {
+    utterance.voice = voices[Number(selected)];
+  } else {
+
+    const czechVoice = voices.find(v =>
+      v.lang.toLowerCase().startsWith("cs")
+    );
+
+    if (czechVoice) {
+      utterance.voice = czechVoice;
     }
 
-    micButton.classList.remove("active");
-    waves.classList.remove("active");
+  }
 
-    setStatus("Pozastaveno");
+  speechSynthesis.speak(utterance);
+
 }
+
+/* TRANSLATION */
 
 async function translateText(text) {
 
-    try {
+  translatedText.textContent = "Překládám…";
 
-        const url =
-            "https://api.mymemory.translated.net/get?q=" +
-            encodeURIComponent(text) +
-            "&langpair=en|cs";
+  try {
 
-        const response = await fetch(url);
-        const data = await response.json();
+    const language = sourceLanguage.value.split("-")[0];
 
-        if (data.responseData &&
-            data.responseData.translatedText) {
+    const url =
+      "https://api.mymemory.translated.net/get?q=" +
+      encodeURIComponent(text) +
+      "&langpair=" +
+      encodeURIComponent(language + "|cs");
 
-            return data.responseData.translatedText;
-        }
+    const response = await fetch(url);
 
-        return "";
+    const data = await response.json();
 
-    } catch (error) {
-        return "";
-    }
-}
+    const translation =
+      data?.responseData?.translatedText;
 
-async function processTranslationQueue() {
+    if (translation) {
 
-    if (translating) return;
+      translatedText.textContent = translation;
 
-    translating = true;
+      addHistory(text, translation);
 
-    while (translationQueue.length > 0) {
+      speakCzech(translation);
 
-        const text = translationQueue.shift();
-
-        const translated = await translateText(text);
-
-        if (translated) {
-            speakingQueue.push(translated);
-            processSpeakingQueue();
-        }
-    }
-
-    translating = false;
-}
-
-function processSpeakingQueue() {
-
-    if (speaking) return;
-    if (speakingQueue.length === 0) return;
-
-    speaking = true;
-
-    const text = speakingQueue.shift();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-
-    utterance.lang = "cs-CZ";
-    utter.rate = 1;
-    utter.pitch = 1;
-
-    utter.onend = () => {
-        speaking = false;
-        processSpeakingQueue();
-    };
-
-    utter.onerror = () => {
-        speaking = false;
-        processSpeakingQueue();
-    };
-
-    window.speechSynthesis.speak(utterance);
-}
-
-micButton.addEventListener("click", () => {
-
-    if (listening) {
-        stopListening();
     } else {
-        startListening();
+
+      translatedText.textContent = "Překlad se nepodařil.";
+
     }
 
-});
+  } catch (error) {
+
+    translatedText.textContent =
+      "Chyba překladu. Zkontroluj internet.";
+
+  }
+
+}
+
+/* HISTORY */
+
+function addHistory(original, translated) {
+
+  let history = JSON.parse(
+    localStorage.getItem("playdabingHistory") || "[]"
+  );
+
+  history.unshift({
+    original,
+    translated,
+    date: new Date().toLocaleString("cs-CZ")
+  });
+
+  history = history.slice(0, 50);
+
+  localStorage.setItem(
+    "playdabingHistory",
+    JSON.stringify(history)
+  );
+
+  renderHistory();
+
+}
+
+function renderHistory() {
+
+  const history = JSON.parse(
+    localStorage.getItem("playdabingHistory") || "[]"
+  );
+
+  const historyList = document.getElementById("historyList");
+
+  if (!history.length) {
+
+    historyList.innerHTML =
+      "<p>Historie překladů je prázdná.</p>";
+
+    return;
+
+  }
+
+  historyList.innerHTML = "";
+
+  history.forEach(item => {
+
+    const div = document.createElement("div");
+
+    div.className = "history-item";
+
+    div.innerHTML = `
+      <small>${item.date}</small>
+      <p>${escapeHTML(item.original)}</p>
+      <p style="color:#00e5f0;margin-top:6px">
+        ${escapeHTML(item.translated)}
+      </p>
+    `;
+
+    historyList.appendChild(div);
+
+  });
+
+}
+
+function escapeHTML(text) {
+
+  return String(text).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
+  }[char]));
+
+}
+
+document.getElementById("clearHistory").onclick = () => {
+
+  localStorage.removeItem("playdabingHistory");
+  renderHistory();
+
+};
+
+renderHistory();
+
+/* MICROPHONE PERMISSION */
+
+async function requestMicrophone() {
+
+  if (!navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia) {
+
+    throw new Error("Mikrofon není podporován.");
+
+  }
+
+  const stream =
+    await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+  stream.getTracks().forEach(track => track.stop());
+
+}
+
+/* SPEECH RECOGNITION */
+
+function createRecognition() {
+
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+
+    alert(
+      "Rozpoznávání řeči není podporováno. " +
+      "Zkus Chrome na Androidu."
+    );
+
+    return null;
+
+  }
+
+  const rec = new SpeechRecognition();
+
+  rec.lang = sourceLanguage.value;
+  rec.continuous = true;
+  rec.interimResults = true;
+
+  rec.onresult = async event => {
+
+    let interim = "";
+    let finalText = "";
+
+    for (let i = event.resultIndex;
+         i < event.results.length;
+         i++) {
+
+      const result = event.results[i];
+
+      if (result.isFinal) {
+        finalText += result[0].transcript;
+      } else {
+        interim += result[0].transcript;
+      }
+
+    }
+
+    if (interim) {
+      originalText.textContent = interim;
+    }
+
+    if (finalText.trim()) {
+
+      const text = finalText.trim();
+
+      originalText.textContent = text;
+
+      await translateText(text);
+
+    }
+
+  };
+
+  rec.onerror = event => {
+
+    console.error("Recognition error:", event.error);
+
+    if (event.error === "not-allowed" ||
+        event.error === "service-not-allowed") {
+
+      stopDubbing();
+
+      statusText.textContent =
+        "Mikrofon nebyl povolen.";
+
+    }
+
+  };
+
+  rec.onend = () => {
+
+    if (isRunning) {
+
+      try {
+        rec.start();
+      } catch (e) {}
+
+    }
+
+  };
+
+  return rec;
+
+}
+
+/* START */
+
+async function startDubbing() {
+
+  try {
+
+    statusText.textContent = "Žádám o přístup k mikrofonu…";
+
+    await requestMicrophone();
+
+    recognition = createRecognition();
+
+    if (!recognition) return;
+
+    recognition.start();
+
+    isRunning = true;
+
+    startButton.classList.add("active");
+    startButton.innerHTML = "■ ZASTAVIT DABING";
+
+    micCircle.classList.add("active");
+    wave.classList.add("active");
+
+    statusDot.classList.add("active");
+    statusText.textContent = "Mikrofon aktivní – poslouchám";
+
+  } catch (error) {
+
+    statusText.textContent =
+      "Mikrofon nepovolil přístup.";
+
+    alert(
+      "Povol mikrofon v nastavení telefonu a zkus to znovu."
+    );
+
+    console.error(error);
+
+  }
+
+}
+
+/* STOP */
+
+function stopDubbing() {
+
+  isRunning = false;
+
+  if (recognition) {
+
+    try {
+      recognition.stop();
+    } catch (e) {}
+
+  }
+
+  speechSynthesis.cancel();
+
+  startButton.classList.remove("active");
+  startButton.innerHTML = "▶ START DABING";
+
+  micCircle.classList.remove("active");
+  wave.classList.remove("active");
+
+  statusDot.classList.remove("active");
+  statusText.textContent = "Dabing zastaven";
+
+}
+
+/* BUTTON */
+
+startButton.onclick = () => {
+
+  if (isRunning) {
+    stopDubbing();
+  } else {
+    startDubbing();
+  }
+
+};
+
+/* MIC TEST */
+
+document.getElementById("micTest").onclick = async () => {
+
+  try {
+
+    await requestMicrophone();
+
+    alert("Mikrofon je dostupný. Oprávnění funguje.");
+
+  } catch (error) {
+
+    alert(
+      "Mikrofon není povolen nebo není dostupný."
+    );
+
+  }
+
+};
+
+/* LANGUAGE CHANGE */
+
+sourceLanguage.onchange = () => {
+
+  if (isRunning) {
+
+    stopDubbing();
+
+    statusText.textContent =
+      "Jazyk změněn. Spusť dabing znovu.";
+
+  }
+
+};
+
 </script>
 
 </body>
