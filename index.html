@@ -194,7 +194,7 @@ select:focus {
   margin-bottom: 6px;
 }
 
-/* ROBOT MOUTH */
+/* LIVE AUDIO WAVE */
 
 .sound-panel {
   overflow: hidden;
@@ -220,167 +220,53 @@ select:focus {
 
 .robot-glow {
   position: absolute;
-  width: 160px;
-  height: 100px;
+  width: 220px;
+  height: 110px;
   background: radial-gradient(
     ellipse,
     #00e5f025 0%,
     #00e5f010 40%,
     transparent 75%
   );
-  filter: blur(12px);
+  filter: blur(14px);
   transition: opacity .2s;
-  opacity: .5;
+  opacity: .45;
 }
 
-.robot-mouth {
-  width: min(100%, 255px);
-  height: 135px;
+.sound-wave {
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 0 7px #00e5f044);
-}
-
-.mouth-core {
-  position: absolute;
-  inset: 15% 10%;
-  border-radius: 50%;
-  background: #020707;
-  border: 1px solid #17494c;
-  box-shadow: inset 0 0 25px #00e5f01a;
-  overflow: hidden;
-}
-
-.mouth-inner {
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  top: 50%;
-  height: 0%;
-  transform: translateY(-50%);
-  background: #001a1b;
-  border-radius: 50%;
-  box-shadow: 0 0 12px #00e5f055;
-  transition: height .08s linear;
-}
-
-.mouth-teeth {
-  position: absolute;
-  left: 13%;
-  right: 13%;
-  top: 50%;
-  height: 0;
-  transform: translateY(-50%);
-  overflow: hidden;
+  width: 100%;
+  max-width: 290px;
+  height: 100px;
   display: flex;
-  justify-content: space-evenly;
-  transition: height .08s linear;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 5px;
 }
 
-.mouth-teeth span {
-  width: 5px;
-  height: 100%;
-  background: linear-gradient(
-    to bottom,
-    #d5ffff,
-    #39e9f3 35%,
-    #008f9c
-  );
-  border-radius: 2px;
-  box-shadow: 0 0 4px #00e5f0;
-}
-
-.upper-jaw {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 50%;
-  transform-origin: center bottom;
-  z-index: 4;
-}
-
-.lower-jaw {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 50%;
-  transform-origin: center top;
-  z-index: 4;
-}
-
-.jaw-piece {
-  position: absolute;
-  left: 5%;
-  right: 5%;
-  height: 75%;
+.wave-bar {
+  flex: 1;
+  min-width: 3px;
+  max-width: 8px;
+  height: var(--base-height);
+  border-radius: 20px;
   background: linear-gradient(
     180deg,
-    #e6f2f4 0%,
-    #87989d 18%,
-    #34464a 42%,
-    #a8c1c6 58%,
-    #24383b 85%,
-    #0c1618 100%
+    #baffff 0%,
+    #00e5f0 45%,
+    #008c99 100%
   );
-  border: 1px solid #66f7ff;
   box-shadow:
-    inset 0 0 7px #ffffff55,
-    0 0 7px #00e5f044;
-}
-
-.upper-jaw .jaw-piece {
-  top: 8%;
-  border-radius: 48% 48% 18% 18%;
-  clip-path: polygon(0 0,100% 0,94% 65%,78% 90%,50% 100%,22% 90%,6% 65%);
-}
-
-.lower-jaw .jaw-piece {
-  bottom: 8%;
-  border-radius: 18% 18% 48% 48%;
-  clip-path: polygon(6% 0,22% 10%,50% 0,78% 10%,94% 0,100% 35%,94% 65%,78% 90%,50% 100%,22% 90%,6% 65%,0 35%);
-}
-
-.jaw-lines {
-  position: absolute;
-  inset: 8px 12%;
-  display: flex;
-  justify-content: space-evenly;
-  pointer-events: none;
-}
-
-.jaw-lines span {
-  width: 2px;
-  height: 100%;
-  background: #16292c;
-  box-shadow: 1px 0 #c2e1e4;
-  opacity: .75;
-}
-
-.jaw-bolts {
-  position: absolute;
-  left: 13%;
-  right: 13%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.jaw-bolts span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #183b3e;
-  border: 1px solid #b9e8ed;
-  box-shadow: 0 0 5px #00e5f0;
-}
-
-.upper-jaw .jaw-bolts {
-  top: 12px;
-}
-
-.lower-jaw .jaw-bolts {
-  bottom: 12px;
+    0 0 5px #00e5f055,
+    0 0 12px #00e5f022;
+  transform: scaleY(var(--bar-scale, 1));
+  opacity: var(--bar-opacity, .75);
+  transition:
+    transform .09s linear,
+    opacity .12s linear,
+    box-shadow .12s linear;
 }
 
 /* SOUND RINGS */
@@ -500,8 +386,17 @@ select:focus {
   font-size: 10px;
   color: #666;
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-top: 12px;
+}
+
+.notice .creator {
+  color: #999;
+  margin-top: 3px;
+}
+
+.notice .version {
+  color: #00e5f0;
 }
 
 /* SMALL PHONE OPTIMIZATION */
@@ -547,9 +442,8 @@ select:focus {
     height: 125px;
   }
 
-  .robot-mouth {
-    width: min(100%, 230px);
-    height: 115px;
+  .sound-wave {
+    height: 90px;
   }
 
   .notice {
@@ -566,7 +460,7 @@ select:focus {
 
 <header class="header">
   <div class="logo">▶ PlayDabing<span> TV</span></div>
-  <div class="beta">BETA 0.2</div>
+  <div class="beta">BETA VERZE 0.0.3</div>
 </header>
 
 <section class="page active" id="home">
@@ -628,46 +522,38 @@ select:focus {
     <div class="sound-ring left"></div>
     <div class="sound-ring right"></div>
 
-    <div class="robot-mouth" id="robotMouth">
-
-      <div class="mouth-core">
-        <div class="mouth-inner" id="mouthInner"></div>
-
-        <div class="mouth-teeth" id="mouthTeeth">
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-          <span></span><span></span><span></span><span></span>
-        </div>
-      </div>
-
-      <div class="upper-jaw" id="upperJaw">
-        <div class="jaw-piece">
-          <div class="jaw-lines">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-          </div>
-          <div class="jaw-bolts"><span></span><span></span></div>
-        </div>
-      </div>
-
-      <div class="lower-jaw" id="lowerJaw">
-        <div class="jaw-piece">
-          <div class="jaw-lines">
-            <span></span><span></span><span></span><span></span>
-            <span></span><span></span><span></span><span></span>
-          </div>
-          <div class="jaw-bolts"><span></span><span></span></div>
-        </div>
-      </div>
-
+    <div class="sound-wave" id="soundWave">
+      <span class="wave-bar" style="--base-height:8px"></span>
+      <span class="wave-bar" style="--base-height:12px"></span>
+      <span class="wave-bar" style="--base-height:18px"></span>
+      <span class="wave-bar" style="--base-height:25px"></span>
+      <span class="wave-bar" style="--base-height:34px"></span>
+      <span class="wave-bar" style="--base-height:43px"></span>
+      <span class="wave-bar" style="--base-height:52px"></span>
+      <span class="wave-bar" style="--base-height:62px"></span>
+      <span class="wave-bar" style="--base-height:72px"></span>
+      <span class="wave-bar" style="--base-height:82px"></span>
+      <span class="wave-bar" style="--base-height:90px"></span>
+      <span class="wave-bar" style="--base-height:82px"></span>
+      <span class="wave-bar" style="--base-height:72px"></span>
+      <span class="wave-bar" style="--base-height:62px"></span>
+      <span class="wave-bar" style="--base-height:52px"></span>
+      <span class="wave-bar" style="--base-height:43px"></span>
+      <span class="wave-bar" style="--base-height:34px"></span>
+      <span class="wave-bar" style="--base-height:25px"></span>
+      <span class="wave-bar" style="--base-height:18px"></span>
+      <span class="wave-bar" style="--base-height:12px"></span>
+      <span class="wave-bar" style="--base-height:8px"></span>
     </div>
+
   </div>
 </div>
 
 <p class="notice">
-  PlayDabing TV Beta 0.2<br>
+  <span class="version">BETA VERZE 0.0.3</span><br>
   Rozpoznávání řeči vyžaduje podporovaný prohlížeč a internet.
+  <div class="creator">Vytvořil Jan Chaloupka</div>
+  © 2026 PlayDabing TV
 </p>
 
 </section>
@@ -750,11 +636,8 @@ const statusText = document.getElementById("statusText");
 const sourceLanguage = document.getElementById("sourceLanguage");
 
 const soundPanel = document.getElementById("soundPanel");
-const robotMouth = document.getElementById("robotMouth");
-const mouthInner = document.getElementById("mouthInner");
-const mouthTeeth = document.getElementById("mouthTeeth");
-const upperJaw = document.getElementById("upperJaw");
-const lowerJaw = document.getElementById("lowerJaw");
+const soundWave = document.getElementById("soundWave");
+const waveBars = Array.from(document.querySelectorAll(".wave-bar"));
 const robotGlow = document.getElementById("robotGlow");
 
 let recognition = null;
@@ -765,7 +648,7 @@ let audioContext = null;
 let analyser = null;
 let audioData = null;
 let animationFrame = null;
-let currentMouth = 0;
+let currentVolume = 0;
 
 /* NAVIGATION */
 
@@ -943,9 +826,9 @@ async function startMicrophone() {
   audioData = new Uint8Array(analyser.fftSize);
 }
 
-/* ROBOT MOUTH ANIMATION */
+/* LIVE AUDIO WAVE ANIMATION */
 
-function animateRobotMouth() {
+function animateSoundWave() {
   if (!isRunning || !analyser) return;
 
   analyser.getByteTimeDomainData(audioData);
@@ -959,40 +842,45 @@ function animateRobotMouth() {
 
   const rms = Math.sqrt(sum / audioData.length);
 
-  let targetOpen = Math.min(
-    100,
-    Math.max(0, (rms - 0.015) * 550)
+  const targetVolume = Math.min(
+    1,
+    Math.max(0, (rms - 0.008) * 18)
   );
 
-  currentMouth += (targetOpen - currentMouth) * 0.35;
+  currentVolume += (targetVolume - currentVolume) * 0.35;
 
-  updateRobotMouth(currentMouth);
+  updateSoundWave(currentVolume);
 
-  animationFrame = requestAnimationFrame(animateRobotMouth);
+  animationFrame = requestAnimationFrame(animateSoundWave);
 }
 
-function updateRobotMouth(amount) {
-  const opening = Math.max(0, Math.min(100, amount));
+function updateSoundWave(volume) {
+  const intensity = Math.max(0, Math.min(1, volume));
 
-  upperJaw.style.transform =
-    `translateY(${-opening * 0.20}px)`;
+  waveBars.forEach((bar, index) => {
+    const baseHeight = parseFloat(
+      getComputedStyle(bar).getPropertyValue("--base-height")
+    );
 
-  lowerJaw.style.transform =
-    `translateY(${opening * 0.20}px)`;
+    const position = index / (waveBars.length - 1);
 
-  mouthInner.style.height =
-    `${Math.max(0, opening * 0.55)}%`;
+    /* Přirozené kolísání jednotlivých sloupců */
+    const variation =
+      Math.sin(index * 1.7 + volume * 12) * 0.18 +
+      Math.sin(index * 0.8 + volume * 8) * 0.12;
 
-  mouthTeeth.style.height =
-    `${Math.max(0, opening * 0.38)}%`;
+    const scale = 0.35 + intensity * (1.25 + variation);
 
-  robotMouth.style.filter =
-    `drop-shadow(0 0 ${5 + opening * 0.12}px #00e5f055)`;
+    bar.style.setProperty("--bar-scale", scale);
+    bar.style.setProperty(
+      "--bar-opacity",
+      0.45 + intensity * 0.55
+    );
+  });
 
-  robotGlow.style.opacity =
-    `${0.35 + opening / 150}`;
+  robotGlow.style.opacity = 0.25 + intensity * 0.75;
 
-  if (opening > 8) {
+  if (intensity > 0.08) {
     soundPanel.classList.add("speaking");
   } else {
     soundPanel.classList.remove("speaking");
@@ -1088,7 +976,7 @@ async function startDubbing() {
     statusText.textContent = "Mikrofon aktivní – poslouchám";
     soundPanel.classList.add("listening");
 
-    animateRobotMouth();
+    animateSoundWave();
 
   } catch (error) {
     console.error(error);
@@ -1144,8 +1032,8 @@ function stopDubbing() {
   speechSynthesis.cancel();
   cleanupAudio();
 
-  currentMouth = 0;
-  updateRobotMouth(0);
+  currentVolume = 0;
+  updateSoundWave(0);
 
   startButton.classList.remove("active");
   startButton.innerHTML = "▶ START DABING";
