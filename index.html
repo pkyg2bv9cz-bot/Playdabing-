@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="cs">
 <head>
@@ -201,7 +200,7 @@ button{cursor:pointer}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin:8px 0 12px;
+  margin:8px 0 10px;
 }
 
 .online-title{
@@ -229,20 +228,22 @@ button{cursor:pointer}
   box-shadow:0 0 8px #20d98b66;
 }
 
+/* KOMPAKTNĚJŠÍ CHAT */
+
 .chat-container{
-  height:min(58vh,560px);
-  min-height:280px;
+  height:min(55vh,500px);
+  min-height:260px;
   overflow-y:auto;
   overscroll-behavior:contain;
-  padding:14px 8px;
+  padding:10px 7px;
   border:1px solid #1e2529;
-  border-radius:20px;
+  border-radius:17px;
   background:
     radial-gradient(circle at top,#10181c 0%,#090b0d 55%,#070707 100%);
   display:flex;
   flex-direction:column;
-  gap:14px;
-  scroll-behavior:smooth;
+  gap:9px;
+  scroll-behavior:auto;
 }
 
 .chat-empty{
@@ -254,102 +255,114 @@ button{cursor:pointer}
 }
 
 .chat-empty .empty-icon{
-  font-size:38px;
-  margin-bottom:10px;
+  font-size:34px;
+  margin-bottom:8px;
 }
 
 .message-row{
   display:flex;
   width:100%;
-  animation:messageIn .2s ease;
+  animation:messageIn .18s ease;
 }
 
-.message-row.english{justify-content:flex-end}
-.message-row.czech{justify-content:flex-start}
+.message-row.speaker-1{justify-content:flex-end}
+.message-row.speaker-2{justify-content:flex-start}
 
 @keyframes messageIn{
-  from{opacity:0;transform:translateY(8px)}
+  from{opacity:0;transform:translateY(5px)}
   to{opacity:1;transform:translateY(0)}
 }
 
 .message-bubble{
   max-width:88%;
-  border-radius:19px;
-  padding:12px 14px;
+  border-radius:16px;
+  padding:10px 12px;
   overflow-wrap:anywhere;
   position:relative;
 }
 
-.message-row.english .message-bubble{
+.message-row.speaker-1 .message-bubble{
   background:linear-gradient(145deg,#1675d2,#1259a7);
   border:1px solid #368ce3;
-  border-bottom-right-radius:6px;
+  border-bottom-right-radius:5px;
 }
 
-.message-row.czech .message-bubble{
+.message-row.speaker-2 .message-bubble{
   background:linear-gradient(145deg,#20262c,#15191d);
   border:1px solid #303941;
-  border-bottom-left-radius:6px;
+  border-bottom-left-radius:5px;
 }
 
 .message-language{
   font-size:10px;
   font-weight:700;
-  letter-spacing:.7px;
+  letter-spacing:.6px;
   opacity:.8;
-  margin-bottom:6px;
+  margin-bottom:5px;
 }
 
 .message-original{
-  font-size:15px;
-  line-height:1.45;
+  font-size:14px;
+  line-height:1.4;
   color:#fff;
 }
 
 .message-divider{
   height:1px;
   background:#ffffff25;
-  margin:9px 0;
+  margin:7px 0;
 }
 
 .message-translation{
-  font-size:14px;
-  line-height:1.45;
+  font-size:13px;
+  line-height:1.4;
   color:#d9f5ff;
 }
 
-.message-row.czech .message-translation{
+.message-row.speaker-2 .message-translation{
   color:#9fe8d8;
 }
 
 .message-time{
   font-size:10px;
-  opacity:.55;
+  opacity:.5;
   text-align:right;
-  margin-top:7px;
+  margin-top:6px;
 }
 
-.chat-controls{
-  display:flex;
-  gap:9px;
-  margin-top:12px;
-}
+/* PŘEPÍNÁNÍ MLUVČÍHO */
 
-.chat-control{
-  flex:1;
+.speaker-switch{
+  width:100%;
+  margin-top:9px;
+  border:1px solid #303941;
   background:#101010;
-  border:1px solid #282828;
   border-radius:12px;
-  padding:11px;
+  padding:11px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:13px;
   color:#aaa;
-  font-size:12px;
+  transition:.2s;
 }
 
-.chat-control:active{opacity:.7}
+.speaker-switch:active{
+  transform:scale(.98);
+  opacity:.75;
+}
 
-.chat-control.clear{
-  flex:0 0 auto;
-  color:#888;
+.speaker-switch.speaker-one{
+  border-color:#368ce3;
+  color:#55aaff;
+  background:#0c1722;
+}
+
+.speaker-switch.speaker-two{
+  border-color:#303941;
+  color:#b0b0b0;
+  background:#151515;
 }
 
 .chat-info{
@@ -357,7 +370,7 @@ button{cursor:pointer}
   color:#666;
   font-size:11px;
   line-height:1.5;
-  margin:10px 0;
+  margin:9px 0;
 }
 
 /* NASTAVENÍ */
@@ -492,7 +505,7 @@ button{cursor:pointer}
 
 <header class="header">
   <div class="brand">▶️ PlayDabing <span class="tv">TV</span></div>
-  <div class="beta">BETA VERZE 0.0.4</div>
+  <div class="beta">BETA VERZE 0.0.5</div>
 </header>
 
 <!-- ONLINE PREKLAD -->
@@ -518,14 +531,12 @@ button{cursor:pointer}
 
   </div>
 
-  <div class="chat-controls">
-    <button class="chat-control" onclick="toggleDabing()" id="chat-start-button">
-      🎙 Spustit překlad
-    </button>
-    <button class="chat-control clear" onclick="clearChat()">
-      🗑 Vymazat
-    </button>
-  </div>
+  <button
+    class="speaker-switch speaker-one"
+    id="speaker-switch"
+    onclick="switchSpeaker()">
+    🔵 Mluvčí 1 · Přepnout na mluvčího 2
+  </button>
 
   <div class="chat-info">
     🇬🇧 Angličtina → Čeština &nbsp; · &nbsp; 🇨🇿 Čeština → Angličtina
@@ -534,7 +545,7 @@ button{cursor:pointer}
   <div class="creator">Vytvořil Jan Chaloupka</div>
 
   <div class="footer-info">
-    <div class="version">BETA VERZE 0.0.4</div>
+    <div class="version">BETA VERZE 0.0.5</div>
     <div class="browser-note">
       Rozpoznávání řeči vyžaduje podporovaný prohlížeč a internet.
     </div>
@@ -762,7 +773,7 @@ button{cursor:pointer}
       <span class="row-icon">ℹ️</span>
       <span class="row-text">
         <span class="row-title">O aplikaci</span>
-        <div class="row-sub">PlayDabing TV · Beta 0.0.4</div>
+        <div class="row-sub">PlayDabing TV · Beta 0.0.5</div>
       </span>
       <span class="chevron">›</span>
     </button>
@@ -779,7 +790,7 @@ button{cursor:pointer}
 
 </div>
 
-<!-- SPODNÍ LIŠTA -->
+<!-- SPODNÍ LIŠTA – BEZE ZMĚNY -->
 <nav class="nav-wrap" aria-label="Spodní navigace">
   <div class="nav">
 
@@ -875,6 +886,7 @@ function toggleDetail(key){
 
 let running=false;
 let recognition=null;
+let currentSpeaker=1;
 
 function toggleDabing(){
   if(running){
@@ -887,8 +899,30 @@ function toggleDabing(){
 function updateStatus(isLive,text){
   document.getElementById('online-dot').classList.toggle('live',isLive);
   document.getElementById('online-status-text').textContent=text;
-  document.getElementById('chat-start-button').textContent=
-    isLive?'■ Zastavit překlad':'🎙 Spustit překlad';
+}
+
+/* =========================================
+   PŘEPÍNÁNÍ MLUVČÍHO
+========================================= */
+
+function updateSpeakerButton(){
+
+  const button=document.getElementById('speaker-switch');
+
+  if(currentSpeaker===1){
+    button.className='speaker-switch speaker-one';
+    button.textContent='🔵 Mluvčí 1 · Přepnout na mluvčího 2';
+  }else{
+    button.className='speaker-switch speaker-two';
+    button.textContent='⚫ Mluvčí 2 · Přepnout na mluvčího 1';
+  }
+}
+
+function switchSpeaker(){
+
+  currentSpeaker=currentSpeaker===1?2:1;
+
+  updateSpeakerButton();
 }
 
 /* =========================================
@@ -1021,23 +1055,59 @@ function stopDabing(){
 }
 
 /* =========================================
-   CHAT BUBLINY
+   CHAT – AUTOMATICKÉ MAZÁNÍ ODSCROLLOVANÝCH ZPRÁV
 ========================================= */
 
-function clearChat(){
+function showChatEmpty(){
 
   const container=document.getElementById('chat-container');
 
-  container.innerHTML=`
-    <div id="chat-empty" class="chat-empty">
-      <div class="empty-icon">💬</div>
-      <div>Tvůj živý překlad</div>
-      <div style="font-size:12px;margin-top:6px">
-        Stiskni Start a začni mluvit.
+  if(container.querySelector('.message-row'))return;
+
+  if(!document.getElementById('chat-empty')){
+    container.innerHTML=`
+      <div id="chat-empty" class="chat-empty">
+        <div class="empty-icon">💬</div>
+        <div>Tvůj živý překlad</div>
+        <div style="font-size:12px;margin-top:6px">
+          Stiskni Start a začni mluvit.
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 }
+
+function removeScrolledMessages(){
+
+  const container=document.getElementById('chat-container');
+  const containerRect=container.getBoundingClientRect();
+
+  const rows=container.querySelectorAll('.message-row');
+
+  rows.forEach(row=>{
+
+    const rect=row.getBoundingClientRect();
+
+    /*
+      Zpráva se odstraní, jakmile celá opustí
+      viditelnou oblast chatu směrem nahoru.
+    */
+
+    if(rect.bottom<=containerRect.top+2){
+      row.remove();
+    }
+  });
+
+  showChatEmpty();
+}
+
+document.getElementById('chat-container').addEventListener('scroll',()=>{
+  removeScrolledMessages();
+});
+
+/* =========================================
+   CHAT BUBLINY
+========================================= */
 
 function addMessage(original,translated,language){
 
@@ -1047,7 +1117,8 @@ function addMessage(original,translated,language){
   if(empty)empty.remove();
 
   const row=document.createElement('div');
-  row.className='message-row '+(language==='en'?'english':'czech');
+
+  row.className='message-row speaker-'+currentSpeaker;
 
   const bubble=document.createElement('div');
   bubble.className='message-bubble';
@@ -1086,6 +1157,16 @@ function addMessage(original,translated,language){
   container.appendChild(row);
 
   container.scrollTop=container.scrollHeight;
+
+  /*
+    Kontrola proběhne až po vykreslení.
+    Zprávy, které jsou odscrollovány mimo chat,
+    se následně odstraní.
+  */
+
+  requestAnimationFrame(()=>{
+    removeScrolledMessages();
+  });
 }
 
 /* =========================================
@@ -1226,6 +1307,12 @@ document.getElementById('compact').addEventListener('change',event=>{
   }
 
 })();
+
+/* =========================================
+   INICIALIZACE MLUVČÍHO
+========================================= */
+
+updateSpeakerButton();
 
 </script>
 
