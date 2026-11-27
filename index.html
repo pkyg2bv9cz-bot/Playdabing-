@@ -30,7 +30,7 @@ button, select {
   width: 100%;
   max-width: 520px;
   margin: auto;
-  padding: 18px 15px 110px;
+  padding: 10px 12px 90px;
 }
 
 /* HEADER */
@@ -39,11 +39,11 @@ button, select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 28px;
+  margin-bottom: 12px;
 }
 
 .logo {
-  font-size: 25px;
+  font-size: 22px;
   font-weight: 900;
   letter-spacing: -1px;
 }
@@ -56,8 +56,8 @@ button, select {
   color: #00e5f0;
   border: 1px solid #00e5f0;
   border-radius: 20px;
-  padding: 5px 10px;
-  font-size: 11px;
+  padding: 4px 8px;
+  font-size: 10px;
 }
 
 /* MAIN */
@@ -65,26 +65,26 @@ button, select {
 .subtitle {
   color: #aaa;
   text-align: center;
-  font-size: 13px;
-  margin-bottom: 25px;
+  font-size: 12px;
+  margin-bottom: 12px;
 }
 
 .hero {
   text-align: center;
-  padding: 20px 0 10px;
+  padding: 5px 0;
 }
 
 .mic-circle {
-  width: 155px;
-  height: 155px;
-  margin: 0 auto 24px;
+  width: 118px;
+  height: 118px;
+  margin: 0 auto 14px;
   border-radius: 50%;
   border: 3px solid #00e5f0;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 0 20px #00e5f044,
-              inset 0 0 20px #00e5f022;
+  box-shadow: 0 0 16px #00e5f044,
+              inset 0 0 15px #00e5f022;
   transition: .3s;
 }
 
@@ -93,19 +93,13 @@ button, select {
 }
 
 .mic-icon {
-  font-size: 64px;
+  font-size: 48px;
 }
 
 @keyframes pulse {
-  0% {
-    box-shadow: 0 0 10px #00e5f055;
-  }
-  50% {
-    box-shadow: 0 0 35px #00e5f0aa;
-  }
-  100% {
-    box-shadow: 0 0 10px #00e5f055;
-  }
+  0% { box-shadow: 0 0 10px #00e5f055; }
+  50% { box-shadow: 0 0 30px #00e5f0aa; }
+  100% { box-shadow: 0 0 10px #00e5f055; }
 }
 
 /* START BUTTON */
@@ -114,12 +108,12 @@ button, select {
   width: 100%;
   border: 2px solid #00e5f0;
   border-radius: 60px;
-  padding: 19px 15px;
+  padding: 13px 12px;
   background: #071416;
   color: white;
-  font-size: 21px;
+  font-size: 19px;
   font-weight: bold;
-  box-shadow: 0 0 18px #00e5f033;
+  box-shadow: 0 0 15px #00e5f033;
   cursor: pointer;
   transition: .2s;
 }
@@ -139,15 +133,15 @@ button, select {
 
 .status {
   text-align: center;
-  margin: 17px 0 25px;
-  font-size: 13px;
+  margin: 10px 0 14px;
+  font-size: 12px;
   color: #aaa;
 }
 
 .status-dot {
   display: inline-block;
-  width: 9px;
-  height: 9px;
+  width: 8px;
+  height: 8px;
   background: #777;
   border-radius: 50%;
   margin-right: 6px;
@@ -163,15 +157,15 @@ button, select {
 .panel {
   background: #101010;
   border: 1px solid #252525;
-  border-radius: 18px;
-  padding: 15px;
-  margin-bottom: 14px;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 10px;
 }
 
 .panel-title {
-  font-size: 13px;
+  font-size: 12px;
   color: #aaa;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 select {
@@ -179,8 +173,8 @@ select {
   background: #151515;
   color: white;
   border: 1px solid #444;
-  border-radius: 12px;
-  padding: 14px 12px;
+  border-radius: 11px;
+  padding: 11px 10px;
   outline: none;
 }
 
@@ -191,16 +185,16 @@ select:focus {
 .setting-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 8px;
 }
 
 .label {
   color: #aaa;
-  font-size: 12px;
-  margin-bottom: 8px;
+  font-size: 11px;
+  margin-bottom: 6px;
 }
 
-/* ROBOTIC TALKING MOUTH */
+/* ROBOT MOUTH */
 
 .sound-panel {
   overflow: hidden;
@@ -210,42 +204,41 @@ select:focus {
 
 .sound-panel.listening {
   border-color: #00e5f066;
-  box-shadow: 0 0 20px #00e5f018;
+  box-shadow: 0 0 18px #00e5f018;
 }
 
 .robot-stage {
   position: relative;
   width: 100%;
-  height: 230px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .robot-glow {
   position: absolute;
-  width: 210px;
-  height: 130px;
+  width: 160px;
+  height: 100px;
   background: radial-gradient(
     ellipse,
     #00e5f025 0%,
     #00e5f010 40%,
     transparent 75%
   );
-  filter: blur(15px);
+  filter: blur(12px);
   transition: opacity .2s;
   opacity: .5;
 }
 
 .robot-mouth {
-  width: min(100%, 340px);
-  height: 190px;
+  width: min(100%, 255px);
+  height: 135px;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 0 8px #00e5f044);
-  --mouth-open: 0;
+  filter: drop-shadow(0 0 7px #00e5f044);
 }
 
 .mouth-core {
@@ -254,11 +247,9 @@ select:focus {
   border-radius: 50%;
   background: #020707;
   border: 1px solid #17494c;
-  box-shadow: inset 0 0 35px #00e5f01a;
+  box-shadow: inset 0 0 25px #00e5f01a;
   overflow: hidden;
 }
-
-/* Inside of mouth */
 
 .mouth-inner {
   position: absolute;
@@ -269,11 +260,9 @@ select:focus {
   transform: translateY(-50%);
   background: #001a1b;
   border-radius: 50%;
-  box-shadow: 0 0 15px #00e5f055;
+  box-shadow: 0 0 12px #00e5f055;
   transition: height .08s linear;
 }
-
-/* Teeth / digital light */
 
 .mouth-teeth {
   position: absolute;
@@ -289,7 +278,7 @@ select:focus {
 }
 
 .mouth-teeth span {
-  width: 7px;
+  width: 5px;
   height: 100%;
   background: linear-gradient(
     to bottom,
@@ -298,10 +287,8 @@ select:focus {
     #008f9c
   );
   border-radius: 2px;
-  box-shadow: 0 0 5px #00e5f0;
+  box-shadow: 0 0 4px #00e5f0;
 }
-
-/* Upper robot jaw */
 
 .upper-jaw {
   position: absolute;
@@ -310,12 +297,8 @@ select:focus {
   top: 0;
   height: 50%;
   transform-origin: center bottom;
-  transform: translateY(calc(var(--mouth-open) * -0.22px));
-  transition: transform .08s linear;
   z-index: 4;
 }
-
-/* Lower robot jaw */
 
 .lower-jaw {
   position: absolute;
@@ -324,8 +307,6 @@ select:focus {
   bottom: 0;
   height: 50%;
   transform-origin: center top;
-  transform: translateY(calc(var(--mouth-open) * 0.22px));
-  transition: transform .08s linear;
   z-index: 4;
 }
 
@@ -361,8 +342,6 @@ select:focus {
   clip-path: polygon(6% 0,22% 10%,50% 0,78% 10%,94% 0,100% 35%,94% 65%,78% 90%,50% 100%,22% 90%,6% 65%,0 35%);
 }
 
-/* Metal segment lines */
-
 .jaw-lines {
   position: absolute;
   inset: 8px 12%;
@@ -388,8 +367,8 @@ select:focus {
 }
 
 .jaw-bolts span {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #183b3e;
   border: 1px solid #b9e8ed;
@@ -397,20 +376,20 @@ select:focus {
 }
 
 .upper-jaw .jaw-bolts {
-  top: 15px;
+  top: 12px;
 }
 
 .lower-jaw .jaw-bolts {
-  bottom: 15px;
+  bottom: 12px;
 }
 
-/* Sound rings */
+/* SOUND RINGS */
 
 .sound-ring {
   position: absolute;
   top: 50%;
-  width: 24px;
-  height: 75px;
+  width: 18px;
+  height: 55px;
   transform: translateY(-50%);
   opacity: .15;
   transition: opacity .15s;
@@ -443,14 +422,14 @@ select:focus {
 .info-card {
   background: #101010;
   border: 1px solid #252525;
-  padding: 20px;
-  border-radius: 18px;
-  margin-bottom: 12px;
+  padding: 16px;
+  border-radius: 16px;
+  margin-bottom: 10px;
 }
 
 .info-card p {
   color: #aaa;
-  margin-top: 8px;
+  margin-top: 7px;
   line-height: 1.5;
 }
 
@@ -458,10 +437,10 @@ select:focus {
   border: 1px solid #00e5f0;
   background: #111;
   color: #00e5f0;
-  padding: 10px;
-  border-radius: 12px;
+  padding: 9px;
+  border-radius: 11px;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 9px;
 }
 
 .page {
@@ -473,13 +452,13 @@ select:focus {
 }
 
 .page-title {
-  font-size: 25px;
-  margin: 20px 0;
+  font-size: 23px;
+  margin: 15px 0;
 }
 
 .history-item {
   border-bottom: 1px solid #252525;
-  padding: 12px 0;
+  padding: 10px 0;
   color: #aaa;
 }
 
@@ -495,7 +474,7 @@ select:focus {
   border-top: 1px solid #222;
   display: flex;
   justify-content: space-around;
-  padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
+  padding: 9px 4px calc(9px + env(safe-area-inset-bottom));
   z-index: 10;
 }
 
@@ -509,8 +488,8 @@ select:focus {
 
 .nav-item .icon {
   display: block;
-  font-size: 21px;
-  margin-bottom: 4px;
+  font-size: 19px;
+  margin-bottom: 3px;
 }
 
 .nav-item.active {
@@ -518,12 +497,66 @@ select:focus {
 }
 
 .notice {
-  font-size: 11px;
+  font-size: 10px;
   color: #666;
   text-align: center;
   line-height: 1.5;
-  margin-top: 18px;
+  margin-top: 12px;
 }
+
+/* SMALL PHONE OPTIMIZATION */
+
+@media (max-height: 800px) {
+  .app {
+    padding-top: 7px;
+  }
+
+  .header {
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    margin-bottom: 8px;
+  }
+
+  .mic-circle {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+
+  .mic-icon {
+    font-size: 42px;
+  }
+
+  .start-button {
+    padding: 11px;
+    font-size: 17px;
+  }
+
+  .status {
+    margin: 8px 0 10px;
+  }
+
+  .panel {
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+
+  .robot-stage {
+    height: 125px;
+  }
+
+  .robot-mouth {
+    width: min(100%, 230px);
+    height: 115px;
+  }
+
+  .notice {
+    margin-top: 8px;
+  }
+}
+
 </style>
 </head>
 
@@ -535,8 +568,6 @@ select:focus {
   <div class="logo">▶ PlayDabing<span> TV</span></div>
   <div class="beta">BETA 0.2</div>
 </header>
-
-<!-- HOME -->
 
 <section class="page active" id="home">
 
@@ -558,8 +589,6 @@ select:focus {
   <span class="status-dot" id="statusDot"></span>
   <span id="statusText">Připraveno ke spuštění</span>
 </div>
-
-<!-- LANGUAGES -->
 
 <div class="panel">
   <div class="setting-row">
@@ -588,8 +617,6 @@ select:focus {
   </div>
 </div>
 
-<!-- LIVE SOUND / ROBOT MOUTH -->
-
 <div class="panel sound-panel" id="soundPanel">
 
   <div class="label">Živý zvuk</div>
@@ -604,7 +631,6 @@ select:focus {
     <div class="robot-mouth" id="robotMouth">
 
       <div class="mouth-core">
-
         <div class="mouth-inner" id="mouthInner"></div>
 
         <div class="mouth-teeth" id="mouthTeeth">
@@ -613,7 +639,6 @@ select:focus {
           <span></span><span></span><span></span><span></span>
           <span></span><span></span><span></span><span></span>
         </div>
-
       </div>
 
       <div class="upper-jaw" id="upperJaw">
@@ -622,9 +647,7 @@ select:focus {
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
           </div>
-          <div class="jaw-bolts">
-            <span></span><span></span>
-          </div>
+          <div class="jaw-bolts"><span></span><span></span></div>
         </div>
       </div>
 
@@ -634,16 +657,12 @@ select:focus {
             <span></span><span></span><span></span><span></span>
             <span></span><span></span><span></span><span></span>
           </div>
-          <div class="jaw-bolts">
-            <span></span><span></span>
-          </div>
+          <div class="jaw-bolts"><span></span><span></span></div>
         </div>
       </div>
 
     </div>
-
   </div>
-
 </div>
 
 <p class="notice">
@@ -653,29 +672,19 @@ select:focus {
 
 </section>
 
-<!-- LIBRARY -->
-
 <section class="page" id="library">
   <h1 class="page-title">Knihovna</h1>
 
   <div class="info-card">
     <h3>🎬 PlayDabing TV</h3>
-    <p>
-      Tvoje knihovna filmů a obsahu.
-      Další funkce připravujeme.
-    </p>
+    <p>Tvoje knihovna filmů a obsahu. Další funkce připravujeme.</p>
   </div>
 
   <div class="info-card">
     <h3>📺 Živý dabing</h3>
-    <p>
-      Spusť dabing z hlavní obrazovky
-      a poslouchej překlad.
-    </p>
+    <p>Spusť dabing z hlavní obrazovky a poslouchej překlad.</p>
   </div>
 </section>
-
-<!-- HISTORY -->
 
 <section class="page" id="history">
   <h1 class="page-title">Historie</h1>
@@ -688,37 +697,25 @@ select:focus {
   </div>
 </section>
 
-<!-- FAVORITES -->
-
 <section class="page" id="favorites">
   <h1 class="page-title">Oblíbené</h1>
 
   <div class="info-card">
     <h3>♡ Oblíbené</h3>
-    <p>
-      Zde budou tvoje uložená nastavení
-      a oblíbené funkce.
-    </p>
+    <p>Zde budou tvoje uložená nastavení a oblíbené funkce.</p>
   </div>
 </section>
-
-<!-- PREMIUM -->
 
 <section class="page" id="premium">
   <h1 class="page-title">Premium</h1>
 
   <div class="info-card">
     <h2>👑 PlayDabing Premium</h2>
-    <p>
-      Budoucí prémiové funkce,
-      kvalitnější hlasy a rozšířené možnosti dabingu.
-    </p>
+    <p>Budoucí prémiové funkce, kvalitnější hlasy a rozšířené možnosti dabingu.</p>
   </div>
 </section>
 
 </div>
-
-<!-- NAVIGATION -->
 
 <nav class="bottom-nav">
 
@@ -746,13 +743,10 @@ select:focus {
 
 <script>
 
-/* ELEMENTS */
-
 const startButton = document.getElementById("startButton");
 const micCircle = document.getElementById("micCircle");
 const statusDot = document.getElementById("statusDot");
 const statusText = document.getElementById("statusText");
-
 const sourceLanguage = document.getElementById("sourceLanguage");
 
 const soundPanel = document.getElementById("soundPanel");
@@ -766,37 +760,31 @@ const robotGlow = document.getElementById("robotGlow");
 let recognition = null;
 let isRunning = false;
 let voices = [];
-
 let microphoneStream = null;
 let audioContext = null;
 let analyser = null;
 let audioData = null;
 let animationFrame = null;
-
 let currentMouth = 0;
-let lastSpeechTime = 0;
 
 /* NAVIGATION */
 
 document.querySelectorAll(".nav-item").forEach(item => {
-
   item.addEventListener("click", () => {
 
     const page = item.dataset.page;
 
-    document.querySelectorAll(".page").forEach(p => {
-      p.classList.remove("active");
-    });
+    document.querySelectorAll(".page").forEach(p =>
+      p.classList.remove("active")
+    );
 
-    document.querySelectorAll(".nav-item").forEach(n => {
-      n.classList.remove("active");
-    });
+    document.querySelectorAll(".nav-item").forEach(n =>
+      n.classList.remove("active")
+    );
 
     document.getElementById(page).classList.add("active");
     item.classList.add("active");
-
   });
-
 });
 
 /* VOICES */
@@ -808,16 +796,14 @@ function loadVoices() {
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
-/* SPEAK CZECH */
+/* CZECH SPEECH */
 
 function speakCzech(text) {
-
   if (!text) return;
 
   speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-
   utterance.lang = "cs-CZ";
   utter.rate = 1;
   utter.pitch = 1;
@@ -826,28 +812,15 @@ function speakCzech(text) {
     v.lang.toLowerCase().startsWith("cs")
   );
 
-  if (czechVoice) {
-    utterance.voice = czechVoice;
-  }
-
-  utterance.onstart = () => {
-    lastSpeechTime = Date.now();
-  };
-
-  utterance.onend = () => {
-    lastSpeechTime = Date.now();
-  };
+  if (czechVoice) utterance.voice = czechVoice;
 
   speechSynthesis.speak(utterance);
-
 }
 
 /* TRANSLATION */
 
 async function translateText(text) {
-
   try {
-
     const language = sourceLanguage.value.split("-")[0];
 
     const url =
@@ -859,29 +832,20 @@ async function translateText(text) {
     const response = await fetch(url);
     const data = await response.json();
 
-    const translation =
-      data?.responseData?.translatedText;
+    const translation = data?.responseData?.translatedText;
 
     if (translation) {
-
       addHistory(text, translation);
-
       speakCzech(translation);
-
     }
-
   } catch (error) {
-
     console.error("Translation error:", error);
-
   }
-
 }
 
 /* HISTORY */
 
 function addHistory(original, translated) {
-
   let history = JSON.parse(
     localStorage.getItem("playdabingHistory") || "[]"
   );
@@ -900,11 +864,9 @@ function addHistory(original, translated) {
   );
 
   renderHistory();
-
 }
 
 function renderHistory() {
-
   const history = JSON.parse(
     localStorage.getItem("playdabingHistory") || "[]"
   );
@@ -912,34 +874,29 @@ function renderHistory() {
   const historyList = document.getElementById("historyList");
 
   if (!history.length) {
-    historyList.innerHTML =
-      "<p>Historie překladů je prázdná.</p>";
+    historyList.innerHTML = "<p>Historie překladů je prázdná.</p>";
     return;
   }
 
   historyList.innerHTML = "";
 
   history.forEach(item => {
-
     const div = document.createElement("div");
     div.className = "history-item";
 
     div.innerHTML = `
       <small>${item.date}</small>
       <p>${escapeHTML(item.original)}</p>
-      <p style="color:#00e5f0;margin-top:6px">
+      <p style="color:#00e5f0;margin-top:5px">
         ${escapeHTML(item.translated)}
       </p>
     `;
 
     historyList.appendChild(div);
-
   });
-
 }
 
 function escapeHTML(text) {
-
   return String(text).replace(/[&<>"']/g, char => ({
     "&": "&amp;",
     "<": "&lt;",
@@ -947,22 +904,18 @@ function escapeHTML(text) {
     '"': "&quot;",
     "'": "&#039;"
   }[char]));
-
 }
 
 document.getElementById("clearHistory").onclick = () => {
-
   localStorage.removeItem("playdabingHistory");
   renderHistory();
-
 };
 
 renderHistory();
 
-/* MICROPHONE + AUDIO ANALYSER */
+/* MICROPHONE */
 
 async function startMicrophone() {
-
   microphoneStream =
     await navigator.mediaDevices.getUserMedia({
       audio: {
@@ -987,17 +940,12 @@ async function startMicrophone() {
   analyser.smoothingTimeConstant = 0.65;
 
   source.connect(analyser);
-
   audioData = new Uint8Array(analyser.fftSize);
-
-  animateRobotMouth();
-
 }
 
-/* ROBOT MOUTH MOVEMENT */
+/* ROBOT MOUTH ANIMATION */
 
 function animateRobotMouth() {
-
   if (!isRunning || !analyser) return;
 
   analyser.getByteTimeDomainData(audioData);
@@ -1005,51 +953,32 @@ function animateRobotMouth() {
   let sum = 0;
 
   for (let i = 0; i < audioData.length; i++) {
-
     const normalized = (audioData[i] - 128) / 128;
     sum += normalized * normalized;
-
   }
 
   const rms = Math.sqrt(sum / audioData.length);
-
-  /* Convert sound level into mouth opening */
 
   let targetOpen = Math.min(
     100,
     Math.max(0, (rms - 0.015) * 550)
   );
 
-  /* Smooth movement */
-
   currentMouth += (targetOpen - currentMouth) * 0.35;
 
   updateRobotMouth(currentMouth);
 
-  if (rms > 0.035) {
-    lastSpeechTime = Date.now();
-  }
-
-  animationFrame =
-    requestAnimationFrame(animateRobotMouth);
-
+  animationFrame = requestAnimationFrame(animateRobotMouth);
 }
 
-/* APPLY OPENING */
-
 function updateRobotMouth(amount) {
-
   const opening = Math.max(0, Math.min(100, amount));
-
-  /* Jaw movement */
 
   upperJaw.style.transform =
     `translateY(${-opening * 0.20}px)`;
 
   lowerJaw.style.transform =
     `translateY(${opening * 0.20}px)`;
-
-  /* Mouth interior grows with sound */
 
   mouthInner.style.height =
     `${Math.max(0, opening * 0.55)}%`;
@@ -1068,26 +997,18 @@ function updateRobotMouth(amount) {
   } else {
     soundPanel.classList.remove("speaking");
   }
-
 }
 
 /* SPEECH RECOGNITION */
 
 function createRecognition() {
-
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
   if (!SpeechRecognition) {
-
-    alert(
-      "Rozpoznávání řeči není podporováno. " +
-      "Zkus Chrome na Androidu."
-    );
-
+    alert("Rozpoznávání řeči není podporováno. Zkus Chrome na Androidu.");
     return null;
-
   }
 
   const rec = new SpeechRecognition();
@@ -1097,71 +1018,53 @@ function createRecognition() {
   rec.interimResults = true;
 
   rec.onresult = async event => {
-
     let finalText = "";
 
-    for (let i = event.resultIndex;
-         i < event.results.length;
-         i++) {
-
+    for (let i = event.resultIndex; i < event.results.length; i++) {
       const result = event.results[i];
 
       if (result.isFinal) {
         finalText += result[0].transcript;
       }
-
     }
 
     if (finalText.trim()) {
       await translateText(finalText.trim());
     }
-
   };
 
   rec.onerror = event => {
-
     console.error("Recognition error:", event.error);
 
-    if (event.error === "not-allowed" ||
-        event.error === "service-not-allowed") {
-
+    if (
+      event.error === "not-allowed" ||
+      event.error === "service-not-allowed"
+    ) {
       stopDubbing();
-      statusText.textContent =
-        "Mikrofon nebyl povolen.";
-
+      statusText.textContent = "Mikrofon nebyl povolen.";
     }
-
   };
 
   rec.onend = () => {
-
     if (isRunning) {
-
       try {
         rec.start();
       } catch (e) {}
-
     }
-
   };
 
   return rec;
-
 }
 
-/* START DUBBING */
+/* START */
 
 async function startDubbing() {
-
   try {
-
     statusText.textContent = "Žádám o přístup k mikrofonu…";
 
     if (!navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia) {
-
       throw new Error("Mikrofon není dostupný.");
-
     }
 
     await startMicrophone();
@@ -1169,85 +1072,66 @@ async function startDubbing() {
     recognition = createRecognition();
 
     if (!recognition) {
-      stopDubbing();
+      cleanupAudio();
       return;
     }
 
-    recognition.start();
-
     isRunning = true;
+    recognition.start();
 
     startButton.classList.add("active");
     startButton.innerHTML = "■ ZASTAVIT DABING";
 
     micCircle.classList.add("active");
-
     statusDot.classList.add("active");
-    statusText.textContent = "Mikrofon aktivní – poslouchám";
 
+    statusText.textContent = "Mikrofon aktivní – poslouchám";
     soundPanel.classList.add("listening");
 
     animateRobotMouth();
 
   } catch (error) {
-
     console.error(error);
 
-    statusText.textContent =
-      "Mikrofon nepovolil přístup.";
+    statusText.textContent = "Mikrofon nepovolil přístup.";
 
-    alert(
-      "Povol mikrofon v nastavení telefonu a zkus to znovu."
-    );
+    alert("Povol mikrofon v nastavení telefonu a zkus to znovu.");
 
     cleanupAudio();
-
   }
-
 }
 
-/* CLEANUP AUDIO */
+/* CLEANUP */
 
 function cleanupAudio() {
-
   if (animationFrame) {
     cancelAnimationFrame(animationFrame);
     animationFrame = null;
   }
 
   if (microphoneStream) {
-
-    microphoneStream.getTracks().forEach(track => {
-      track.stop();
-    });
-
+    microphoneStream.getTracks().forEach(track => track.stop());
     microphoneStream = null;
-
   }
 
   if (audioContext) {
-
     try {
       audioContext.close();
     } catch (e) {}
 
     audioContext = null;
-
   }
 
   analyser = null;
   audioData = null;
-
 }
 
 /* STOP */
 
 function stopDubbing() {
-
   isRunning = false;
 
   if (recognition) {
-
     recognition.onend = null;
 
     try {
@@ -1255,11 +1139,9 @@ function stopDubbing() {
     } catch (e) {}
 
     recognition = null;
-
   }
 
   speechSynthesis.cancel();
-
   cleanupAudio();
 
   currentMouth = 0;
@@ -1269,40 +1151,31 @@ function stopDubbing() {
   startButton.innerHTML = "▶ START DABING";
 
   micCircle.classList.remove("active");
-
   statusDot.classList.remove("active");
+
   statusText.textContent = "Dabing zastaven";
 
-  soundPanel.classList.remove("listening");
-  soundPanel.classList.remove("speaking");
-
+  soundPanel.classList.remove("listening", "speaking");
 }
 
 /* BUTTON */
 
 startButton.onclick = () => {
-
   if (isRunning) {
     stopDubbing();
   } else {
     startDubbing();
   }
-
 };
 
-/* LANGUAGE CHANGE */
+/* LANGUAGE */
 
 sourceLanguage.onchange = () => {
-
   if (isRunning) {
-
     stopDubbing();
-
     statusText.textContent =
       "Jazyk změněn. Spusť dabing znovu.";
-
   }
-
 };
 
 </script>
