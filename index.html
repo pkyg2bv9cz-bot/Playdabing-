@@ -27,15 +27,9 @@ html,body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
-body{
-  padding-bottom:120px;
-}
+body{padding-bottom:120px}
 
-button,select{
-  font:inherit;
-  color:inherit;
-}
-
+button,select{font:inherit;color:inherit}
 button{cursor:pointer}
 
 .app{
@@ -78,7 +72,6 @@ button{cursor:pointer}
   min-height:calc(100vh - 260px);
   flex-direction:column;
 }
-
 .home.active{display:flex!important}
 
 .subtitle{
@@ -88,7 +81,7 @@ button{cursor:pointer}
   margin:18px 0 0;
 }
 
-.home .subtitle{margin-bottom:auto}
+.home .subtitle{margin-bottom:12px}
 
 .creator{
   text-align:center;
@@ -162,7 +155,6 @@ button{cursor:pointer}
 }
 
 .nav-item.active{color:var(--cyan)}
-
 .start-item{transform:translateY(-9px)}
 
 .start-circle{
@@ -203,6 +195,171 @@ button{cursor:pointer}
   margin-bottom:18px;
 }
 
+/* ONLINE PREKLAD */
+
+.online-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0 12px;
+}
+
+.online-title{
+  font-size:21px;
+  font-weight:700;
+}
+
+.online-status{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  color:#777;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#555;
+}
+
+.status-dot.live{
+  background:#20d98b;
+  box-shadow:0 0 8px #20d98b66;
+}
+
+.chat-container{
+  height:min(58vh,560px);
+  min-height:280px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:14px 8px;
+  border:1px solid #1e2529;
+  border-radius:20px;
+  background:
+    radial-gradient(circle at top,#10181c 0%,#090b0d 55%,#070707 100%);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  scroll-behavior:smooth;
+}
+
+.chat-empty{
+  margin:auto;
+  text-align:center;
+  color:#666;
+  padding:20px;
+  line-height:1.6;
+}
+
+.chat-empty .empty-icon{
+  font-size:38px;
+  margin-bottom:10px;
+}
+
+.message-row{
+  display:flex;
+  width:100%;
+  animation:messageIn .2s ease;
+}
+
+.message-row.english{justify-content:flex-end}
+.message-row.czech{justify-content:flex-start}
+
+@keyframes messageIn{
+  from{opacity:0;transform:translateY(8px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.message-bubble{
+  max-width:88%;
+  border-radius:19px;
+  padding:12px 14px;
+  overflow-wrap:anywhere;
+  position:relative;
+}
+
+.message-row.english .message-bubble{
+  background:linear-gradient(145deg,#1675d2,#1259a7);
+  border:1px solid #368ce3;
+  border-bottom-right-radius:6px;
+}
+
+.message-row.czech .message-bubble{
+  background:linear-gradient(145deg,#20262c,#15191d);
+  border:1px solid #303941;
+  border-bottom-left-radius:6px;
+}
+
+.message-language{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.7px;
+  opacity:.8;
+  margin-bottom:6px;
+}
+
+.message-original{
+  font-size:15px;
+  line-height:1.45;
+  color:#fff;
+}
+
+.message-divider{
+  height:1px;
+  background:#ffffff25;
+  margin:9px 0;
+}
+
+.message-translation{
+  font-size:14px;
+  line-height:1.45;
+  color:#d9f5ff;
+}
+
+.message-row.czech .message-translation{
+  color:#9fe8d8;
+}
+
+.message-time{
+  font-size:10px;
+  opacity:.55;
+  text-align:right;
+  margin-top:7px;
+}
+
+.chat-controls{
+  display:flex;
+  gap:9px;
+  margin-top:12px;
+}
+
+.chat-control{
+  flex:1;
+  background:#101010;
+  border:1px solid #282828;
+  border-radius:12px;
+  padding:11px;
+  color:#aaa;
+  font-size:12px;
+}
+
+.chat-control:active{opacity:.7}
+
+.chat-control.clear{
+  flex:0 0 auto;
+  color:#888;
+}
+
+.chat-info{
+  text-align:center;
+  color:#666;
+  font-size:11px;
+  line-height:1.5;
+  margin:10px 0;
+}
+
 /* NASTAVENÍ */
 
 .settings-group{
@@ -233,7 +390,6 @@ button{cursor:pointer}
 }
 
 .settings-row .row-text{flex:1}
-
 .settings-row .row-title{font-size:17px}
 
 .settings-row .row-sub{
@@ -242,10 +398,7 @@ button{cursor:pointer}
   margin-top:4px;
 }
 
-.chevron{
-  color:#aaa;
-  font-size:22px;
-}
+.chevron{color:#aaa;font-size:22px}
 
 .detail{
   display:none;
@@ -319,6 +472,11 @@ button{cursor:pointer}
 
 .history-entry small{color:#888}
 
+@media(max-width:390px){
+  .app{padding-left:12px;padding-right:12px}
+  .message-bubble{max-width:92%}
+}
+
 @media(max-height:750px){
   .subtitle{margin-top:10px}
   .creator{margin-top:18px}
@@ -337,9 +495,42 @@ button{cursor:pointer}
   <div class="beta">BETA VERZE 0.0.4</div>
 </header>
 
-<!-- DABING -->
+<!-- ONLINE PREKLAD -->
 <section id="page-dabing" class="page active home">
-  <p class="subtitle">AI český dabing pro filmy, seriály a hry</p>
+
+  <div class="online-header">
+    <div class="online-title">🌐 OnlinePreklad</div>
+    <div class="online-status">
+      <span class="status-dot" id="online-dot"></span>
+      <span id="online-status-text">Připraveno</span>
+    </div>
+  </div>
+
+  <div id="chat-container" class="chat-container">
+
+    <div id="chat-empty" class="chat-empty">
+      <div class="empty-icon">💬</div>
+      <div>Tvůj živý překlad</div>
+      <div style="font-size:12px;margin-top:6px">
+        Stiskni Start a začni mluvit.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="chat-controls">
+    <button class="chat-control" onclick="toggleDabing()" id="chat-start-button">
+      🎙 Spustit překlad
+    </button>
+    <button class="chat-control clear" onclick="clearChat()">
+      🗑 Vymazat
+    </button>
+  </div>
+
+  <div class="chat-info">
+    🇬🇧 Angličtina → Čeština &nbsp; · &nbsp; 🇨🇿 Čeština → Angličtina
+  </div>
+
   <div class="creator">Vytvořil Jan Chaloupka</div>
 
   <div class="footer-info">
@@ -348,6 +539,7 @@ button{cursor:pointer}
       Rozpoznávání řeči vyžaduje podporovaný prohlížeč a internet.
     </div>
   </div>
+
 </section>
 
 <!-- KNIHOVNA -->
@@ -418,6 +610,7 @@ button{cursor:pointer}
       <label for="source-language">Původní jazyk</label>
       <select id="source-language">
         <option value="en-US">Angličtina</option>
+        <option value="cs-CZ">Čeština</option>
         <option value="de-DE">Němčina</option>
         <option value="fr-FR">Francouzština</option>
         <option value="es-ES">Španělština</option>
@@ -623,7 +816,7 @@ button{cursor:pointer}
 <script>
 
 /* =========================================
-   FUNKČNÍ NAVIGACE
+   NAVIGACE
 ========================================= */
 
 const pages = {
@@ -651,7 +844,6 @@ function showPage(name){
   document.querySelectorAll('.nav-item').forEach(button=>{
     button.classList.toggle('active',button.dataset.page===name);
   });
-
 }
 
 document.querySelectorAll('.nav-item').forEach(button=>{
@@ -666,17 +858,23 @@ document.querySelectorAll('.nav-item').forEach(button=>{
 
 function toggleDetail(key){
   const panel = document.getElementById('detail-'+key);
-  if(panel){
-    panel.classList.toggle('open');
-  }
+  if(!panel)return;
+
+  const wasOpen=panel.classList.contains('open');
+
+  document.querySelectorAll('#page-nastaveni .detail').forEach(item=>{
+    item.classList.remove('open');
+  });
+
+  if(!wasOpen)panel.classList.add('open');
 }
 
 /* =========================================
-   DABING
+   ONLINE PREKLAD
 ========================================= */
 
-let running = false;
-let recognition = null;
+let running=false;
+let recognition=null;
 
 function toggleDabing(){
   if(running){
@@ -686,47 +884,115 @@ function toggleDabing(){
   }
 }
 
+function updateStatus(isLive,text){
+  document.getElementById('online-dot').classList.toggle('live',isLive);
+  document.getElementById('online-status-text').textContent=text;
+  document.getElementById('chat-start-button').textContent=
+    isLive?'■ Zastavit překlad':'🎙 Spustit překlad';
+}
+
+/* =========================================
+   DETEKCE JAZYKA – ZÁKLADNÍ
+========================================= */
+
+function detectLanguage(text){
+
+  const lower=text.toLowerCase();
+
+  const czechChars=/[ěščřžýáíéůúťďň]/i.test(lower);
+
+  const czechWords=[
+    ' jsem ',' jsme ',' jste ',' není ',' nebo ',
+    ' protože ',' který ',' která ',' co ',' kde ',
+    ' jak ',' proč ',' ale ',' takže ',' dnes ',
+    ' ahoj ',' děkuji ',' prosím ',' můžeš ',
+    ' mám ',' máš ',' máme ',' jdu ',' jdeš ',
+    ' bude ',' byly ',' bylo ',' nechci ',' chci '
+  ];
+
+  const englishWords=[
+    ' the ',' and ',' you ',' your ',' is ',' are ',
+    ' was ',' were ',' what ',' where ',' why ',
+    ' how ',' but ',' because ',' with ',' have ',
+    ' has ',' do ',' does ',' did ',' hello ',
+    ' thank ',' please ',' can ',' could ',' would ',
+    ' will ',' going ',' want ',' need '
+  ];
+
+  if(czechChars)return 'cs';
+
+  const padded=' '+lower+' ';
+
+  let csScore=0;
+  let enScore=0;
+
+  czechWords.forEach(word=>{
+    if(padded.includes(word))csScore++;
+  });
+
+  englishWords.forEach(word=>{
+    if(padded.includes(word))enScore++;
+  });
+
+  return csScore>enScore?'cs':'en';
+}
+
+/* =========================================
+   START ROZPOZNÁVÁNÍ
+========================================= */
+
 function startDabing(){
 
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+  const SpeechRecognition=
+    window.SpeechRecognition||window.webkitSpeechRecognition;
 
   if(!SpeechRecognition){
     alert('Tento prohlížeč nepodporuje rozpoznávání řeči. Zkus Chrome.');
     return;
   }
 
-  running = true;
+  running=true;
 
   document.getElementById('start-circle').textContent='■';
   document.querySelector('.start-item').classList.add('running');
 
-  recognition = new SpeechRecognition();
+  updateStatus(true,'Poslouchám');
 
-  const selectedLanguage =
+  recognition=new SpeechRecognition();
+
+  const selectedLanguage=
     document.getElementById('source-language').value;
 
-  recognition.lang =
-    selectedLanguage === 'auto' ? 'en-US' : selectedLanguage;
+  /*
+    Web Speech Recognition potřebuje konkrétní jazyk.
+    Auto zatím používá angličtinu jako výchozí rozpoznávání.
+  */
 
-  recognition.continuous = true;
-  recognition.interimResults = false;
+  recognition.lang=
+    selectedLanguage==='auto'?'en-US':selectedLanguage;
 
-  recognition.onresult = event=>{
-    const text =
-      event.results[event.results.length-1][0].transcript.trim();
+  recognition.continuous=true;
+  recognition.interimResults=false;
 
-    if(text) translateText(text);
-  };
+  recognition.onresult=event=>{
 
-  recognition.onerror = event=>{
-    if(event.error === 'not-allowed'){
-      alert('Povol mikrofon v nastavení prohlížeče.');
+    const result=event.results[event.results.length-1];
+    const text=result[0].transcript.trim();
+
+    if(text){
+      translateText(text);
     }
   };
 
-  recognition.onend = ()=>{
-    if(running && recognition){
+  recognition.onerror=event=>{
+    if(event.error==='not-allowed'){
+      alert('Povol mikrofon v nastavení prohlížeče.');
+      stopDabing();
+    }
+  };
+
+  recognition.onend=()=>{
+    if(running&&recognition){
       try{recognition.start()}catch(error){}
     }
   };
@@ -740,59 +1006,148 @@ function startDabing(){
 
 function stopDabing(){
 
-  running = false;
+  running=false;
 
   document.getElementById('start-circle').textContent='▶';
   document.querySelector('.start-item').classList.remove('running');
 
+  updateStatus(false,'Připraveno');
+
   if(recognition){
-    recognition.onend = null;
+    recognition.onend=null;
     try{recognition.stop()}catch(error){}
-    recognition = null;
+    recognition=null;
   }
 }
 
 /* =========================================
-   PŘEKLAD
+   CHAT BUBLINY
+========================================= */
+
+function clearChat(){
+
+  const container=document.getElementById('chat-container');
+
+  container.innerHTML=`
+    <div id="chat-empty" class="chat-empty">
+      <div class="empty-icon">💬</div>
+      <div>Tvůj živý překlad</div>
+      <div style="font-size:12px;margin-top:6px">
+        Stiskni Start a začni mluvit.
+      </div>
+    </div>
+  `;
+}
+
+function addMessage(original,translated,language){
+
+  const container=document.getElementById('chat-container');
+  const empty=document.getElementById('chat-empty');
+
+  if(empty)empty.remove();
+
+  const row=document.createElement('div');
+  row.className='message-row '+(language==='en'?'english':'czech');
+
+  const bubble=document.createElement('div');
+  bubble.className='message-bubble';
+
+  const languageLabel=document.createElement('div');
+  languageLabel.className='message-language';
+  languageLabel.textContent=language==='en'
+    ?'🇬🇧 ENGLISH → 🇨🇿 ČEŠTINA'
+    :'🇨🇿 ČEŠTINA → 🇬🇧 ENGLISH';
+
+  const originalText=document.createElement('div');
+  originalText.className='message-original';
+  originalText.textContent=original;
+
+  const divider=document.createElement('div');
+  divider.className='message-divider';
+
+  const translation=document.createElement('div');
+  translation.className='message-translation';
+  translation.textContent=translated;
+
+  const time=document.createElement('div');
+  time.className='message-time';
+  time.textContent=new Date().toLocaleTimeString('cs-CZ',{
+    hour:'2-digit',
+    minute:'2-digit'
+  });
+
+  bubble.appendChild(languageLabel);
+  bubble.appendChild(originalText);
+  bubble.appendChild(divider);
+  bubble.appendChild(translation);
+  bubble.appendChild(time);
+
+  row.appendChild(bubble);
+  container.appendChild(row);
+
+  container.scrollTop=container.scrollHeight;
+}
+
+/* =========================================
+   PŘEKLAD CZ ↔ EN
 ========================================= */
 
 async function translateText(text){
 
-  const src = document.getElementById('source-language').value;
-  const target = document.getElementById('target-language').value;
-  const lang = src === 'auto' ? 'en' : src.slice(0,2);
+  const language=detectLanguage(text);
+
+  const source=language==='cs'?'cs':'en';
+  const target=language==='cs'?'en':'cs';
+
+  const sourceLabel=source==='cs'?'Čeština':'Angličtina';
+  const targetLabel=target==='cs'?'Čeština':'Angličtina';
 
   try{
 
-    const url =
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${lang}|${target}`;
+    const url=
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${source}|${target}`;
 
-    const response = await fetch(url);
-    const data = await response.json();
-    const translated = data?.responseData?.translatedText;
+    const response=await fetch(url);
+    const data=await response.json();
 
-    if(translated && document.getElementById('audio-enabled').checked){
+    const translated=
+      data?.responseData?.translatedText||'Překlad se nepodařil.';
 
-      const utterance = new SpeechSynthesisUtterance(translated);
+    addMessage(text,translated,language);
 
-      utterance.lang =
-        target === 'cs' ? 'cs-CZ' :
-        target === 'sk' ? 'sk-SK' : 'en-US';
+    /* Uložení do knihovny */
+
+    const entry=document.createElement('div');
+    entry.className='history-entry';
+
+    const translatedText=document.createElement('div');
+    translatedText.textContent=translated;
+
+    const original=document.createElement('small');
+    original.textContent=
+      sourceLabel+' → '+targetLabel+' | '+text;
+
+    entry.appendChild(translatedText);
+    entry.appendChild(original);
+
+    document.getElementById('library-list').prepend(entry);
+
+    /* Hlasové čtení překladu */
+
+    if(document.getElementById('audio-enabled').checked){
+
+      const utterance=new SpeechSynthesisUtterance(translated);
+
+      utterance.lang=target==='cs'?'cs-CZ':'en-US';
 
       speechSynthesis.speak(utterance);
     }
 
-    const entry = document.createElement('div');
-    entry.className = 'history-entry';
-    entry.innerHTML = '<div></div><small></small>';
-
-    entry.firstElementChild.textContent = translated || text;
-    entry.lastElementChild.textContent = 'Původní: ' + text;
-
-    document.getElementById('library-list').prepend(entry);
-
   }catch(error){
+
     console.warn('Překlad se nepodařil',error);
+
+    addMessage(text,'Překlad není momentálně dostupný.',language);
   }
 }
 
@@ -802,22 +1157,20 @@ async function translateText(text){
 
 document.getElementById('mic-test').addEventListener('click',async()=>{
 
-  const status = document.getElementById('mic-status');
+  const status=document.getElementById('mic-status');
 
   try{
 
-    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
 
-    status.textContent = 'Mikrofon je povolen.';
+    status.textContent='Mikrofon je povolen.';
 
     stream.getTracks().forEach(track=>track.stop());
 
   }catch(error){
 
-    status.textContent = 'Mikrofon není povolen nebo není dostupný.';
-
+    status.textContent='Mikrofon není povolen nebo není dostupný.';
   }
-
 });
 
 /* =========================================
@@ -843,7 +1196,7 @@ document.getElementById('background').addEventListener('change',event=>{
 ========================================= */
 
 document.getElementById('compact').addEventListener('change',event=>{
-  document.body.style.fontSize = event.target.checked ? '14px' : '16px';
+  document.body.style.fontSize=event.target.checked?'14px':'16px';
   localStorage.setItem('pd-compact',event.target.checked?'1':'0');
 });
 
@@ -853,9 +1206,9 @@ document.getElementById('compact').addEventListener('change',event=>{
 
 (function(){
 
-  const accent = localStorage.getItem('pd-accent');
-  const background = localStorage.getItem('pd-background');
-  const compact = localStorage.getItem('pd-compact');
+  const accent=localStorage.getItem('pd-accent');
+  const background=localStorage.getItem('pd-background');
+  const compact=localStorage.getItem('pd-compact');
 
   if(accent){
     document.documentElement.style.setProperty('--cyan',accent);
@@ -867,7 +1220,7 @@ document.getElementById('compact').addEventListener('change',event=>{
     document.getElementById('background').value=background;
   }
 
-  if(compact === '1'){
+  if(compact==='1'){
     document.body.style.fontSize='14px';
     document.getElementById('compact').checked=true;
   }
